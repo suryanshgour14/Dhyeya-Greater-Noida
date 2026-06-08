@@ -1,0 +1,46 @@
+{
+  "navbar": {
+    "home": "Home",
+    "courses": "Courses",
+    "about": "About Us",
+    "faculty": "Faculty",
+    "results": "Results",
+    "currentAffairs": "Current Affairs",
+    "magazine": "Magazine",
+    "contact": "Contact",
+    "login": "Login",
+    "signup": "Sign Up",
+    "dashboard": "Dashboard"
+  },
+  "footer": {
+    "tagline": "Empowering aspirants towards civil services excellence",
+    "address": "Greater Noida, Uttar Pradesh, India",
+    "phone": "+91-XXXXXXXXXX",
+    "email": "info@dhyeyagreaternoida.com",
+    "rights": "All rights reserved.",
+    "quickLinks": "Quick Links",
+    "followUs": "Follow Us"
+  },
+  "announcement": {
+    "admissionsOpen": "Admissions Open for 2024-25 Batch! Limited Seats Available.",
+    "contactNow": "Enquire Now"
+  },
+  "cta": {
+    "enquireNow": "Enquire Now",
+    "learnMore": "Learn More",
+    "downloadBrochure": "Download Brochure",
+    "applyNow": "Apply Now",
+    "viewAll": "View All"
+  },
+  "loading": "Loading...",
+  "error": {
+    "title": "Something went wrong",
+    "tryAgain": "Try Again",
+    "goHome": "Go Home"
+  },
+  "notFound": {
+    "title": "Page Not Found",
+    "description": "The page you are looking for does not exist.",
+    "goHome": "Go Back Home"
+  }
+}

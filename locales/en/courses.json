@@ -1,0 +1,59 @@
+{
+  "title": "Our Courses",
+  "subtitle": "Comprehensive UPSC & UPPSC preparation programmes for every aspirant",
+  "hero": {
+    "stats": {
+      "programmes": "Programmes",
+      "selectionRate": "Selection Rate",
+      "selections": "Selections",
+      "faculty": "Expert Faculty"
+    }
+  },
+  "filters": {
+    "exam": "Exam",
+    "phase": "Phase",
+    "all": "All Courses",
+    "allExams": "All",
+    "allPhases": "All",
+    "ias": "IAS",
+    "pcs": "PCS",
+    "iasPcs": "IAS+PCS",
+    "foundation": "Foundation",
+    "prelims": "Prelims",
+    "mains": "Mains",
+    "interview": "Interview",
+    "allPhasesFull": "All Phases",
+    "showing": "Showing",
+    "programme": "programme",
+    "programmes": "programmes",
+    "for": "for",
+    "phase": "phase",
+    "clearFilters": "Clear Filters"
+  },
+  "card": {
+    "duration": "Duration",
+    "seats": "seats",
+    "batchStart": "Batch",
+    "fee": "Fee",
+    "emi": "or",
+    "viewDetails": "View Details",
+    "enroll": "Enroll Now",
+    "new": "New"
+  },
+  "detail": {
+    "overview": "Course Overview",
+    "whatYouCover": "What You'll Cover",
+    "whatsIncluded": "What's Included",
+    "roadmap": "Learning Roadmap",
+    "whoFor": "Who Is This For?",
+    "faq": "Frequently Asked Questions",
+    "enquire": "Enquire About This Course",
+    "enrollNow": "Enroll Now",
+    "learnMore": "Learn More",
+    "callUs": "Call Us",
+    "whatsapp": "WhatsApp",
+    "visitCentre": "Visit Centre",
+    "chatInstantly": "Chat with us instantly"
+  },
+  "notFound": "No courses found matching your criteria."
+}

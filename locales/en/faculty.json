@@ -1,0 +1,15 @@
+{
+  "title": "Our Expert Faculty",
+  "subtitle": "Learn from the best — IAS officers, IPS officers, and subject specialists",
+  "card": {
+    "experience": "Experience",
+    "specialization": "Specialization",
+    "viewProfile": "View Profile"
+  },
+  "filter": {
+    "all": "All",
+    "gs": "General Studies",
+    "optional": "Optional Subjects",
+    "csat": "CSAT"
+  }
+}

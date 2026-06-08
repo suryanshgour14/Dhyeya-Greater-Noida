@@ -1,0 +1,26 @@
+{
+  "title": "Our Results",
+  "subtitle": "Celebrating the success of our dedicated students",
+  "filter": {
+    "all": "All Years",
+    "year": "Year",
+    "exam": "Exam",
+    "upsc": "UPSC CSE",
+    "uppcs": "UPPCS",
+    "other": "Other"
+  },
+  "card": {
+    "rank": "Rank",
+    "year": "Year",
+    "service": "Service",
+    "optional": "Optional Subject",
+    "batch": "Batch",
+    "message": "Success Message"
+  },
+  "stats": {
+    "total": "Total Selections",
+    "ias": "IAS Officers",
+    "ips": "IPS Officers",
+    "ifs": "IFS Officers"
+  }
+}

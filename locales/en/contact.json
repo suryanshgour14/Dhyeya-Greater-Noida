@@ -1,0 +1,27 @@
+{
+  "title": "Contact Us",
+  "subtitle": "We're here to answer your questions and guide your IAS journey",
+  "form": {
+    "name": "Full Name",
+    "namePlaceholder": "Enter your full name",
+    "email": "Email Address",
+    "emailPlaceholder": "Enter your email",
+    "phone": "Phone Number",
+    "phonePlaceholder": "Enter your phone number",
+    "subject": "Subject",
+    "subjectPlaceholder": "What is this regarding?",
+    "message": "Message",
+    "messagePlaceholder": "Write your message here...",
+    "submit": "Send Message",
+    "submitting": "Sending...",
+    "success": "Message sent successfully! We'll get back to you soon.",
+    "error": "Failed to send message. Please try again."
+  },
+  "info": {
+    "address": "Address",
+    "phone": "Phone",
+    "email": "Email",
+    "hours": "Office Hours",
+    "hoursValue": "Monday – Saturday: 9:00 AM – 7:00 PM"
+  }
+}

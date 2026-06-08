@@ -1,0 +1,23 @@
+{
+  "title": "About Dhyeya IAS Greater Noida",
+  "subtitle": "A legacy of excellence in civil services education",
+  "mission": {
+    "title": "Our Mission",
+    "content": "To provide world-class coaching that empowers every aspirant to achieve their dream of serving the nation through civil services."
+  },
+  "vision": {
+    "title": "Our Vision",
+    "content": "To be the most trusted and result-oriented IAS coaching institute in Northern India."
+  },
+  "history": {
+    "title": "Our Journey",
+    "content": "Founded with a vision to bridge the gap between aspirants and their IAS dreams, Dhyeya IAS Greater Noida has been a beacon of excellence in UPSC preparation."
+  },
+  "infrastructure": {
+    "title": "World-Class Infrastructure",
+    "library": "Modern Library",
+    "classrooms": "Smart Classrooms",
+    "hostel": "Hostel Facility",
+    "cafeteria": "Cafeteria"
+  }
+}

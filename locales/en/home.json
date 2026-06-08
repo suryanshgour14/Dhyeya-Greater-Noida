@@ -1,0 +1,69 @@
+{
+  "hero": {
+    "badge": "India's Premier IAS Coaching",
+    "title": "Your Journey to IAS Starts Here",
+    "subtitle": "Dhyeya IAS Greater Noida — Proven results, expert faculty, and a dedicated learning environment for UPSC Civil Services aspirants.",
+    "cta": "Explore Courses",
+    "secondaryCta": "Book Free Counselling",
+    "trustLine": "Trusted by 15,000+ aspirants · 500+ UPSC Selections · 12 Years"
+  },
+  "stats": {
+    "title": "Our Achievements",
+    "selections": "IAS/IPS Selections",
+    "students": "Students Trained",
+    "years": "Years of Excellence",
+    "rank1": "AIR 1 Holders"
+  },
+  "welcome": {
+    "label": "About Dhyeya IAS Greater Noida",
+    "title": "Greater Noida's Most Trusted UPSC Coaching Institute",
+    "description": "Established with a mission to make quality IAS preparation accessible, Dhyeya IAS Greater Noida has produced hundreds of IAS, IPS, and IFS officers. Our integrated approach — combining rigorous academics, personalised mentorship, and strategic test practice — gives aspirants the complete edge they need.",
+    "feature1": "IAS Officers as Faculty",
+    "feature2": "Hindi & English Medium",
+    "feature3": "Integrated Prelims–Mains–Interview Prep",
+    "feature4": "Free Demo Classes Every Saturday",
+    "cta": "Know More About Us",
+    "yearsLabel": "Years of Excellence",
+    "selectionsLabel": "Civil Services Selections",
+    "facultyLabel": "Expert Faculty Members",
+    "ratingLabel": "Google Rating"
+  },
+  "courses": {
+    "title": "Our Courses",
+    "subtitle": "Comprehensive programs designed for every stage of your UPSC preparation",
+    "viewAll": "View All Courses"
+  },
+  "toppers": {
+    "title": "Our Toppers",
+    "subtitle": "Proud achievements of our dedicated students"
+  },
+  "batches": {
+    "title": "Active Batches",
+    "subtitle": "Join an ongoing batch or register for upcoming ones",
+    "enrollNow": "Enroll Now",
+    "seatsLeft": "seats left",
+    "starting": "Starting"
+  },
+  "testimonials": {
+    "title": "What Our Students Say",
+    "subtitle": "Real stories from real achievers"
+  },
+  "whyUs": {
+    "title": "Why Choose Dhyeya IAS?",
+    "subtitle": "What sets us apart from the rest",
+    "expertFaculty": "Expert Faculty",
+    "expertFacultyDesc": "Learn from experienced IAS officers and subject matter experts",
+    "comprehensiveMaterial": "Comprehensive Study Material",
+    "comprehensiveMaterialDesc": "Up-to-date, research-backed content covering entire UPSC syllabus",
+    "personalizedMentoring": "Personalized Mentoring",
+    "personalizedMentoringDesc": "One-on-one guidance to address your specific weaknesses",
+    "regularTests": "Regular Test Series",
+    "regularTestsDesc": "Frequent mock tests to track progress and improve performance"
+  },
+  "cta": {
+    "title": "Ready to Begin Your IAS Journey?",
+    "subtitle": "Join thousands of successful candidates who chose Dhyeya IAS Greater Noida",
+    "primary": "Enroll Now",
+    "secondary": "Talk to Counsellor"
+  }
+}

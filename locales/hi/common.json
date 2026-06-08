@@ -1,0 +1,46 @@
+{
+  "navbar": {
+    "home": "होम",
+    "courses": "कोर्सेज",
+    "about": "हमारे बारे में",
+    "faculty": "फैकल्टी",
+    "results": "परिणाम",
+    "currentAffairs": "करंट अफेयर्स",
+    "magazine": "पत्रिका",
+    "contact": "संपर्क",
+    "login": "लॉगिन",
+    "signup": "साइन अप",
+    "dashboard": "डैशबोर्ड"
+  },
+  "footer": {
+    "tagline": "सिविल सेवा उत्कृष्टता की ओर आकांक्षाओं को सशक्त बनाना",
+    "address": "ग्रेटर नोएडा, उत्तर प्रदेश, भारत",
+    "phone": "+91-XXXXXXXXXX",
+    "email": "info@dhyeyagreaternoida.com",
+    "rights": "सर्वाधिकार सुरक्षित।",
+    "quickLinks": "त्वरित लिंक",
+    "followUs": "हमें फॉलो करें"
+  },
+  "announcement": {
+    "admissionsOpen": "2024-25 बैच के लिए प्रवेश खुले हैं! सीमित सीटें उपलब्ध हैं।",
+    "contactNow": "अभी पूछताछ करें"
+  },
+  "cta": {
+    "enquireNow": "अभी पूछताछ करें",
+    "learnMore": "और जानें",
+    "downloadBrochure": "ब्रोशर डाउनलोड करें",
+    "applyNow": "अभी आवेदन करें",
+    "viewAll": "सब देखें"
+  },
+  "loading": "लोड हो रहा है...",
+  "error": {
+    "title": "कुछ गलत हो गया",
+    "tryAgain": "पुनः प्रयास करें",
+    "goHome": "होम जाएं"
+  },
+  "notFound": {
+    "title": "पेज नहीं मिला",
+    "description": "आप जिस पेज को खोज रहे हैं वह मौजूद नहीं है।",
+    "goHome": "होम पर वापस जाएं"
+  }
+}
