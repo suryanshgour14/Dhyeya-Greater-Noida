@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ChevronDown, BookOpen, Circle } from "lucide-react";
+import { ChevronDown, BookOpen } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { CourseModule } from "@/lib/constants";
 

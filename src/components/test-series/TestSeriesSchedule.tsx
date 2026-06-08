@@ -126,7 +126,7 @@ function SectionAccordion({
               </tr>
             </thead>
             <tbody>
-              {section.schedule.map((row, ri) => (
+              {section.schedule.map((row) => (
                 <tr
                   key={row.id}
                   className={cn(

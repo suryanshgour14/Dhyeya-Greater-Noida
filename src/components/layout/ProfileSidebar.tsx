@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { useLocale } from "next-intl";
 import { motion, AnimatePresence } from "framer-motion";
 import {
-  X, LogOut, User, BookOpen, ClipboardList, Bell,
+  X, LogOut, BookOpen, ClipboardList, Bell,
   Download, Trophy, FileText, HelpCircle, GraduationCap,
   ShoppingBag, Award, ChevronRight, Loader2, Settings,
 } from "lucide-react";

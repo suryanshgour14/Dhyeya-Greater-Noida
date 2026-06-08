@@ -5,7 +5,7 @@ import {
   HelpCircle, Bell, Trophy, Award, Calendar, CalendarDays, Newspaper,
   Crown, Users2, Settings, GraduationCap, MessageSquare, CheckCircle,
   IndianRupee, UserCheck, Zap, Video, Play,
-  Clock, TrendingUp, PenLine, Shield, Mic, Globe, Brain, FileCheck,
+  PenLine,
 } from 'lucide-react';
 
 // ─── Site ────────────────────────────────────────────────────────────────────
