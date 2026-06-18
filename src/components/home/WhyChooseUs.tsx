@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { motion } from "framer-motion";
 import { WHY_US_FEATURES } from "@/lib/constants";
@@ -33,7 +33,7 @@ export default function WhyChooseUs() {
             Why Choose Dhyeya IAS?
           </h2>
           <p className="mt-3 text-muted-foreground max-w-xl mx-auto">
-            Greater Noida&apos;s most trusted UPSC coaching — combining experienced faculty, proven methods, and personal mentorship.
+            Greater Noida&apos;s most trusted UPSC coaching - combining experienced faculty, proven methods, and personal mentorship.
           </p>
         </motion.div>
 

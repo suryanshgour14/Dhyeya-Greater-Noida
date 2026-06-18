@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
@@ -29,16 +29,16 @@ const HERO_FEATURES = [
 ];
 
 const CAROUSEL_SLIDES = [
-  { src: "https://res.cloudinary.com/dl9t48lyt/image/upload/v1776709339/ae1e7289-c7f5-42a9-baca-b3b9407652c7.png", alt: "UPSC Toppers — Dhyeya IAS Greater Noida" },
-  { src: "https://res.cloudinary.com/dl9t48lyt/image/upload/v1776709075/637846ab-4412-400b-a2aa-d1179bcffff9.png", alt: "All Toppers — Dhyeya IAS" },
-  { src: "https://res.cloudinary.com/dl9t48lyt/image/upload/v1776709087/adbdba8a-207b-4a8d-8f8c-9e1e26953f1b.png", alt: "Topper Batch — Dhyeya IAS Greater Noida" },
-  { src: "https://res.cloudinary.com/dl9t48lyt/image/upload/v1776769812/ChatGPT_Image_Apr_21_2026_04_37_12_PM_wxbzuz.png", alt: "Digital Library — Dhyeya IAS" },
+  { src: "https://res.cloudinary.com/dl9t48lyt/image/upload/v1776709339/ae1e7289-c7f5-42a9-baca-b3b9407652c7.png", alt: "UPSC Toppers - Dhyeya IAS Greater Noida" },
+  { src: "https://res.cloudinary.com/dl9t48lyt/image/upload/v1776709075/637846ab-4412-400b-a2aa-d1179bcffff9.png", alt: "All Toppers - Dhyeya IAS" },
+  { src: "https://res.cloudinary.com/dl9t48lyt/image/upload/v1776709087/adbdba8a-207b-4a8d-8f8c-9e1e26953f1b.png", alt: "Topper Batch - Dhyeya IAS Greater Noida" },
+  { src: "https://res.cloudinary.com/dl9t48lyt/image/upload/v1776769812/ChatGPT_Image_Apr_21_2026_04_37_12_PM_wxbzuz.png", alt: "Digital Library - Dhyeya IAS" },
   { src: "https://res.cloudinary.com/dl9t48lyt/image/upload/v1776769804/PhotoshopExtension_Image_4_tnss7q.png", alt: "UDAAN Scholarship Programme" },
-  { src: "https://res.cloudinary.com/dl9t48lyt/image/upload/v1776769795/ChatGPT_Image_Apr_21_2026_03_38_45_AM_cp0psc.png", alt: "Current Affairs Session — Dhyeya IAS" },
-  { src: "https://res.cloudinary.com/dl9t48lyt/image/upload/v1776769779/ChatGPT_Image_Apr_21_2026_04_30_24_PM_mep9pe.png", alt: "DLP Study Notes — Dhyeya IAS" },
-  { src: "https://res.cloudinary.com/dl9t48lyt/image/upload/v1776769787/ChatGPT_Image_Apr_21_2026_04_10_20_PM_s85d2y.png", alt: "UDAAN Office — Dhyeya IAS" },
-  { src: "https://res.cloudinary.com/dl9t48lyt/image/upload/v1776707894/WhatsApp_Image_2026-04-19_at_20.44.18_zx8x6d.jpg", alt: "Faculty — Dhyeya IAS Greater Noida" },
-  { src: "https://res.cloudinary.com/dl9t48lyt/image/upload/v1776707889/WhatsApp_Image_2026-04-19_at_20.44.17_ip6wdx.jpg", alt: "Admissions Open — Dhyeya IAS 2025" },
+  { src: "https://res.cloudinary.com/dl9t48lyt/image/upload/v1776769795/ChatGPT_Image_Apr_21_2026_03_38_45_AM_cp0psc.png", alt: "Current Affairs Session - Dhyeya IAS" },
+  { src: "https://res.cloudinary.com/dl9t48lyt/image/upload/v1776769779/ChatGPT_Image_Apr_21_2026_04_30_24_PM_mep9pe.png", alt: "DLP Study Notes - Dhyeya IAS" },
+  { src: "https://res.cloudinary.com/dl9t48lyt/image/upload/v1776769787/ChatGPT_Image_Apr_21_2026_04_10_20_PM_s85d2y.png", alt: "UDAAN Office - Dhyeya IAS" },
+  { src: "https://res.cloudinary.com/dl9t48lyt/image/upload/v1776707894/WhatsApp_Image_2026-04-19_at_20.44.18_zx8x6d.jpg", alt: "Faculty - Dhyeya IAS Greater Noida" },
+  { src: "https://res.cloudinary.com/dl9t48lyt/image/upload/v1776707889/WhatsApp_Image_2026-04-19_at_20.44.17_ip6wdx.jpg", alt: "Admissions Open - Dhyeya IAS 2025" },
   { src: "https://res.cloudinary.com/dl9t48lyt/image/upload/v1776713290/WhatsApp_Image_2026-04-19_at_20.47.35_gjkqgd.jpg", alt: "Dhyeya IAS Greater Noida Building" },
 ];
 
@@ -161,14 +161,14 @@ export default function HeroSection() {
           </motion.p>
         </div>
 
-        {/* ── Right column — image carousel ── */}
+        {/* ── Right column - image carousel ── */}
         <motion.div
           initial={{ opacity: 0, x: 40 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.7, delay: 0.2, ease: EASE }}
           className="relative mx-auto w-full max-w-lg lg:mx-0"
         >
-          {/* Carousel — full-bleed images, arrow buttons */}
+          {/* Carousel - full-bleed images, arrow buttons */}
           <div className="relative aspect-[4/3] w-full overflow-hidden rounded-2xl bg-[#0a1628]">
             <AnimatePresence mode="wait">
               <motion.div

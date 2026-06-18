@@ -1,4 +1,4 @@
-import Link from "next/link";
+﻿import Link from "next/link";
 import { Phone, Mail, MapPin, Clock, Send } from "lucide-react";
 import { CONTACT_INFO, SOCIAL_LINKS, SITE_NAME } from "@/lib/constants";
 import DhyeyaLogo from "@/components/shared/DhyeyaLogo";
@@ -43,7 +43,7 @@ export default function Footer() {
       <div className="container mx-auto px-4 py-14">
         <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-5">
 
-          {/* Col 1 — Brand */}
+          {/* Col 1 - Brand */}
           <div className="lg:col-span-2">
             <div className="mb-4">
               <DhyeyaLogo background="dark" heightClass="h-11" className="max-w-[180px]" />
@@ -78,7 +78,7 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* Col 2 — Quick Links */}
+          {/* Col 2 - Quick Links */}
           <div>
             <h3 className="mb-4 text-sm font-semibold uppercase tracking-wider text-white">
               Quick Links
@@ -97,7 +97,7 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* Col 3 — Courses */}
+          {/* Col 3 - Courses */}
           <div>
             <h3 className="mb-4 text-sm font-semibold uppercase tracking-wider text-white">
               Courses
@@ -116,7 +116,7 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* Col 4 — Student Zone + Social */}
+          {/* Col 4 - Student Zone + Social */}
           <div>
             <h3 className="mb-4 text-sm font-semibold uppercase tracking-wider text-white">
               Student Zone

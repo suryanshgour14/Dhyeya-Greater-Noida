@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -73,7 +73,7 @@ export default function LoginForm({ initialNext, errorParam }: LoginFormProps) {
       setError('Google login failed. Please try again.');
       setGoogleLoading(false);
     }
-    // On success, browser is redirected by Supabase — no need to do anything
+    // On success, browser is redirected by Supabase - no need to do anything
   }
 
   return (

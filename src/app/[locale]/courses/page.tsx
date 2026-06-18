@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState, useMemo } from "react";
 import { motion } from "framer-motion";
@@ -42,7 +42,7 @@ export default function CoursesPage() {
   return (
     <>
       {/* Hero strip */}
-      <section className="bg-gradient-to-br from-brand-blue to-blue-800 text-white">
+      <section className="bg-gradient-to-br from-slate-900 via-blue-950 to-slate-800 text-white">
         <div className="container mx-auto px-4 py-14 md:py-20 text-center">
           <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-white/15">
             <GraduationCap className="h-7 w-7" />
@@ -56,7 +56,7 @@ export default function CoursesPage() {
             Our Courses
           </motion.h1>
           <p className="mx-auto mt-3 max-w-xl text-base leading-relaxed text-white/75 md:text-lg">
-            Comprehensive UPSC &amp; UPPSC preparation programmes for every aspirant — from foundation to interview.
+            Comprehensive UPSC &amp; UPPSC preparation programmes for every aspirant - from foundation to interview.
           </p>
 
           {/* stats */}
@@ -77,7 +77,7 @@ export default function CoursesPage() {
       </section>
 
       {/* Main */}
-      <section className="bg-slate-50 py-12">
+      <section className="bg-gradient-to-b from-slate-50 to-white py-12">
         <div className="container mx-auto px-4">
           {/* Filter bar */}
           <CourseFilterBar

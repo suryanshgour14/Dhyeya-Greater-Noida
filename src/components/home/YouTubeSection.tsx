@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 import Link from "next/link";
@@ -101,7 +101,7 @@ export default function YouTubeSection() {
               Watch &amp; Learn
             </h2>
             <p className="mt-2 text-muted-foreground max-w-lg">
-              Free lectures, strategy sessions, and current affairs analysis — straight from our faculty.
+              Free lectures, strategy sessions, and current affairs analysis - straight from our faculty.
             </p>
           </div>
           <Link

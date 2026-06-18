@@ -7,43 +7,23 @@ import { Clock, Users, ChevronRight, CalendarDays } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { Course } from "@/lib/constants";
 
+const unified = {
+  bar:       "bg-gradient-to-r from-slate-800 to-blue-700",
+  catBadge:  "bg-blue-50 text-blue-700",
+  specBadge: "bg-slate-100 text-slate-600 border border-slate-200",
+  chip:      "bg-slate-50 text-slate-600 border border-slate-200/70",
+  price:     "text-slate-900",
+  hl:        "bg-slate-50/80",
+  hlVal:     "text-slate-800",
+  hlLbl:     "text-slate-400",
+  btn:       "bg-blue-700 hover:bg-blue-800 text-white shadow-sm shadow-blue-700/20",
+  card:      "border-slate-200/80 hover:border-blue-200/60 hover:shadow-lg hover:shadow-slate-900/6",
+};
+
 const themes = {
-  blue: {
-    bar:       "bg-gradient-to-r from-brand-blue to-blue-400",
-    catBadge:  "bg-brand-blue/8 text-brand-blue",
-    specBadge: "bg-amber-50 text-amber-700 border border-amber-200",
-    chip:      "bg-blue-50/70 text-brand-blue border border-blue-100",
-    price:     "text-brand-blue",
-    hl:        "bg-blue-50/60",
-    hlVal:     "text-brand-blue",
-    hlLbl:     "text-slate-400",
-    btn:       "bg-brand-blue hover:bg-brand-blue/90 text-white shadow-sm shadow-brand-blue/20",
-    card:      "border-slate-200/80 hover:border-blue-200 hover:shadow-lg hover:shadow-blue-900/6",
-  },
-  gold: {
-    bar:       "bg-gradient-to-r from-amber-500 to-yellow-400",
-    catBadge:  "bg-amber-50 text-amber-700",
-    specBadge: "bg-amber-100 text-amber-800 border border-amber-200",
-    chip:      "bg-amber-50/70 text-amber-700 border border-amber-100",
-    price:     "text-amber-800",
-    hl:        "bg-amber-50/60",
-    hlVal:     "text-amber-700",
-    hlLbl:     "text-slate-400",
-    btn:       "bg-amber-600 hover:bg-amber-700 text-white shadow-sm shadow-amber-600/20",
-    card:      "border-slate-200/80 hover:border-amber-200 hover:shadow-lg hover:shadow-amber-900/6",
-  },
-  orange: {
-    bar:       "bg-gradient-to-r from-brand-orange to-orange-400",
-    catBadge:  "bg-orange-50 text-brand-orange",
-    specBadge: "bg-orange-100 text-orange-800 border border-orange-200",
-    chip:      "bg-orange-50/70 text-orange-700 border border-orange-100",
-    price:     "text-orange-800",
-    hl:        "bg-orange-50/60",
-    hlVal:     "text-orange-700",
-    hlLbl:     "text-slate-400",
-    btn:       "bg-brand-orange hover:bg-brand-orange/90 text-white shadow-sm shadow-orange-600/20",
-    card:      "border-slate-200/80 hover:border-orange-200 hover:shadow-lg hover:shadow-orange-900/6",
-  },
+  blue:   unified,
+  gold:   unified,
+  orange: unified,
 };
 
 interface CourseCardProps {

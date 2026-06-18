@@ -12,10 +12,12 @@ interface StickyEnrollBarProps {
   accentColor: "blue" | "gold" | "orange";
 }
 
+const unified = { btn: "bg-blue-700 hover:bg-blue-800 text-white shadow-md shadow-blue-700/25" };
+
 const themes = {
-  blue:   { btn: "bg-brand-blue hover:bg-brand-blue/90 text-white shadow-md shadow-brand-blue/25" },
-  gold:   { btn: "bg-amber-600 hover:bg-amber-700 text-white shadow-md shadow-amber-600/25" },
-  orange: { btn: "bg-brand-orange hover:bg-brand-orange/90 text-white shadow-md shadow-orange-600/25" },
+  blue:   unified,
+  gold:   unified,
+  orange: unified,
 };
 
 export default function StickyEnrollBar({ title, fee, accentColor }: StickyEnrollBarProps) {

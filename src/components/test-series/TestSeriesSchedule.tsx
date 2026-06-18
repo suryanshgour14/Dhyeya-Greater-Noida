@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { motion } from "framer-motion";
 import { Calendar, FileText, ChevronDown } from "lucide-react";
@@ -146,13 +146,13 @@ function SectionAccordion({
                           {row.date}
                         </span>
                       ) : (
-                        <span className="text-slate-300">—</span>
+                        <span className="text-slate-300">-</span>
                       )}
                     </td>
                   )}
                   {section.schedule.some((r) => r.time) && (
                     <td className="whitespace-nowrap px-4 py-3 text-xs text-slate-500">
-                      {row.time ?? <span className="text-slate-300">—</span>}
+                      {row.time ?? <span className="text-slate-300">-</span>}
                     </td>
                   )}
                   <td className="px-4 py-3">
@@ -176,7 +176,7 @@ function SectionAccordion({
                   </td>
                   {section.schedule.some((r) => r.marks) && (
                     <td className="whitespace-nowrap px-4 py-3 text-xs font-semibold text-slate-600">
-                      {row.marks ?? <span className="text-slate-300">—</span>}
+                      {row.marks ?? <span className="text-slate-300">-</span>}
                     </td>
                   )}
                 </tr>

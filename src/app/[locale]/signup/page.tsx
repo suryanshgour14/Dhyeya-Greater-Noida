@@ -1,11 +1,11 @@
-import type { Metadata } from 'next';
+﻿import type { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
 import SignupForm from '@/components/forms/SignupForm';
 import { CheckCircle2 } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Create Account — Dhyeya IAS Greater Noida',
+  title: 'Create Account - Dhyeya IAS Greater Noida',
   description: 'Join 15,000+ UPSC aspirants. Create your free student account.',
 };
 
@@ -81,7 +81,7 @@ export default function SignupPage() {
         </div>
       </div>
 
-      {/* ── Right panel — form ── */}
+      {/* ── Right panel - form ── */}
       <div className="flex flex-1 flex-col items-center justify-center bg-slate-50 px-6 py-12 overflow-y-auto">
         {/* Mobile logo */}
         <div className="mb-8 lg:hidden">

@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import Link from "next/link";
 import { useLocale } from "next-intl";
@@ -39,7 +39,7 @@ export default function BlogSection() {
               Latest from the Blog
             </h2>
             <p className="mt-2 text-muted-foreground max-w-lg">
-              Strategy guides, subject deep-dives, and current affairs analysis — written by our expert faculty.
+              Strategy guides, subject deep-dives, and current affairs analysis - written by our expert faculty.
             </p>
           </div>
           <Link

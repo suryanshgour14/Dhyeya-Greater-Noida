@@ -22,34 +22,20 @@ interface CourseFeatureBentoProps {
   accentColor: "blue" | "gold" | "orange";
 }
 
+const unified = {
+  heading:    "text-slate-800",
+  iconWrap:   "bg-blue-50 text-blue-600",
+  iconBg:     "bg-blue-50/70 text-blue-600",
+  card:       "bg-white border border-slate-200/70 hover:border-blue-200/60 hover:shadow-md",
+  title:      "text-slate-800",
+  desc:       "text-slate-500",
+  headerIcon: "bg-blue-50 text-blue-600",
+};
+
 const themes = {
-  blue: {
-    heading:  "text-brand-blue",
-    iconWrap: "bg-brand-blue/10 text-brand-blue",
-    iconBg:   "bg-blue-50/60 text-brand-blue",
-    card:     "bg-white border border-blue-100/80 hover:border-blue-200 hover:shadow-md",
-    title:    "text-slate-800",
-    desc:     "text-slate-500",
-    headerIcon: "bg-brand-blue/10 text-brand-blue",
-  },
-  gold: {
-    heading:  "text-amber-900",
-    iconWrap: "bg-amber-100 text-amber-600",
-    iconBg:   "bg-amber-50 text-amber-600",
-    card:     "bg-white border border-amber-100/80 hover:border-amber-200 hover:shadow-md",
-    title:    "text-slate-800",
-    desc:     "text-slate-500",
-    headerIcon: "bg-amber-100 text-amber-600",
-  },
-  orange: {
-    heading:  "text-orange-900",
-    iconWrap: "bg-orange-100 text-brand-orange",
-    iconBg:   "bg-orange-50 text-brand-orange",
-    card:     "bg-white border border-orange-100/80 hover:border-orange-200 hover:shadow-md",
-    title:    "text-slate-800",
-    desc:     "text-slate-500",
-    headerIcon: "bg-orange-100 text-brand-orange",
-  },
+  blue:   unified,
+  gold:   unified,
+  orange: unified,
 };
 
 export default function CourseFeatureBento({ features, accentColor }: CourseFeatureBentoProps) {

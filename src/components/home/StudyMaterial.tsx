@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import Link from "next/link";
 import { useLocale } from "next-intl";
@@ -53,7 +53,7 @@ export default function StudyMaterial() {
             Study Material & Resources
           </h2>
           <p className="mt-3 text-muted-foreground max-w-xl mx-auto">
-            Curated, regularly updated study material — from daily current affairs to monthly magazine gists — all free for students.
+            Curated, regularly updated study material - from daily current affairs to monthly magazine gists - all free for students.
           </p>
         </motion.div>
 

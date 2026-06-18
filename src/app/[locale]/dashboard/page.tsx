@@ -1,8 +1,8 @@
-import { redirect } from 'next/navigation';
+﻿import { redirect } from 'next/navigation';
 import { createServerClient } from '@/lib/supabase/server';
 import DashboardClient from './DashboardClient';
 
-export const metadata = { title: 'Student Dashboard — Dhyeya IAS' };
+export const metadata = { title: 'Student Dashboard - Dhyeya IAS' };
 
 export default async function DashboardPage({
   params,
@@ -12,7 +12,7 @@ export default async function DashboardPage({
   const supabase = createServerClient();
   const { data: { user } } = await supabase.auth.getUser();
 
-  // Server-side guard — if somehow middleware was bypassed
+  // Server-side guard - if somehow middleware was bypassed
   if (!user) {
     redirect(`/${params.locale}/login`);
   }

@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { motion } from "framer-motion";
 import { Quote, Star } from "lucide-react";
@@ -25,7 +25,7 @@ export default function Testimonials() {
             What Our Toppers Say
           </h2>
           <p className="mt-3 text-muted-foreground max-w-xl mx-auto">
-            Real words from real achievers — students who cracked UPSC with Dhyeya IAS.
+            Real words from real achievers - students who cracked UPSC with Dhyeya IAS.
           </p>
         </motion.div>
 

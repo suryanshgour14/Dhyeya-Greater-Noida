@@ -1,4 +1,4 @@
-import type { Metadata } from 'next';
+﻿import type { Metadata } from 'next';
 import { Suspense } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -6,7 +6,7 @@ import LoginForm from '@/components/forms/LoginForm';
 import { Trophy, Users, GraduationCap, Star } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Student Login — Dhyeya IAS Greater Noida',
+  title: 'Student Login - Dhyeya IAS Greater Noida',
   description: 'Login to access your study materials, test series, and resources.',
 };
 
@@ -43,7 +43,7 @@ export default function LoginPage({
   return (
     <div className="flex min-h-screen">
 
-      {/* ── Left panel — brand (hidden on mobile) ── */}
+      {/* ── Left panel - brand (hidden on mobile) ── */}
       <div className="relative hidden lg:flex lg:w-1/2 flex-col justify-between overflow-hidden bg-brand-blue p-12">
         {/* Dot pattern */}
         <div
@@ -73,7 +73,7 @@ export default function LoginPage({
             starts <span className="text-brand-gold">here.</span>
           </h2>
           <p className="mb-8 text-base leading-relaxed text-slate-300">
-            Access your study materials, mock tests, current affairs, and live sessions — all in one place.
+            Access your study materials, mock tests, current affairs, and live sessions - all in one place.
           </p>
 
           {/* Stats grid */}
@@ -103,7 +103,7 @@ export default function LoginPage({
         </div>
       </div>
 
-      {/* ── Right panel — form ── */}
+      {/* ── Right panel - form ── */}
       <div className="flex flex-1 flex-col items-center justify-center bg-slate-50 px-6 py-12">
         <div className="w-full max-w-md">
           <Suspense fallback={<FormSkeleton />}>

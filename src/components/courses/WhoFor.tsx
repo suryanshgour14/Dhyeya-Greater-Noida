@@ -9,28 +9,18 @@ interface WhoForProps {
   accentColor: "blue" | "gold" | "orange";
 }
 
+const unified = {
+  heading:  "text-slate-800",
+  iconWrap: "bg-blue-50 text-blue-600",
+  card:     "bg-slate-50/60 border border-slate-200/80 hover:border-blue-200/60 hover:bg-blue-50/30",
+  check:    "text-blue-600",
+  text:     "text-slate-700",
+};
+
 const themes = {
-  blue: {
-    heading:  "text-brand-blue",
-    iconWrap: "bg-brand-blue/10 text-brand-blue",
-    card:     "bg-blue-50/40 border border-blue-100 hover:border-blue-200 hover:bg-blue-50/70",
-    check:    "text-brand-blue",
-    text:     "text-slate-700",
-  },
-  gold: {
-    heading:  "text-amber-900",
-    iconWrap: "bg-amber-100 text-amber-600",
-    card:     "bg-amber-50/50 border border-amber-100 hover:border-amber-200 hover:bg-amber-50",
-    check:    "text-amber-500",
-    text:     "text-amber-950/80",
-  },
-  orange: {
-    heading:  "text-orange-900",
-    iconWrap: "bg-orange-100 text-brand-orange",
-    card:     "bg-orange-50/50 border border-orange-100 hover:border-orange-200 hover:bg-orange-50",
-    check:    "text-brand-orange",
-    text:     "text-orange-950/80",
-  },
+  blue:   unified,
+  gold:   unified,
+  orange: unified,
 };
 
 export default function WhoFor({ items, accentColor }: WhoForProps) {

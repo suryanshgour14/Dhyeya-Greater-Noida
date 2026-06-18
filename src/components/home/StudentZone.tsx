@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import Link from "next/link";
 import { useLocale } from "next-intl";
@@ -44,7 +44,7 @@ export default function StudentZone() {
             Student Zone
           </h2>
           <p className="mt-3 text-muted-foreground max-w-xl mx-auto">
-            Everything a Dhyeya IAS student needs — resources, schedules, exam info, and more — all in one place.
+            Everything a Dhyeya IAS student needs - resources, schedules, exam info, and more - all in one place.
           </p>
         </motion.div>
 

@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 import Link from "next/link";
@@ -189,10 +189,10 @@ export default function ProfileSidebar({ user }: Props) {
                 </div>
               </div>
 
-              {/* Footer — logout */}
+              {/* Footer - logout */}
               <div className="border-t bg-white px-4 py-4">
                 <div className="mb-3 rounded-xl bg-brand-gold/10 border border-brand-gold/20 px-4 py-3 text-center">
-                  <p className="text-xs font-semibold text-amber-700">Admissions Open — 2025 Batch</p>
+                  <p className="text-xs font-semibold text-amber-700">Admissions Open - 2025 Batch</p>
                   <Link
                     href={`/${locale}/contact`}
                     onClick={() => setOpen(false)}

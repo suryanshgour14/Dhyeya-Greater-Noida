@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import Link from "next/link";
 import Image from "next/image";
@@ -17,8 +17,8 @@ import {
 const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
 
 const FEATURES = [
-  { icon: IndianRupee, text: "Scholarship up to ₹2 Lakh — merit-based waiver" },
-  { icon: Users, text: "Small batch size — maximum personal attention" },
+  { icon: IndianRupee, text: "Scholarship up to ₹2 Lakh - merit-based waiver" },
+  { icon: Users, text: "Small batch size - maximum personal attention" },
   { icon: Zap, text: "IAS officer faculty for all GS papers" },
   { icon: Calendar, text: "Integrated Prelims + Mains + Interview prep" },
 ];
@@ -80,7 +80,7 @@ export default function UdaanPromo() {
 
             <p className="mb-6 text-base leading-relaxed text-slate-300">
               UDAAN is our flagship initiative to make quality UPSC coaching
-              accessible to every deserving aspirant — regardless of financial
+              accessible to every deserving aspirant - regardless of financial
               background. Get up to <strong className="text-white">₹2 Lakh scholarship</strong> waiver
               based on your performance in the Dhyeya Scholarship Test.
             </p>
@@ -118,7 +118,7 @@ export default function UdaanPromo() {
             </div>
           </motion.div>
 
-          {/* ── Right — benefits card ── */}
+          {/* ── Right - benefits card ── */}
           <motion.div
             initial={{ opacity: 0, x: 30 }}
             whileInView={{ opacity: 1, x: 0 }}

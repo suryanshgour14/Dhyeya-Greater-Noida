@@ -9,34 +9,20 @@ interface EnquirySectionProps {
   course: Course;
 }
 
+const unified = {
+  wrap:    "bg-gradient-to-br from-slate-50/80 to-blue-50/30 border border-slate-200/60 rounded-2xl",
+  heading: "text-slate-800",
+  sub:     "text-slate-500",
+  card:    "bg-white border border-slate-200/80 shadow-sm hover:shadow-md rounded-2xl",
+  phone:   "text-blue-600",
+  label:   "text-slate-700 font-semibold",
+  val:     "text-slate-500 text-xs",
+};
+
 const themes = {
-  blue: {
-    wrap:    "bg-gradient-to-br from-blue-50/60 to-sky-50/30 border border-blue-100 rounded-2xl",
-    heading: "text-brand-blue",
-    sub:     "text-slate-500",
-    card:    "bg-white border border-slate-200/80 shadow-sm hover:shadow-md rounded-2xl",
-    phone:   "text-brand-blue",
-    label:   "text-slate-700 font-semibold",
-    val:     "text-slate-500 text-xs",
-  },
-  gold: {
-    wrap:    "bg-gradient-to-br from-amber-50/60 to-yellow-50/30 border border-amber-100 rounded-2xl",
-    heading: "text-amber-900",
-    sub:     "text-amber-700/60",
-    card:    "bg-white border border-slate-200/80 shadow-sm hover:shadow-md rounded-2xl",
-    phone:   "text-amber-600",
-    label:   "text-slate-700 font-semibold",
-    val:     "text-slate-500 text-xs",
-  },
-  orange: {
-    wrap:    "bg-gradient-to-br from-orange-50/60 to-rose-50/20 border border-orange-100 rounded-2xl",
-    heading: "text-orange-900",
-    sub:     "text-orange-700/60",
-    card:    "bg-white border border-slate-200/80 shadow-sm hover:shadow-md rounded-2xl",
-    phone:   "text-brand-orange",
-    label:   "text-slate-700 font-semibold",
-    val:     "text-slate-500 text-xs",
-  },
+  blue:   unified,
+  gold:   unified,
+  orange: unified,
 };
 
 export default function EnquirySection({ course }: EnquirySectionProps) {

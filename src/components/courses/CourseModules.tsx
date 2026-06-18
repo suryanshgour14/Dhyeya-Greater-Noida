@@ -11,46 +11,24 @@ interface CourseModulesProps {
   accentColor: "blue" | "gold" | "orange";
 }
 
+const unified = {
+  heading:     "text-slate-800",
+  iconWrap:    "bg-blue-50 text-blue-600",
+  activeCard:  "border-blue-200/50 bg-blue-50/30 shadow-sm",
+  inactiveCard:"border-slate-200/80 bg-white hover:border-blue-200/50 hover:shadow-sm",
+  chevron:     "text-blue-600",
+  chevronOff:  "text-slate-400",
+  countText:   "text-slate-400",
+  bullet:      "bg-blue-500/40",
+  topic:       "text-slate-600",
+  sectionBg:   "bg-slate-50/60 border-t border-slate-200/40",
+  numBadge:    "bg-slate-800 text-white",
+};
+
 const themes = {
-  blue: {
-    heading:    "text-brand-blue",
-    iconWrap:   "bg-brand-blue/10 text-brand-blue",
-    activeCard: "border-brand-blue/30 bg-blue-50/40 shadow-sm",
-    inactiveCard:"border-slate-200 bg-white hover:border-blue-200 hover:shadow-sm",
-    chevron:    "text-brand-blue",
-    chevronOff: "text-slate-400",
-    countText:  "text-slate-400",
-    bullet:     "bg-brand-blue/40",
-    topic:      "text-slate-600",
-    sectionBg:  "bg-blue-50/30 border-t border-blue-100/50",
-    numBadge:   "bg-brand-blue text-white",
-  },
-  gold: {
-    heading:    "text-amber-900",
-    iconWrap:   "bg-amber-100 text-amber-600",
-    activeCard: "border-amber-300/60 bg-amber-50/40 shadow-sm",
-    inactiveCard:"border-slate-200 bg-white hover:border-amber-200 hover:shadow-sm",
-    chevron:    "text-amber-600",
-    chevronOff: "text-slate-400",
-    countText:  "text-slate-400",
-    bullet:     "bg-amber-500/40",
-    topic:      "text-slate-600",
-    sectionBg:  "bg-amber-50/30 border-t border-amber-100/50",
-    numBadge:   "bg-amber-500 text-white",
-  },
-  orange: {
-    heading:    "text-orange-900",
-    iconWrap:   "bg-orange-100 text-brand-orange",
-    activeCard: "border-orange-300/60 bg-orange-50/40 shadow-sm",
-    inactiveCard:"border-slate-200 bg-white hover:border-orange-200 hover:shadow-sm",
-    chevron:    "text-brand-orange",
-    chevronOff: "text-slate-400",
-    countText:  "text-slate-400",
-    bullet:     "bg-orange-500/40",
-    topic:      "text-slate-600",
-    sectionBg:  "bg-orange-50/30 border-t border-orange-100/50",
-    numBadge:   "bg-brand-orange text-white",
-  },
+  blue:   unified,
+  gold:   unified,
+  orange: unified,
 };
 
 export default function CourseModules({ modules, accentColor }: CourseModulesProps) {

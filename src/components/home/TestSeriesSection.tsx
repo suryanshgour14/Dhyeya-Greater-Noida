@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import Link from "next/link";
 import { useLocale } from "next-intl";
@@ -23,7 +23,7 @@ const TEST_SERIES = [
     id: "prelims",
     label: "Prelims",
     title: "All India Prelims Test Series 2025",
-    desc: "50 full-length mock tests — GS Paper I + CSAT — with detailed solutions, rank analysis, and subject-wise performance reports.",
+    desc: "50 full-length mock tests - GS Paper I + CSAT - with detailed solutions, rank analysis, and subject-wise performance reports.",
     icon: ClipboardList,
     color: "blue",
     features: ["50 Full Mocks", "All India Rank", "Detailed Solutions", "Previous Year Papers"],
@@ -47,7 +47,7 @@ const TEST_SERIES = [
     id: "integrated",
     label: "Integrated",
     title: "Integrated Prelims + Mains Series",
-    desc: "Complete package covering Prelims GS + CSAT and all Mains GS papers — best value for serious aspirants.",
+    desc: "Complete package covering Prelims GS + CSAT and all Mains GS papers - best value for serious aspirants.",
     icon: Target,
     color: "orange",
     features: ["50 Prelims Mocks", "360 Mains Questions", "Interview Guidance", "All India Rank"],
@@ -110,7 +110,7 @@ export default function TestSeriesSection() {
             UPSC Test Series 2025
           </h2>
           <p className="mt-3 text-muted-foreground max-w-xl mx-auto">
-            Exam-like practice with All India ranking, expert evaluation, and deep performance analytics — everything you need to crack UPSC.
+            Exam-like practice with All India ranking, expert evaluation, and deep performance analytics - everything you need to crack UPSC.
           </p>
         </motion.div>
 

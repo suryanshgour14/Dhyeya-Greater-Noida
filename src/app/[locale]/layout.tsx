@@ -1,4 +1,4 @@
-import type { Metadata } from 'next';
+﻿import type { Metadata } from 'next';
 import { Plus_Jakarta_Sans, Inter } from 'next/font/google';
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages } from 'next-intl/server';
@@ -30,7 +30,7 @@ export const metadata: Metadata = {
     template: '%s | Dhyeya IAS Greater Noida',
   },
   description:
-    'Dhyeya IAS Greater Noida — Premier UPSC Civil Services coaching institute with proven results, expert faculty, and comprehensive study material.',
+    'Dhyeya IAS Greater Noida - Premier UPSC Civil Services coaching institute with proven results, expert faculty, and comprehensive study material.',
   keywords: [
     'IAS coaching Greater Noida',
     'UPSC coaching',

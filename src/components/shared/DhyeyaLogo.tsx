@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import Image from "next/image";
 import { useLocale } from "next-intl";
@@ -16,7 +16,7 @@ const LOGOS = {
 
 interface DhyeyaLogoProps {
   background?: "light" | "dark";
-  /** CSS height class e.g. "h-9", "h-10", "h-12" — width scales automatically */
+  /** CSS height class e.g. "h-9", "h-10", "h-12" - width scales automatically */
   heightClass?: string;
   className?: string;
 }
@@ -31,8 +31,8 @@ export default function DhyeyaLogo({
   const src = LOGOS[lang][background];
   const alt =
     locale === "hi"
-      ? "ध्येय IAS ग्रेटर नोएडा — सर्वश्रेष्ठ UPSC कोचिंग"
-      : "Dhyeya IAS Greater Noida — Best UPSC Coaching";
+      ? "ध्येय IAS ग्रेटर नोएडा - सर्वश्रेष्ठ UPSC कोचिंग"
+      : "Dhyeya IAS Greater Noida - Best UPSC Coaching";
 
   return (
     <Image

@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
@@ -36,7 +36,7 @@ function MegaMenu({ item, locale }: { item: NavItem; locale: string }) {
         item.columns === 2 && "min-w-[420px]"
       )}
     >
-      <div className="max-h-[calc(100vh-100px)] overflow-y-auto overscroll-contain rounded-xl p-2">
+      <div className="max-h-[calc(100vh-100px)] overflow-y-auto overscroll-contain rounded-xl p-2" data-lenis-prevent>
         <div className={cn("grid gap-0.5", cols)}>
           {item.children.map((child, i) => {
             if (child.isHeader) {
@@ -285,7 +285,7 @@ export default function Navbar() {
           : "border-transparent bg-white"
       )}
     >
-      {/* Row 1 — top bar */}
+      {/* Row 1 - top bar */}
       <div className="hidden border-b border-border/40 bg-slate-50 md:block">
         <div className="container mx-auto flex items-center justify-between px-4 py-1.5 text-xs text-muted-foreground">
           <span className="flex items-center gap-1.5">
@@ -306,7 +306,7 @@ export default function Navbar() {
         </div>
       </div>
 
-      {/* Row 2 — main nav */}
+      {/* Row 2 - main nav */}
       <div className="container mx-auto flex h-14 items-center justify-between px-4">
         {/* Logo */}
         <Link href={`/${locale}`} className="flex items-center shrink-0">

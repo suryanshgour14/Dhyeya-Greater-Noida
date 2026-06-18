@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import Link from "next/link";
 import { useLocale, useTranslations } from "next-intl";
@@ -39,7 +39,7 @@ export default function WelcomeSection() {
     <section className="bg-white py-20">
       <div className="container mx-auto px-4">
         <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-20">
-          {/* ── Left — text ── */}
+          {/* ── Left - text ── */}
           <motion.div
             variants={staggerChildren}
             initial="initial"
@@ -93,7 +93,7 @@ export default function WelcomeSection() {
             </motion.div>
           </motion.div>
 
-          {/* ── Right — visual ── */}
+          {/* ── Right - visual ── */}
           <motion.div
             initial={{ opacity: 0, x: 30 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -155,7 +155,7 @@ export default function WelcomeSection() {
               </div>
             </div>
 
-            {/* Floating accent — top left */}
+            {/* Floating accent - top left */}
             <div className="absolute -left-5 -top-5 rounded-2xl border border-brand-blue/10 bg-white p-4 shadow-xl">
               <p className="text-xs font-medium text-muted-foreground">UPSC 2024</p>
               <p className="text-lg font-bold text-brand-blue">47 Selections</p>

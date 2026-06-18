@@ -10,46 +10,24 @@ interface CourseRoadmapProps {
   accentColor: "blue" | "gold" | "orange";
 }
 
+const unified = {
+  heading:  "text-slate-800",
+  iconWrap: "bg-blue-50 text-blue-600",
+  dot:      "bg-blue-700 border-4 border-white ring-2 ring-blue-200/50",
+  line:     "bg-gradient-to-b from-blue-300/30 to-slate-200/20",
+  period:   "text-blue-700",
+  card:     "bg-white border border-slate-200/80 shadow-sm hover:shadow-md",
+  cardAcct: "border-l-4 border-blue-600",
+  title:    "text-slate-800",
+  check:    "text-blue-500/80",
+  item:     "text-slate-500",
+  stepNum:  "bg-blue-50 text-blue-700",
+};
+
 const themes = {
-  blue: {
-    heading:  "text-brand-blue",
-    iconWrap: "bg-brand-blue/10 text-brand-blue",
-    dot:      "bg-brand-blue border-4 border-white ring-2 ring-brand-blue/20",
-    line:     "bg-gradient-to-b from-brand-blue/30 to-blue-100",
-    period:   "text-brand-blue",
-    card:     "bg-white border border-blue-100 shadow-sm hover:shadow-md",
-    cardAcct: "border-l-4 border-brand-blue",
-    title:    "text-slate-800",
-    check:    "text-brand-blue/70",
-    item:     "text-slate-500",
-    stepNum:  "bg-brand-blue/10 text-brand-blue",
-  },
-  gold: {
-    heading:  "text-amber-900",
-    iconWrap: "bg-amber-100 text-amber-600",
-    dot:      "bg-amber-500 border-4 border-white ring-2 ring-amber-200",
-    line:     "bg-gradient-to-b from-amber-400/30 to-amber-100",
-    period:   "text-amber-600",
-    card:     "bg-white border border-amber-100 shadow-sm hover:shadow-md",
-    cardAcct: "border-l-4 border-amber-400",
-    title:    "text-slate-800",
-    check:    "text-amber-500",
-    item:     "text-slate-500",
-    stepNum:  "bg-amber-50 text-amber-700",
-  },
-  orange: {
-    heading:  "text-orange-900",
-    iconWrap: "bg-orange-100 text-brand-orange",
-    dot:      "bg-brand-orange border-4 border-white ring-2 ring-orange-200",
-    line:     "bg-gradient-to-b from-orange-400/30 to-orange-100",
-    period:   "text-brand-orange",
-    card:     "bg-white border border-orange-100 shadow-sm hover:shadow-md",
-    cardAcct: "border-l-4 border-brand-orange",
-    title:    "text-slate-800",
-    check:    "text-orange-400",
-    item:     "text-slate-500",
-    stepNum:  "bg-orange-50 text-orange-700",
-  },
+  blue:   unified,
+  gold:   unified,
+  orange: unified,
 };
 
 export default function CourseRoadmap({ roadmap, accentColor }: CourseRoadmapProps) {

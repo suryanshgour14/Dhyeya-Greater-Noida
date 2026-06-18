@@ -15,43 +15,23 @@ interface CourseFAQProps {
   accentColor?: "blue" | "gold" | "orange";
 }
 
+const unified = {
+  heading:     "text-slate-800",
+  iconWrap:    "bg-blue-50 text-blue-600",
+  activeCard:  "border-blue-200/40 bg-blue-50/20",
+  inactiveCard:"border-slate-200/80 bg-white hover:border-blue-200/50",
+  question:    "text-slate-800",
+  answer:      "text-slate-500",
+  chevron:     "text-blue-600",
+  chevronOff:  "text-slate-400",
+  divider:     "border-slate-200/60",
+  num:         "text-slate-400/50",
+};
+
 const themes = {
-  blue: {
-    heading:     "text-brand-blue",
-    iconWrap:    "bg-brand-blue/10 text-brand-blue",
-    activeCard:  "border-brand-blue/30 bg-blue-50/30",
-    inactiveCard:"border-slate-200 bg-white hover:border-blue-200",
-    question:    "text-slate-800",
-    answer:      "text-slate-500",
-    chevron:     "text-brand-blue",
-    chevronOff:  "text-slate-400",
-    divider:     "border-blue-100/60",
-    num:         "text-brand-blue/40",
-  },
-  gold: {
-    heading:     "text-amber-900",
-    iconWrap:    "bg-amber-100 text-amber-600",
-    activeCard:  "border-amber-300/40 bg-amber-50/30",
-    inactiveCard:"border-slate-200 bg-white hover:border-amber-200",
-    question:    "text-slate-800",
-    answer:      "text-slate-500",
-    chevron:     "text-amber-600",
-    chevronOff:  "text-slate-400",
-    divider:     "border-amber-100/60",
-    num:         "text-amber-400/60",
-  },
-  orange: {
-    heading:     "text-orange-900",
-    iconWrap:    "bg-orange-100 text-brand-orange",
-    activeCard:  "border-orange-300/40 bg-orange-50/30",
-    inactiveCard:"border-slate-200 bg-white hover:border-orange-200",
-    question:    "text-slate-800",
-    answer:      "text-slate-500",
-    chevron:     "text-brand-orange",
-    chevronOff:  "text-slate-400",
-    divider:     "border-orange-100/60",
-    num:         "text-orange-400/50",
-  },
+  blue:   unified,
+  gold:   unified,
+  orange: unified,
 };
 
 export default function CourseFAQ({ faqs, accentColor = "blue" }: CourseFAQProps) {

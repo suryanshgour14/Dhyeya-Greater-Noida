@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 import Link from "next/link";
@@ -38,7 +38,7 @@ export default function TeamSection() {
             Meet the Faculty
           </h2>
           <p className="mt-3 text-muted-foreground max-w-xl mx-auto">
-            Experienced IAS/IPS officers, subject experts, and interview specialists — all committed to your success.
+            Experienced IAS/IPS officers, subject experts, and interview specialists - all committed to your success.
           </p>
         </motion.div>
 

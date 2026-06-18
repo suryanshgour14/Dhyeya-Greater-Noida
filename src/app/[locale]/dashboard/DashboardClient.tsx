@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useState } from 'react';
 import Link from 'next/link';
@@ -106,8 +106,8 @@ export default function DashboardClient({ user, locale }: Props) {
           <div className="grid gap-4 sm:grid-cols-2">
             {[
               { label: 'Name',   value: displayName },
-              { label: 'Email',  value: user.email ?? '—' },
-              { label: 'Phone',  value: (user.user_metadata?.phone as string) || '—' },
+              { label: 'Email',  value: user.email ?? '-' },
+              { label: 'Phone',  value: (user.user_metadata?.phone as string) || '-' },
               { label: 'Login method', value: user.app_metadata?.provider === 'google' ? 'Google' : 'Email / Password' },
             ].map(({ label, value }) => (
               <div key={label}>

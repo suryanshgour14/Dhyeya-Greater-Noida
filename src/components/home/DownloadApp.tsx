@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { motion } from "framer-motion";
 import { CheckCircle2, Smartphone, Star } from "lucide-react";
@@ -47,7 +47,7 @@ export default function DownloadApp() {
             </h2>
 
             <p className="mb-8 text-base leading-relaxed text-slate-300">
-              Carry your UPSC preparation in your pocket. Access lectures, mock tests, current affairs, and doubt sessions — all from the Dhyeya IAS app.
+              Carry your UPSC preparation in your pocket. Access lectures, mock tests, current affairs, and doubt sessions - all from the Dhyeya IAS app.
             </p>
 
             <ul className="mb-10 space-y-3">
@@ -91,7 +91,7 @@ export default function DownloadApp() {
             </div>
           </motion.div>
 
-          {/* ── Right — app mockup card ── */}
+          {/* ── Right - app mockup card ── */}
           <motion.div
             initial={{ opacity: 0, x: 30 }}
             whileInView={{ opacity: 1, x: 0 }}

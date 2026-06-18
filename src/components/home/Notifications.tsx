@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 import Link from "next/link";
@@ -25,7 +25,7 @@ export default function Notifications() {
       <div className="container mx-auto px-4">
         <div className="grid gap-12 lg:grid-cols-[1fr_380px]">
 
-          {/* ── Left — notification board ── */}
+          {/* ── Left - notification board ── */}
           <div>
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -127,7 +127,7 @@ export default function Notifications() {
             </div>
           </div>
 
-          {/* ── Right — quick access cards ── */}
+          {/* ── Right - quick access cards ── */}
           <motion.div
             initial={{ opacity: 0, x: 20 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -147,14 +147,14 @@ export default function Notifications() {
               },
               {
                 title: "Admission Enquiry",
-                desc: "Talk to our counsellors — free consultation",
+                desc: "Talk to our counsellors - free consultation",
                 href: "/contact",
                 bg: "bg-brand-orange",
                 emoji: "📞",
               },
               {
                 title: "Free Demo Class",
-                desc: "Every Saturday at 10:00 AM — walk in welcome",
+                desc: "Every Saturday at 10:00 AM - walk in welcome",
                 href: "/demo",
                 bg: "bg-emerald-600",
                 emoji: "🎓",

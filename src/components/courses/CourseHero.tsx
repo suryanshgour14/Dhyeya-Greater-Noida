@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import Link from "next/link";
 import { useLocale } from "next-intl";
@@ -7,85 +7,37 @@ import { Clock, Users, ChevronRight, Home, Calendar } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { Course } from "@/lib/constants";
 
+const unified = {
+  section:       "bg-gradient-to-br from-white via-slate-50/60 to-blue-50/25",
+  blob1:         "bg-blue-300/10",
+  blob2:         "bg-indigo-200/10",
+  breadcrumb:    "text-slate-400 hover:text-blue-700 transition-colors",
+  breadcrumbCur: "text-blue-700 font-medium",
+  catBadge:      "bg-blue-50 text-blue-700 border border-blue-200/60",
+  featBadge:     "bg-slate-100 text-slate-600 border border-slate-200",
+  newBadge:      "bg-teal-50 text-teal-700 border border-teal-200",
+  title:         "text-slate-900",
+  subtitle:      "text-slate-500",
+  desc:          "text-slate-600",
+  chip:          "bg-white border border-slate-200 text-slate-600 shadow-sm",
+  chipIcon:      "text-blue-600",
+  card:          "bg-white border border-slate-200/80 shadow-2xl shadow-slate-900/6",
+  cardTop:       "bg-gradient-to-r from-slate-800 to-blue-700",
+  price:         "text-slate-900",
+  emi:           "text-slate-400",
+  hl:            "bg-slate-50 border border-slate-200/60",
+  hlVal:         "text-slate-800",
+  hlLbl:         "text-slate-400",
+  btnEnroll:     "bg-blue-700 text-white hover:bg-blue-800 shadow-md shadow-blue-700/20",
+  btnEnquire:    "border border-slate-200 text-slate-700 hover:bg-slate-50",
+  mobEnroll:     "bg-blue-700 text-white hover:bg-blue-800",
+  mobLearn:      "border border-slate-200 text-slate-700 hover:bg-slate-50",
+};
+
 const themes = {
-  blue: {
-    section:       "bg-gradient-to-br from-white via-blue-50/50 to-sky-50/40",
-    blob1:         "bg-blue-200/25",
-    blob2:         "bg-sky-200/20",
-    breadcrumb:    "text-slate-400 hover:text-brand-blue transition-colors",
-    breadcrumbCur: "text-brand-blue font-medium",
-    catBadge:      "bg-brand-blue/10 text-brand-blue border border-brand-blue/20",
-    featBadge:     "bg-amber-100 text-amber-700 border border-amber-200",
-    newBadge:      "bg-emerald-100 text-emerald-700 border border-emerald-200",
-    title:         "text-brand-blue",
-    subtitle:      "text-slate-500",
-    desc:          "text-slate-600",
-    chip:          "bg-white border border-blue-200 text-slate-600 shadow-sm",
-    chipIcon:      "text-brand-blue",
-    card:          "bg-white border border-blue-100 shadow-2xl shadow-blue-900/6",
-    cardTop:       "bg-gradient-to-r from-brand-blue to-blue-500",
-    price:         "text-brand-blue",
-    emi:           "text-slate-400",
-    hl:            "bg-blue-50 border border-blue-100",
-    hlVal:         "text-brand-blue",
-    hlLbl:         "text-slate-400",
-    btnEnroll:     "bg-brand-blue text-white hover:bg-brand-blue/90 shadow-md shadow-brand-blue/20",
-    btnEnquire:    "border border-blue-200 text-brand-blue hover:bg-blue-50",
-    mobEnroll:     "bg-brand-blue text-white hover:bg-brand-blue/90",
-    mobLearn:      "border border-blue-200 text-brand-blue hover:bg-blue-50",
-  },
-  gold: {
-    section:       "bg-gradient-to-br from-amber-50/80 via-yellow-50/50 to-white",
-    blob1:         "bg-amber-200/25",
-    blob2:         "bg-yellow-200/20",
-    breadcrumb:    "text-amber-400/80 hover:text-amber-700 transition-colors",
-    breadcrumbCur: "text-amber-700 font-medium",
-    catBadge:      "bg-amber-100 text-amber-800 border border-amber-200",
-    featBadge:     "bg-amber-200/60 text-amber-900 border border-amber-300",
-    newBadge:      "bg-emerald-100 text-emerald-700 border border-emerald-200",
-    title:         "text-amber-900",
-    subtitle:      "text-amber-700/70",
-    desc:          "text-amber-950/70",
-    chip:          "bg-white border border-amber-200 text-amber-900 shadow-sm",
-    chipIcon:      "text-amber-600",
-    card:          "bg-white border border-amber-100 shadow-2xl shadow-amber-900/6",
-    cardTop:       "bg-gradient-to-r from-amber-500 to-yellow-400",
-    price:         "text-amber-900",
-    emi:           "text-amber-600/60",
-    hl:            "bg-amber-50 border border-amber-100",
-    hlVal:         "text-amber-800",
-    hlLbl:         "text-amber-500",
-    btnEnroll:     "bg-amber-600 text-white hover:bg-amber-700 shadow-md shadow-amber-600/20",
-    btnEnquire:    "border border-amber-200 text-amber-800 hover:bg-amber-50",
-    mobEnroll:     "bg-amber-600 text-white hover:bg-amber-700",
-    mobLearn:      "border border-amber-200 text-amber-800 hover:bg-amber-50",
-  },
-  orange: {
-    section:       "bg-gradient-to-br from-orange-50/80 via-rose-50/40 to-white",
-    blob1:         "bg-orange-200/25",
-    blob2:         "bg-rose-200/20",
-    breadcrumb:    "text-orange-400/80 hover:text-orange-700 transition-colors",
-    breadcrumbCur: "text-orange-700 font-medium",
-    catBadge:      "bg-orange-100 text-orange-800 border border-orange-200",
-    featBadge:     "bg-orange-200/60 text-orange-900 border border-orange-300",
-    newBadge:      "bg-emerald-100 text-emerald-700 border border-emerald-200",
-    title:         "text-orange-900",
-    subtitle:      "text-orange-700/70",
-    desc:          "text-orange-950/70",
-    chip:          "bg-white border border-orange-200 text-orange-900 shadow-sm",
-    chipIcon:      "text-brand-orange",
-    card:          "bg-white border border-orange-100 shadow-2xl shadow-orange-900/6",
-    cardTop:       "bg-gradient-to-r from-brand-orange to-orange-400",
-    price:         "text-orange-900",
-    emi:           "text-orange-600/60",
-    hl:            "bg-orange-50 border border-orange-100",
-    hlVal:         "text-orange-800",
-    hlLbl:         "text-orange-500",
-    btnEnroll:     "bg-brand-orange text-white hover:bg-brand-orange/90 shadow-md shadow-orange-600/20",
-    btnEnquire:    "border border-orange-200 text-orange-800 hover:bg-orange-50",
-    mobEnroll:     "bg-brand-orange text-white hover:bg-brand-orange/90",
-    mobLearn:      "border border-orange-200 text-orange-800 hover:bg-orange-50",
-  },
+  blue:   unified,
+  gold:   unified,
+  orange: unified,
 };
 
 export default function CourseHero({ course }: { course: Course }) {
@@ -187,7 +139,7 @@ export default function CourseHero({ course }: { course: Course }) {
             </div>
           </div>
 
-          {/* ── RIGHT — Fee card ──────────────────────── */}
+          {/* ── RIGHT - Fee card ──────────────────────── */}
           <motion.div
             initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}

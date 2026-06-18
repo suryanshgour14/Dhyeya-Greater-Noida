@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import Link from "next/link";
 import { TEST_SERIES } from "@/lib/test-series";
 import { cn } from "@/lib/utils";
@@ -29,7 +29,7 @@ export default function TestSeriesPage({ params }: Props) {
         <div className="container mx-auto px-4">
           <h1 className="mb-3 text-3xl font-extrabold sm:text-4xl">Test Series</h1>
           <p className="max-w-xl text-base text-white/70">
-            Structured mock tests for IAS, UPPCS, and UKPCS — sectional, full-length, and CSAT practice with evaluated copies and all-India rankings.
+            Structured mock tests for IAS, UPPCS, and UKPCS - sectional, full-length, and CSAT practice with evaluated copies and all-India rankings.
           </p>
         </div>
       </section>

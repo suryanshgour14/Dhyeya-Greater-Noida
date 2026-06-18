@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useRef } from "react";
 import Link from "next/link";
@@ -28,7 +28,7 @@ function FadeUp({ children, delay = 0, className = "" }: { children: React.React
   );
 }
 
-// ─── Section 1 — Mission ──────────────────────────────────────────────────────
+// ─── Section 1 - Mission ──────────────────────────────────────────────────────
 function MissionSection() {
   const stats = [
     { value: "10+", label: "Years of Legacy" },
@@ -46,7 +46,7 @@ function MissionSection() {
 
       <div className="container mx-auto px-4">
         <div className="grid gap-12 lg:grid-cols-2 lg:items-center">
-          {/* Left — text */}
+          {/* Left - text */}
           <div>
             <FadeUp>
               <span className="mb-4 inline-flex items-center gap-2 rounded-full border border-brand-gold/30 bg-brand-gold/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-widest text-brand-gold">
@@ -67,19 +67,19 @@ function MissionSection() {
             <FadeUp delay={0.2}>
               <div className="space-y-4 text-sm leading-relaxed text-slate-300">
                 <p>
-                  At <strong className="text-white">Dhyeya IAS Greater Noida</strong>, our mission is simple yet profound — to nurture a competitive temperament in every aspirant who walks through our doors and equip them with the knowledge, strategy, and confidence to crack India's most demanding examinations.
+                  At <strong className="text-white">Dhyeya IAS Greater Noida</strong>, our mission is simple yet profound - to nurture a competitive temperament in every aspirant who walks through our doors and equip them with the knowledge, strategy, and confidence to crack India's most demanding examinations.
                 </p>
                 <p>
                   We firmly believe that <em className="text-brand-gold font-semibold">"Geniuses are made, not born."</em> Behind every successful IAS, IPS, or PCS officer lies years of consistent effort, sharp guidance, and an unwavering commitment to growth.
                 </p>
                 <p>
-                  As an authorized franchise of Dhyeya IAS — one of India's most trusted names in civil services preparation for over a decade — we bring the same proven methodology, premium study material, and academic rigor right here to Greater Noida. <strong className="text-white">No more travelling to Delhi or Mukherjee Nagar.</strong> World-class UPSC coaching is now in your neighbourhood.
+                  As an authorized franchise of Dhyeya IAS - one of India's most trusted names in civil services preparation for over a decade - we bring the same proven methodology, premium study material, and academic rigor right here to Greater Noida. <strong className="text-white">No more travelling to Delhi or Mukherjee Nagar.</strong> World-class UPSC coaching is now in your neighbourhood.
                 </p>
               </div>
             </FadeUp>
           </div>
 
-          {/* Right — stats grid */}
+          {/* Right - stats grid */}
           <FadeUp delay={0.3} className="grid grid-cols-2 gap-4">
             {stats.map(({ value, label }, i) => (
               <motion.div
@@ -101,22 +101,22 @@ function MissionSection() {
   );
 }
 
-// ─── Section 2 — Aims & Objectives ───────────────────────────────────────────
+// ─── Section 2 - Aims & Objectives ───────────────────────────────────────────
 const AIMS = [
   {
     icon: Target,
     title: "Crafting a Personalised Examination Strategy",
-    body: "Every aspirant is different — different strengths, different challenges. Our faculty helps each student frame a personalised, level-wise strategy for the Preliminary Examination, Mains Examination, and Personality Test — because there is no one-size-fits-all path to success.",
+    body: "Every aspirant is different - different strengths, different challenges. Our faculty helps each student frame a personalised, level-wise strategy for the Preliminary Examination, Mains Examination, and Personality Test - because there is no one-size-fits-all path to success.",
   },
   {
     icon: BookOpen,
     title: "Building Conceptual Clarity Through Classroom Programmes",
-    body: "Our classroom programmes are conducted by subject experts with years of teaching and exam experience. The focus is always on building clarity of fundamentals first — because deep understanding always outperforms rote memorization.",
+    body: "Our classroom programmes are conducted by subject experts with years of teaching and exam experience. The focus is always on building clarity of fundamentals first - because deep understanding always outperforms rote memorization.",
   },
   {
     icon: HeartHandshake,
     title: "Empowering Aspirants from Weaker Sections of Society",
-    body: "We are deeply committed to inclusivity. A meaningful share of our seats and special scholarship support is reserved for aspirants from economically and socially weaker sections — because talent should never be limited by circumstance.",
+    body: "We are deeply committed to inclusivity. A meaningful share of our seats and special scholarship support is reserved for aspirants from economically and socially weaker sections - because talent should never be limited by circumstance.",
   },
   {
     icon: Award,
@@ -140,7 +140,7 @@ function AimsSection() {
           </span>
           <h2 className="text-3xl font-extrabold text-brand-blue md:text-4xl">Our Aims & Objectives</h2>
           <p className="mt-3 text-base text-muted-foreground">
-            Building a generation of civil servants from every section of society — driven, disciplined, and dedicated.
+            Building a generation of civil servants from every section of society - driven, disciplined, and dedicated.
           </p>
         </FadeUp>
 
@@ -160,14 +160,14 @@ function AimsSection() {
             </FadeUp>
           ))}
 
-          {/* Filler card — quote */}
+          {/* Filler card - quote */}
           <FadeUp delay={0.07 * AIMS.length}>
             <div className="flex h-full flex-col items-center justify-center rounded-2xl border border-brand-gold/30 bg-brand-blue p-6 text-center">
               <Sparkles className="mb-3 h-8 w-8 text-brand-gold" />
               <p className="text-base font-bold italic text-white leading-snug">
                 "Don't study to earn,<br />rather study to learn."
               </p>
-              <p className="mt-3 text-xs text-slate-400">— Dhyeya IAS Philosophy</p>
+              <p className="mt-3 text-xs text-slate-400">- Dhyeya IAS Philosophy</p>
             </div>
           </FadeUp>
         </div>
@@ -176,24 +176,24 @@ function AimsSection() {
   );
 }
 
-// ─── Section 3 — Methodology ──────────────────────────────────────────────────
+// ─── Section 3 - Methodology ──────────────────────────────────────────────────
 const METHODOLOGY = [
   {
     icon: Lightbulb,
     title: "Personalised Counselling",
-    body: "Every preparation journey begins with one-on-one counselling — understanding the aspirant's background, strengths, weaknesses, and target. A personalised roadmap is built before classes even begin.",
+    body: "Every preparation journey begins with one-on-one counselling - understanding the aspirant's background, strengths, weaknesses, and target. A personalised roadmap is built before classes even begin.",
     color: "bg-blue-50 text-blue-700 border-blue-100",
   },
   {
     icon: GraduationCap,
     title: "Structured Classroom Training",
-    body: "Our Pre-cum-Mains integrated programme covers the entire UPSC and State PCS syllabus in a structured, time-bound manner — with dedicated revision modules of 45 days for Prelims and 60 days for Mains.",
+    body: "Our Pre-cum-Mains integrated programme covers the entire UPSC and State PCS syllabus in a structured, time-bound manner - with dedicated revision modules of 45 days for Prelims and 60 days for Mains.",
     color: "bg-amber-50 text-amber-700 border-amber-100",
   },
   {
     icon: ClipboardCheck,
     title: "Test Evaluation Programme",
-    body: "Our All India Test Series for Prelims and Mains simulates the real exam environment, and every answer sheet is personally evaluated with detailed feedback — not just a score.",
+    body: "Our All India Test Series for Prelims and Mains simulates the real exam environment, and every answer sheet is personally evaluated with detailed feedback - not just a score.",
     color: "bg-emerald-50 text-emerald-700 border-emerald-100",
   },
   {
@@ -211,7 +211,7 @@ const METHODOLOGY = [
   {
     icon: MonitorPlay,
     title: "Distance Learning & Online Programmes",
-    body: "For students who cannot attend physical classes, our online learning platform delivers the same quality content, live classes, and test series — anytime, anywhere.",
+    body: "For students who cannot attend physical classes, our online learning platform delivers the same quality content, live classes, and test series - anytime, anywhere.",
     color: "bg-cyan-50 text-cyan-700 border-cyan-100",
   },
 ];
@@ -228,7 +228,7 @@ function MethodologySection() {
             A Proven Methodology Backed by a Decade of Results
           </h2>
           <p className="mt-3 max-w-2xl mx-auto text-base text-muted-foreground">
-            A complete, integrated learning ecosystem — where every component is engineered to convert effort into results.
+            A complete, integrated learning ecosystem - where every component is engineered to convert effort into results.
           </p>
         </FadeUp>
 
@@ -260,7 +260,7 @@ function MethodologySection() {
               <div className="flex-1">
                 <h3 className="text-lg font-bold text-white">Mains Answer Writing Programme</h3>
                 <p className="mt-1 text-sm leading-relaxed text-slate-300">
-                  Knowledge alone doesn't clear the Mains exam — presentation does. Our daily answer writing practice and evaluation programme trains aspirants in the art of crafting structured, analytical, and high-scoring answers.
+                  Knowledge alone doesn't clear the Mains exam - presentation does. Our daily answer writing practice and evaluation programme trains aspirants in the art of crafting structured, analytical, and high-scoring answers.
                 </p>
               </div>
             </div>
@@ -271,7 +271,7 @@ function MethodologySection() {
   );
 }
 
-// ─── Section 4 — Why Choose Us ────────────────────────────────────────────────
+// ─── Section 4 - Why Choose Us ────────────────────────────────────────────────
 const COMPARISON = [
   { feature: "Integrated Pre-cum-Mains Programme",                  us: "yes",     others: "yes"     },
   { feature: "Dedicated Revision Programme (45 days Prelims + 60 days Mains)", us: "yes", others: "no" },
@@ -280,7 +280,7 @@ const COMPARISON = [
   { feature: "Interview Guidance Programme",                        us: "yes",     others: "limited" },
   { feature: "Concise, Comprehensive & Exclusive Study Material",   us: "yes",     others: "limited" },
   { feature: "PMI (Prelims-Mains-Interview) Integrated Programme",  us: "yes",     others: "no"      },
-  { feature: "Dhyeya IAS App — Daily Answer Writing & Evaluation",  us: "yes",     others: "no"      },
+  { feature: "Dhyeya IAS App - Daily Answer Writing & Evaluation",  us: "yes",     others: "no"      },
   { feature: "Personal Mentor for Every Student",                   us: "yes",     others: "limited" },
   { feature: "Performance Tracking via Class Tests",                us: "yes",     others: "limited" },
   { feature: "Continuous Interaction with UPSC Toppers",            us: "yes",     others: "limited" },
@@ -298,12 +298,12 @@ const PILLARS = [
   {
     icon: Sparkles,
     title: "Nurturing and Shaping Talent",
-    body: "Talent decides what you can do. Motivation decides how much. But attitude decides how well. We help you master the balance of ATM — Attitude, Talent, Motivation — through structured mentoring.",
+    body: "Talent decides what you can do. Motivation decides how much. But attitude decides how well. We help you master the balance of ATM - Attitude, Talent, Motivation - through structured mentoring.",
   },
   {
     icon: Brain,
     title: "Enhancing Capacity, Building Capability",
-    body: "Our faculty expands your knowledge base while building analytical thinking, writing skills, and emotional intelligence — what the UPSC examination truly tests.",
+    body: "Our faculty expands your knowledge base while building analytical thinking, writing skills, and emotional intelligence - what the UPSC examination truly tests.",
   },
   {
     icon: BookOpen,
@@ -313,7 +313,7 @@ const PILLARS = [
   {
     icon: Network,
     title: "Dedicated Academic Associates",
-    body: "Round-the-clock academic support from past UPSC Mains and Interview candidates. No significant learning happens without a significant relationship — we've built that into the curriculum.",
+    body: "Round-the-clock academic support from past UPSC Mains and Interview candidates. No significant learning happens without a significant relationship - we've built that into the curriculum.",
   },
 ];
 
@@ -335,7 +335,7 @@ function WhySection({ locale }: { locale: string }) {
             Why Choose Dhyeya IAS Greater Noida?
           </h2>
           <p className="mt-3 max-w-2xl mx-auto text-base text-muted-foreground">
-            When you choose a coaching institute, you're not just choosing a classroom — you're choosing a partner for one of the most important journeys of your life.
+            When you choose a coaching institute, you're not just choosing a classroom - you're choosing a partner for one of the most important journeys of your life.
           </p>
         </FadeUp>
 
@@ -402,7 +402,7 @@ function WhySection({ locale }: { locale: string }) {
               </div>
               <h4 className="mb-2 text-sm font-bold text-white">Pan-India Network</h4>
               <p className="text-xs leading-relaxed text-slate-300">
-                As part of the Dhyeya IAS family, our Greater Noida students benefit from resources, faculty, and toppers' insights from centres across India — a network no standalone local institute can match.
+                As part of the Dhyeya IAS family, our Greater Noida students benefit from resources, faculty, and toppers' insights from centres across India - a network no standalone local institute can match.
               </p>
             </div>
           </FadeUp>
