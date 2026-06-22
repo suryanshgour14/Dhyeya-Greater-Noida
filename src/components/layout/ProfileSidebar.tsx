@@ -19,7 +19,7 @@ const STUDENT_ZONE = [
   { icon: BookOpen,      label: "Study Material",    href: "/student-zone/resources" },
   { icon: ClipboardList, label: "Test Series",        href: "/test-series" },
   { icon: Bell,          label: "Notifications",      href: "/student-zone/notifications" },
-  { icon: FileText,      label: "Exam Info",          href: "/student-zone/exam-info" },
+  { icon: FileText,      label: "Live Test",           href: "/tests" },
   { icon: Download,      label: "Books & Notes",      href: "/student-zone/books" },
   { icon: HelpCircle,    label: "UPSC FAQs",          href: "/student-zone/faqs" },
   { icon: Award,         label: "IAS Olympiad",       href: "/student-zone/olympiad" },

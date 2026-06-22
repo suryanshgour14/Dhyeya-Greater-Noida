@@ -5,16 +5,27 @@ import { routing } from './i18n/routing';
 
 const intlMiddleware = createMiddleware(routing);
 
-// Routes that require a logged-in user
-const PROTECTED = ['/dashboard', '/dashboard/materials', '/dashboard/profile'];
+// Routes that require any authenticated user
+const AUTH_REQUIRED = [
+  '/dashboard',
+  '/tests',
+  '/student-zone',
+];
+
+// Routes that require faculty/admin role
+const ADMIN_REQUIRED = ['/admin'];
+
+function getLocale(pathname: string) {
+  return pathname.split('/')[1] || 'en';
+}
 
 export default async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  const isProtected = PROTECTED.some((p) => pathname.includes(p));
+  const needsAuth = AUTH_REQUIRED.some((p) => pathname.includes(p));
+  const needsAdmin = ADMIN_REQUIRED.some((p) => pathname.includes(p));
 
-  if (isProtected) {
-    // Build a temporary response to pass cookies through
+  if (needsAuth || needsAdmin) {
     const response = NextResponse.next({ request });
 
     const supabase = createServerClient(
@@ -34,13 +45,25 @@ export default async function middleware(request: NextRequest) {
     );
 
     const { data: { user } } = await supabase.auth.getUser();
+    const locale = getLocale(pathname);
 
     if (!user) {
-      // Not logged in → redirect to /[locale]/login
-      const locale = pathname.split('/')[1] || 'en';
       const loginUrl = new URL(`/${locale}/login`, request.url);
       loginUrl.searchParams.set('next', pathname);
       return NextResponse.redirect(loginUrl);
+    }
+
+    if (needsAdmin) {
+      // Check role from profiles table
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('role')
+        .eq('id', user.id)
+        .single();
+
+      if (!profile || !['admin', 'faculty'].includes(profile.role)) {
+        return NextResponse.redirect(new URL(`/${locale}`, request.url));
+      }
     }
   }
 
