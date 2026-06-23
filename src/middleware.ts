@@ -10,6 +10,7 @@ const AUTH_REQUIRED = [
   '/dashboard',
   '/tests',
   '/student-zone',
+  '/purchases',
 ];
 
 // Routes that require faculty/admin role

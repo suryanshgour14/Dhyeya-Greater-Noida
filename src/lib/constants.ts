@@ -47,6 +47,7 @@ export interface NavChild {
   icon?: LucideIcon;
   description?: string;
   isHeader?: boolean;
+  fullWidth?: boolean;
   subLinks?: { label: string; href: string }[];
 }
 
@@ -101,9 +102,9 @@ export const NAV_ITEMS: NavItem[] = [
     href: '/test-series',
     columns: 2,
     children: [
-      { label: 'Live Tests', href: '/tests', icon: Monitor, description: 'Take live mock tests online' },
-      { label: 'Prelims', href: '', isHeader: true },
+      { label: 'Live Tests', href: '/tests', icon: Monitor, description: 'Take live mock tests online', fullWidth: true },
       { label: 'Mains', href: '', isHeader: true },
+      { label: 'Prelims', href: '', isHeader: true },
       { label: 'IAS Prelims', href: '/test-series/ias-prelims', icon: ClipboardList, description: 'GS + CSAT mock tests' },
       { label: 'IAS Mains', href: '/test-series/ias-mains', icon: Edit, description: 'Answer writing mock tests' },
       { label: 'UPPCS Prelims', href: '/test-series/uppcs-prelims', icon: ClipboardList, description: 'UP PCS prelims mock tests' },
@@ -120,12 +121,10 @@ export const NAV_ITEMS: NavItem[] = [
     children: [
       { label: 'Batch Details', href: '/student-zone/batches', icon: Users },
       { label: 'Free Resources', href: '/student-zone/resources', icon: Download },
-      { label: 'Books & Notes', href: '/student-zone/books', icon: Book },
       { label: 'UPSC FAQs', href: '/student-zone/faqs', icon: HelpCircle },
       { label: 'Live Test', href: '/tests', icon: Monitor },
       { label: 'Latest Notifications', href: '/student-zone/notifications', icon: Bell },
       { label: 'Test Results', href: '/student-zone/results', icon: Trophy },
-      { label: 'IAS Olympiad', href: '/student-zone/olympiad', icon: Award },
     ],
   },
   {
@@ -148,10 +147,6 @@ export const NAV_ITEMS: NavItem[] = [
       { label: 'Faculty', href: '/team#faculty', icon: GraduationCap, description: 'Subject matter experts' },
       { label: 'Mock Interview Panel', href: '/team#interview', icon: MessageSquare, description: 'Personality test prep' },
     ],
-  },
-  {
-    label: 'Blogs',
-    href: '/blogs',
   },
 ];
 

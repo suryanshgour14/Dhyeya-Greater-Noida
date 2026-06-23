@@ -1,22 +1,23 @@
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import { createServerClient } from "@/lib/supabase/server";
-import { Clock, Layers, Lock, ChevronRight, GraduationCap } from "lucide-react";
+import { Clock, Layers, Lock, ChevronRight, GraduationCap, CheckCircle2 } from "lucide-react";
 import type { DBTest } from "@/lib/test-types";
+import BuyButton from "@/components/payments/BuyButton";
 
 interface TestWithCounts extends DBTest {
   test_sections: { count: number }[];
   questions: { count: number }[];
 }
+interface ProductRow { id: string; ref_id: string }
+interface EnrollmentRow { product_id: string; expires_at: string | null }
 
 export default async function TestsPage({ params }: { params: { locale: string } }) {
   const locale = params.locale;
   const supabase = createServerClient();
   const { data: { user } } = await supabase.auth.getUser();
 
-  if (!user) {
-    redirect(`/${locale}/login?next=/${locale}/tests`);
-  }
+  if (!user) redirect(`/${locale}/login?next=/${locale}/tests`);
 
   const { data: tests } = await supabase
     .from("tests")
@@ -24,27 +25,49 @@ export default async function TestsPage({ params }: { params: { locale: string }
     .eq("status", "published")
     .order("created_at", { ascending: false });
 
-  // Check existing in-progress attempts
   const { data: inProgress } = await supabase
     .from("attempts")
     .select("test_id")
     .eq("student_id", user.id)
     .eq("status", "in_progress");
-
   const inProgressSet = new Set((inProgress ?? []).map((a) => a.test_id));
+
+  // Products + enrollments for access gating
+  const { data: products } = await supabase
+    .from("products")
+    .select("id, ref_id")
+    .eq("type", "test")
+    .eq("is_active", true);
+
+  const productByTestId = new Map<string, string>(
+    (products as ProductRow[] ?? []).map((p) => [p.ref_id, p.id])
+  );
+
+  let enrolledProductIds = new Set<string>();
+  if (products && products.length > 0) {
+    const { data: enrollments } = await supabase
+      .from("enrollments")
+      .select("product_id, expires_at")
+      .eq("student_id", user.id)
+      .in("product_id", (products as ProductRow[]).map((p) => p.id));
+    enrolledProductIds = new Set(
+      (enrollments as EnrollmentRow[] ?? [])
+        .filter((e) => e.expires_at === null || new Date(e.expires_at) > new Date())
+        .map((e) => e.product_id)
+    );
+  }
 
   const EXAM_COLORS: Record<string, string> = {
     "UPSC Prelims": "from-blue-600 to-blue-800",
-    "CSAT": "from-sky-600 to-sky-800",
-    "UPPSC": "from-amber-600 to-amber-800",
-    "UKPSC": "from-orange-600 to-orange-800",
-    "BPSC": "from-green-600 to-green-800",
+    "CSAT":         "from-sky-600 to-sky-800",
+    "UPPSC":        "from-amber-600 to-amber-800",
+    "UKPSC":        "from-orange-600 to-orange-800",
+    "BPSC":         "from-green-600 to-green-800",
     "Current Affairs": "from-purple-600 to-purple-800",
   };
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white">
-      {/* Hero */}
       <section className="bg-gradient-to-br from-slate-900 via-blue-950 to-slate-800 text-white">
         <div className="container mx-auto px-4 py-12 text-center">
           <GraduationCap className="mx-auto mb-3 h-10 w-10 text-white/60" />
@@ -67,10 +90,13 @@ export default async function TestsPage({ params }: { params: { locale: string }
         ) : (
           <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {(tests as TestWithCounts[]).map((test) => {
-              const gradient = EXAM_COLORS[test.exam_type ?? ""] ?? "from-slate-700 to-slate-900";
+              const gradient  = EXAM_COLORS[test.exam_type ?? ""] ?? "from-slate-700 to-slate-900";
               const resumable = inProgressSet.has(test.id);
-              const qCount = test.questions?.[0]?.count ?? 0;
-              const sCount = test.test_sections?.[0]?.count ?? 0;
+              const qCount    = test.questions?.[0]?.count ?? 0;
+              const sCount    = test.test_sections?.[0]?.count ?? 0;
+              const productId = productByTestId.get(test.id);
+              const enrolled  = productId ? enrolledProductIds.has(productId) : false;
+              const canStart  = test.is_free || enrolled;
 
               return (
                 <div key={test.id} className="flex flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md">
@@ -85,15 +111,18 @@ export default async function TestsPage({ params }: { params: { locale: string }
                           <p className="mt-0.5 text-sm text-white/75">{test.title_hi}</p>
                         )}
                       </div>
-                      {!test.is_free && <Lock className="h-4 w-4 text-white/50 shrink-0 ml-2" />}
+                      {!test.is_free && (enrolled
+                        ? <CheckCircle2 className="h-4 w-4 text-green-300 shrink-0 ml-2" />
+                        : <Lock className="h-4 w-4 text-white/50 shrink-0 ml-2" />
+                      )}
                     </div>
                   </div>
 
                   <div className="grid grid-cols-3 divide-x divide-slate-100 border-b border-slate-100 text-center">
                     {[
                       { label: "Questions", val: qCount },
-                      { label: "Sections", val: sCount },
-                      { label: "Duration", val: `${test.total_duration_min}m` },
+                      { label: "Sections",  val: sCount },
+                      { label: "Duration",  val: `${test.total_duration_min}m` },
                     ].map((s) => (
                       <div key={s.label} className="py-3">
                         <p className="text-base font-extrabold text-slate-800">{s.val}</p>
@@ -107,6 +136,9 @@ export default async function TestsPage({ params }: { params: { locale: string }
                       {test.is_free && (
                         <span className="rounded-full bg-green-100 px-2.5 py-0.5 text-[10px] font-bold text-green-700">FREE</span>
                       )}
+                      {!test.is_free && enrolled && (
+                        <span className="rounded-full bg-blue-100 px-2.5 py-0.5 text-[10px] font-bold text-blue-700">ENROLLED</span>
+                      )}
                       <span className="flex items-center gap-1 rounded-full bg-slate-100 px-2.5 py-0.5 text-[10px] font-semibold text-slate-600">
                         <Clock className="h-3 w-3" />{test.total_duration_min} min
                       </span>
@@ -114,13 +146,28 @@ export default async function TestsPage({ params }: { params: { locale: string }
                         <Layers className="h-3 w-3" />{sCount} sections
                       </span>
                     </div>
-                    <Link
-                      href={`/${locale}/tests/${test.id}/attempt`}
-                      className="flex items-center gap-1 rounded-xl bg-brand-blue px-4 py-2 text-sm font-bold text-white hover:bg-blue-700 transition-colors"
-                    >
-                      {resumable ? "Resume" : "Start"}
-                      <ChevronRight className="h-4 w-4" />
-                    </Link>
+
+                    {canStart ? (
+                      <Link
+                        href={`/${locale}/tests/${test.id}/attempt`}
+                        className="flex items-center gap-1 rounded-xl bg-brand-blue px-4 py-2 text-sm font-bold text-white hover:bg-blue-700 transition-colors"
+                      >
+                        {resumable ? "Resume" : "Start"}<ChevronRight className="h-4 w-4" />
+                      </Link>
+                    ) : productId ? (
+                      <BuyButton
+                        productId={productId}
+                        isEnrolled={false}
+                        redirectTo={`/tests/${test.id}/attempt`}
+                        label="Buy"
+                        size="sm"
+                        variant="gold"
+                      />
+                    ) : (
+                      <span className="flex items-center gap-1 rounded-xl bg-slate-100 px-4 py-2 text-sm font-semibold text-slate-400">
+                        <Lock className="h-3.5 w-3.5" /> Paid
+                      </span>
+                    )}
                   </div>
                 </div>
               );

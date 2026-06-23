@@ -18,6 +18,35 @@ export async function POST(request: NextRequest, { params }: { params: { id: str
 
   if (!test) return NextResponse.json({ error: 'Test not found' }, { status: 404 });
 
+  // Enrollment gate: paid tests require an active enrollment
+  if (!test.is_free) {
+    const { data: product } = await supabase
+      .from('products')
+      .select('id')
+      .eq('type', 'test')
+      .eq('ref_id', testId)
+      .eq('is_active', true)
+      .maybeSingle();
+
+    if (product) {
+      const { data: enrollment } = await supabase
+        .from('enrollments')
+        .select('id, expires_at')
+        .eq('student_id', user.id)
+        .eq('product_id', product.id)
+        .maybeSingle();
+
+      const active = enrollment &&
+        (enrollment.expires_at === null || new Date(enrollment.expires_at) > new Date());
+      if (!active) {
+        return NextResponse.json(
+          { error: 'Purchase required', requiresPurchase: true, productId: product.id },
+          { status: 403 },
+        );
+      }
+    }
+  }
+
   // Check for an existing in-progress attempt
   const { data: existing } = await supabase
     .from('attempts')

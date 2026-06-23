@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { COURSES } from "@/lib/constants";
+import { createServerClient } from "@/lib/supabase/server";
 import CourseHero from "@/components/courses/CourseHero";
 import CourseFeatureBento from "@/components/courses/CourseFeatureBento";
 import CourseModules from "@/components/courses/CourseModules";
@@ -30,9 +31,34 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-export default function CourseDetailPage({ params }: Props) {
+export default async function CourseDetailPage({ params }: Props) {
   const course = COURSES.find((c) => c.slug === params.slug);
   if (!course) notFound();
+
+  const supabase = createServerClient();
+  const { data: { user } } = await supabase.auth.getUser();
+
+  // Look up a payment product linked to this course slug
+  const { data: product } = await supabase
+    .from("products")
+    .select("id, price_inr")
+    .eq("type", "course")
+    .eq("ref_slug", params.slug)
+    .eq("is_active", true)
+    .maybeSingle();
+
+  // Check enrollment if user is logged in and a product exists
+  let isEnrolled = false;
+  if (user && product) {
+    const { data: enrollment } = await supabase
+      .from("enrollments")
+      .select("id, expires_at")
+      .eq("student_id", user.id)
+      .eq("product_id", product.id)
+      .maybeSingle();
+    isEnrolled = !!enrollment &&
+      (enrollment.expires_at === null || new Date(enrollment.expires_at) > new Date());
+  }
 
   return (
     <>
@@ -55,11 +81,13 @@ export default function CourseDetailPage({ params }: Props) {
         </div>
       </div>
 
-      {/* Sticky bottom enroll bar */}
       <StickyEnrollBar
         title={course.title}
         fee={course.fee}
         accentColor={course.accentColor}
+        productId={product?.id}
+        isEnrolled={isEnrolled}
+        courseSlug={params.slug}
       />
     </>
   );

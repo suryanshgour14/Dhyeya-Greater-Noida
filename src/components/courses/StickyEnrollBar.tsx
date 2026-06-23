@@ -3,26 +3,22 @@
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Phone, MessageSquare, ArrowRight } from "lucide-react";
-import { cn } from "@/lib/utils";
 import { CONTACT_INFO } from "@/lib/constants";
+import BuyButton from "@/components/payments/BuyButton";
 
 interface StickyEnrollBarProps {
   title: string;
   fee: number;
   accentColor: "blue" | "gold" | "orange";
+  productId?: string;
+  isEnrolled?: boolean;
+  courseSlug?: string;
 }
 
-const unified = { btn: "bg-blue-700 hover:bg-blue-800 text-white shadow-md shadow-blue-700/25" };
-
-const themes = {
-  blue:   unified,
-  gold:   unified,
-  orange: unified,
-};
-
-export default function StickyEnrollBar({ title, fee, accentColor }: StickyEnrollBarProps) {
+export default function StickyEnrollBar({
+  title, fee, productId, isEnrolled = false, courseSlug,
+}: StickyEnrollBarProps) {
   const [visible, setVisible] = useState(false);
-  const t = themes[accentColor];
 
   useEffect(() => {
     const handler = () => setVisible(window.scrollY > 400);
@@ -38,18 +34,17 @@ export default function StickyEnrollBar({ title, fee, accentColor }: StickyEnrol
           animate={{ y: 0, opacity: 1 }}
           exit={{ y: 80, opacity: 0 }}
           transition={{ duration: 0.25, ease: "easeOut" }}
-          id="enroll"
           className="fixed bottom-0 left-0 right-0 z-50 border-t border-slate-200/60 bg-white/96 shadow-2xl backdrop-blur-sm"
         >
           <div className="container mx-auto flex items-center justify-between gap-4 px-4 py-3">
             <div className="hidden sm:block">
               <p className="text-xs text-slate-400 font-medium line-clamp-1">{title}</p>
               <p className="text-lg font-extrabold text-slate-800">
-                ₹{fee.toLocaleString("en-IN")}
+                {productId ? `₹${fee.toLocaleString("en-IN")}` : "Enquire for fee"}
               </p>
             </div>
 
-            <div className="flex flex-1 justify-end gap-2">
+            <div className="flex flex-1 justify-end gap-2 flex-wrap">
               <a
                 href={`tel:${CONTACT_INFO.phone}`}
                 className="flex items-center gap-1.5 rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-600 hover:bg-slate-50 transition-colors"
@@ -64,17 +59,25 @@ export default function StickyEnrollBar({ title, fee, accentColor }: StickyEnrol
               >
                 <MessageSquare className="h-3.5 w-3.5" /> WhatsApp
               </a>
-              <button
-                onClick={() => {
-                  document.getElementById("enquiry")?.scrollIntoView({ behavior: "smooth" });
-                }}
-                className={cn(
-                  "flex items-center gap-1.5 rounded-xl px-5 py-2 text-sm font-bold transition-all duration-200",
-                  t.btn
-                )}
-              >
-                Enroll Now <ArrowRight className="h-3.5 w-3.5" />
-              </button>
+
+              {productId ? (
+                <BuyButton
+                  productId={productId}
+                  isEnrolled={isEnrolled}
+                  redirectTo={`/courses/${courseSlug}`}
+                  label="Enroll Now"
+                  enrolledLabel="Go to Course"
+                  size="md"
+                  variant="gold"
+                />
+              ) : (
+                <button
+                  onClick={() => document.getElementById("enquiry")?.scrollIntoView({ behavior: "smooth" })}
+                  className="flex items-center gap-1.5 rounded-xl bg-blue-700 px-5 py-2 text-sm font-bold text-white hover:bg-blue-800 transition-colors shadow-md shadow-blue-700/25"
+                >
+                  Enroll Now <ArrowRight className="h-3.5 w-3.5" />
+                </button>
+              )}
             </div>
           </div>
         </motion.div>
