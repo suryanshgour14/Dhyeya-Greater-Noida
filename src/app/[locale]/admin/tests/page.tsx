@@ -3,14 +3,12 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useLocale } from "next-intl";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import {
-  Plus, Eye, Trash2, Send, BookOpen, Loader2, CheckCircle2, XCircle,
+  Plus, Eye, Send, BookOpen, Loader2, CheckCircle2, XCircle,
+  X, FileUp, Shield,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import ExcelUpload from "@/components/admin/ExcelUpload";
 import { cn } from "@/lib/utils";
 import type { ParsedQuestion } from "@/lib/test-types";
@@ -39,17 +37,15 @@ export default function AdminTestsPage() {
   const [creating, setCreating] = useState(false);
   const [toast, setToast] = useState<{ msg: string; ok: boolean } | null>(null);
 
-  // New test form state
   const [form, setForm] = useState({
     title: "", title_hi: "", exam_type: "", total_duration_min: "90",
     marks_per_q: "2", negative_marks: "0.66", sectional_timing: false, is_free: false,
   });
 
-  // Questions for current draft
   const [draftId, setDraftId] = useState<string | null>(null);
   const [parsedQs, setParsedQs] = useState<ParsedQuestion[]>([]);
   const [uploading, setUploading] = useState(false);
-  const [publishing, setPublishing] = useState(false);
+  const [publishing, setPublishing] = useState<string | null>(null);
   const [step, setStep] = useState<"form" | "questions">("form");
   const [showCreate, setShowCreate] = useState(false);
 
@@ -102,16 +98,16 @@ export default function AdminTestsPage() {
   }
 
   async function handlePublish(id: string, unpublish = false) {
-    setPublishing(true);
+    setPublishing(id);
     const res = await fetch(`/api/admin/tests/${id}/publish`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ unpublish }),
     });
     const json = await res.json();
-    setPublishing(false);
+    setPublishing(null);
     if (!res.ok) { showToast(json.error, false); return; }
-    showToast(unpublish ? "Unpublished" : "Published!", true);
+    showToast(unpublish ? "Unpublished" : "Published successfully!", true);
     loadTests();
   }
 
@@ -124,59 +120,87 @@ export default function AdminTestsPage() {
     loadTests();
   }
 
+  const Field = ({ label, children }: { label: string; children: React.ReactNode }) => (
+    <div>
+      <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-slate-400">{label}</label>
+      {children}
+    </div>
+  );
+
+  const inputCls = "w-full rounded-xl border border-white/10 bg-white/10 px-4 py-2.5 text-sm text-white placeholder-white/40 outline-none ring-offset-0 focus:border-brand-gold/60 focus:bg-white/15 focus:ring-2 focus:ring-brand-gold/30 transition-all";
+  const selectCls = "w-full rounded-xl border border-white/10 bg-[#0d2050] px-4 py-2.5 text-sm text-white outline-none focus:border-brand-gold/60 focus:ring-2 focus:ring-brand-gold/30 transition-all";
+
   return (
     <div className="min-h-screen bg-slate-50">
-      {/* Header */}
-      <div className="border-b bg-white px-6 py-4 flex items-center justify-between">
-        <div>
-          <p className="text-xs text-muted-foreground">Admin Panel</p>
-          <h1 className="text-xl font-bold text-slate-800">Test Management</h1>
+      {/* ── Page header ── */}
+      <div className="border-b bg-white px-6 py-4 flex items-center justify-between shadow-sm">
+        <div className="flex items-center gap-3">
+          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-brand-blue/10">
+            <Shield className="h-5 w-5 text-brand-blue" />
+          </div>
+          <div>
+            <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Admin Panel</p>
+            <h1 className="text-lg font-bold text-slate-800">Test Management</h1>
+          </div>
         </div>
         <div className="flex gap-2">
           <a href="/api/admin/tests/template" download>
-            <Button variant="outline" size="sm">Download Template</Button>
+            <Button variant="outline" size="sm" className="text-xs">Download Template</Button>
           </a>
-          <Button onClick={() => setShowCreate(true)} size="sm">
+          <Button
+            onClick={() => setShowCreate(true)}
+            size="sm"
+            className="bg-brand-blue text-white hover:bg-brand-blue/90 text-xs"
+          >
             <Plus className="h-4 w-4 mr-1" /> New Test
           </Button>
         </div>
       </div>
 
-      {/* Toast */}
-      {toast && (
-        <div className={cn(
-          "fixed right-4 top-4 z-50 flex items-center gap-2 rounded-xl px-4 py-3 text-sm font-semibold shadow-lg",
-          toast.ok ? "bg-green-600 text-white" : "bg-red-600 text-white"
-        )}>
-          {toast.ok ? <CheckCircle2 className="h-4 w-4" /> : <XCircle className="h-4 w-4" />}
-          {toast.msg}
-        </div>
-      )}
+      {/* ── Toast ── */}
+      <AnimatePresence>
+        {toast && (
+          <motion.div
+            initial={{ opacity: 0, y: -16 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -16 }}
+            className={cn(
+              "fixed right-5 top-5 z-[9999] flex items-center gap-2.5 rounded-2xl px-5 py-3.5 text-sm font-semibold shadow-xl",
+              toast.ok ? "bg-green-600 text-white" : "bg-red-600 text-white"
+            )}
+          >
+            {toast.ok ? <CheckCircle2 className="h-4 w-4 shrink-0" /> : <XCircle className="h-4 w-4 shrink-0" />}
+            {toast.msg}
+          </motion.div>
+        )}
+      </AnimatePresence>
 
-      {/* Tests list */}
+      {/* ── Tests list ── */}
       <div className="container mx-auto px-4 py-8 max-w-5xl">
         {loading ? (
-          <div className="flex items-center justify-center py-20">
-            <Loader2 className="h-6 w-6 animate-spin text-slate-400" />
+          <div className="flex items-center justify-center py-24">
+            <Loader2 className="h-8 w-8 animate-spin text-slate-300" />
           </div>
         ) : tests.length === 0 ? (
-          <div className="py-20 text-center text-slate-500">
-            <BookOpen className="mx-auto mb-3 h-10 w-10 text-slate-300" />
-            <p className="font-semibold">No tests yet.</p>
-            <p className="text-sm">Create your first test using the button above.</p>
+          <div className="py-24 text-center">
+            <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-slate-100">
+              <BookOpen className="h-8 w-8 text-slate-300" />
+            </div>
+            <p className="font-semibold text-slate-600">No tests yet.</p>
+            <p className="mt-1 text-sm text-slate-400">Create your first test using the button above.</p>
           </div>
         ) : (
-          <div className="space-y-4">
+          <div className="space-y-3">
             {tests.map((t, i) => (
               <motion.div
                 key={t.id}
-                initial={{ opacity: 0, y: 12 }}
+                initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: i * 0.04 }}
                 className="flex flex-wrap items-center gap-4 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm"
               >
                 <div className="flex-1 min-w-0">
-                  <div className="flex flex-wrap items-center gap-2">
+                  <div className="flex flex-wrap items-center gap-2 mb-1">
                     <h3 className="font-bold text-slate-800 truncate">{t.title}</h3>
                     <span className={cn(
                       "rounded-full px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wide",
@@ -184,24 +208,28 @@ export default function AdminTestsPage() {
                     )}>{t.status}</span>
                     {t.is_free && <span className="rounded-full bg-blue-100 px-2 py-0.5 text-[10px] font-bold text-blue-700">FREE</span>}
                   </div>
-                  <p className="mt-0.5 text-xs text-slate-500">
-                    {t.exam_type} · {t.total_duration_min} min · {t.marks_per_q}m per Q · -{t.negative_marks} negative
-                    · {t.questions?.[0]?.count ?? 0} questions · {t.test_sections?.[0]?.count ?? 0} sections
+                  <p className="text-xs text-slate-400">
+                    {t.exam_type || "—"} · {t.total_duration_min} min · {t.marks_per_q}m/Q · -{t.negative_marks} neg
+                    · <span className="font-medium text-slate-500">{t.questions?.[0]?.count ?? 0} questions</span>
+                    · {t.test_sections?.[0]?.count ?? 0} sections
                   </p>
                 </div>
                 <div className="flex gap-2">
                   <Link href={`/${locale}/tests/${t.id}`}>
-                    <Button variant="outline" size="sm">
-                      <Eye className="h-3.5 w-3.5 mr-1" /> View
+                    <Button variant="outline" size="sm" className="text-xs">
+                      <Eye className="h-3.5 w-3.5 mr-1" /> Preview
                     </Button>
                   </Link>
                   <Button
                     size="sm"
                     variant={t.status === "published" ? "outline" : "default"}
-                    disabled={publishing}
+                    disabled={publishing === t.id}
                     onClick={() => handlePublish(t.id, t.status === "published")}
+                    className={cn("text-xs", t.status !== "published" && "bg-brand-blue text-white hover:bg-brand-blue/90")}
                   >
-                    <Send className="h-3.5 w-3.5 mr-1" />
+                    {publishing === t.id
+                      ? <Loader2 className="h-3.5 w-3.5 mr-1 animate-spin" />
+                      : <Send className="h-3.5 w-3.5 mr-1" />}
                     {t.status === "published" ? "Unpublish" : "Publish"}
                   </Button>
                 </div>
@@ -211,81 +239,210 @@ export default function AdminTestsPage() {
         )}
       </div>
 
-      {/* Create test dialog */}
-      <Dialog open={showCreate} onOpenChange={(o) => { if (!o) resetAndClose(); }}>
-        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
-          <DialogHeader>
-            <DialogTitle>
-              {step === "form" ? "Create New Test" : `Upload Questions — ${form.title}`}
-            </DialogTitle>
-          </DialogHeader>
+      {/* ── Create Test Modal ── */}
+      <AnimatePresence>
+        {showCreate && (
+          <>
+            {/* Backdrop */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.2 }}
+              className="fixed inset-0 z-[9998] bg-black/60 backdrop-blur-sm"
+              onClick={resetAndClose}
+            />
 
-          {step === "form" && (
-            <form onSubmit={handleCreateTest} className="space-y-4">
-              <div className="grid grid-cols-2 gap-3">
-                <div className="col-span-2">
-                  <Label>Test Title (English) *</Label>
-                  <Input required value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} placeholder="e.g. UPSC Prelims Mock Test 1" />
-                </div>
-                <div className="col-span-2">
-                  <Label>Title (Hindi) — optional</Label>
-                  <Input value={form.title_hi} onChange={(e) => setForm({ ...form, title_hi: e.target.value })} placeholder="हिंदी में शीर्षक" />
-                </div>
+            {/* Modal panel */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.96, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.96, y: 20 }}
+              transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
+              className="fixed inset-x-4 top-[50%] z-[9999] mx-auto max-w-2xl -translate-y-1/2 overflow-hidden rounded-3xl shadow-2xl"
+              style={{ maxHeight: "90vh" }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              {/* ── Navy blue header ── */}
+              <div className="bg-[#0B1C3D] px-7 py-5 flex items-center justify-between">
                 <div>
-                  <Label>Exam Type</Label>
-                  <select className="mt-1 w-full rounded-md border border-input bg-background px-3 py-2 text-sm" value={form.exam_type} onChange={(e) => setForm({ ...form, exam_type: e.target.value })}>
-                    <option value="">Select…</option>
-                    {EXAM_TYPES.map((t) => <option key={t} value={t}>{t}</option>)}
-                  </select>
+                  <div className="flex items-center gap-2 mb-0.5">
+                    <div className="h-1.5 w-1.5 rounded-full bg-brand-gold" />
+                    <span className="text-[10px] font-bold uppercase tracking-widest text-brand-gold/80">
+                      {step === "form" ? "Step 1 of 2" : "Step 2 of 2"}
+                    </span>
+                  </div>
+                  <h2 className="text-lg font-bold text-white">
+                    {step === "form" ? "Create New Test" : `Upload Questions`}
+                  </h2>
+                  {step === "questions" && (
+                    <p className="text-xs text-slate-400 truncate mt-0.5">{form.title}</p>
+                  )}
                 </div>
-                <div>
-                  <Label>Total Duration (minutes) *</Label>
-                  <Input type="number" required min="1" value={form.total_duration_min} onChange={(e) => setForm({ ...form, total_duration_min: e.target.value })} />
-                </div>
-                <div>
-                  <Label>Marks per Question</Label>
-                  <Input type="number" step="0.1" value={form.marks_per_q} onChange={(e) => setForm({ ...form, marks_per_q: e.target.value })} />
-                </div>
-                <div>
-                  <Label>Negative Marks</Label>
-                  <Input type="number" step="0.01" value={form.negative_marks} onChange={(e) => setForm({ ...form, negative_marks: e.target.value })} />
-                </div>
-                <div className="flex items-center gap-2">
-                  <input type="checkbox" id="sectional" checked={form.sectional_timing} onChange={(e) => setForm({ ...form, sectional_timing: e.target.checked })} className="h-4 w-4 rounded" />
-                  <Label htmlFor="sectional" className="cursor-pointer">Sectional Timing</Label>
-                </div>
-                <div className="flex items-center gap-2">
-                  <input type="checkbox" id="isfree" checked={form.is_free} onChange={(e) => setForm({ ...form, is_free: e.target.checked })} className="h-4 w-4 rounded" />
-                  <Label htmlFor="isfree" className="cursor-pointer">Free Test</Label>
-                </div>
-              </div>
-              <div className="flex justify-end gap-2 pt-2">
-                <Button type="button" variant="outline" onClick={resetAndClose}>Cancel</Button>
-                <Button type="submit" disabled={creating}>
-                  {creating && <Loader2 className="h-4 w-4 mr-1 animate-spin" />}
-                  Next: Upload Questions
-                </Button>
-              </div>
-            </form>
-          )}
-
-          {step === "questions" && (
-            <div className="space-y-4">
-              <ExcelUpload onParsed={setParsedQs} />
-              <div className="flex justify-end gap-2">
-                <Button variant="outline" onClick={resetAndClose}>Done / Close</Button>
-                <Button
-                  onClick={handleUploadQuestions}
-                  disabled={uploading || !parsedQs.length || parsedQs.some((q) => q.errors.length > 0)}
+                <button
+                  onClick={resetAndClose}
+                  className="flex h-9 w-9 items-center justify-center rounded-full text-white/50 transition-colors hover:bg-white/10 hover:text-white"
                 >
-                  {uploading && <Loader2 className="h-4 w-4 mr-1 animate-spin" />}
-                  Upload {parsedQs.length > 0 ? `(${parsedQs.length} questions)` : ""}
-                </Button>
+                  <X className="h-5 w-5" />
+                </button>
               </div>
-            </div>
-          )}
-        </DialogContent>
-      </Dialog>
+
+              {/* Step indicator */}
+              <div className="flex bg-[#0d2050]">
+                {["Test Details", "Upload Questions"].map((label, idx) => (
+                  <div key={label} className={cn(
+                    "flex-1 py-2.5 text-center text-[11px] font-bold uppercase tracking-wider transition-colors",
+                    (idx === 0 && step === "form") || (idx === 1 && step === "questions")
+                      ? "border-b-2 border-brand-gold text-brand-gold"
+                      : "text-slate-500"
+                  )}>
+                    {label}
+                  </div>
+                ))}
+              </div>
+
+              {/* ── Body ── */}
+              <div className="overflow-y-auto bg-[#0f2257]" style={{ maxHeight: "calc(90vh - 140px)" }}>
+
+                {/* Step 1 — form */}
+                {step === "form" && (
+                  <form onSubmit={handleCreateTest} className="p-7 space-y-5">
+                    <Field label="Test Title (English) *">
+                      <input
+                        required
+                        className={inputCls}
+                        placeholder="e.g. UPSC Prelims Mock Test 1"
+                        value={form.title}
+                        onChange={(e) => setForm({ ...form, title: e.target.value })}
+                      />
+                    </Field>
+
+                    <Field label="Title (Hindi) — optional">
+                      <input
+                        className={inputCls}
+                        placeholder="हिंदी में शीर्षक"
+                        value={form.title_hi}
+                        onChange={(e) => setForm({ ...form, title_hi: e.target.value })}
+                      />
+                    </Field>
+
+                    <div className="grid grid-cols-2 gap-4">
+                      <Field label="Exam Type">
+                        <select
+                          className={selectCls}
+                          value={form.exam_type}
+                          onChange={(e) => setForm({ ...form, exam_type: e.target.value })}
+                        >
+                          <option value="">Select...</option>
+                          {EXAM_TYPES.map((t) => <option key={t} value={t}>{t}</option>)}
+                        </select>
+                      </Field>
+
+                      <Field label="Total Duration (minutes) *">
+                        <input
+                          type="number"
+                          required
+                          min="1"
+                          className={inputCls}
+                          value={form.total_duration_min}
+                          onChange={(e) => setForm({ ...form, total_duration_min: e.target.value })}
+                        />
+                      </Field>
+
+                      <Field label="Marks per Question">
+                        <input
+                          type="number"
+                          step="0.1"
+                          className={inputCls}
+                          value={form.marks_per_q}
+                          onChange={(e) => setForm({ ...form, marks_per_q: e.target.value })}
+                        />
+                      </Field>
+
+                      <Field label="Negative Marks">
+                        <input
+                          type="number"
+                          step="0.01"
+                          className={inputCls}
+                          value={form.negative_marks}
+                          onChange={(e) => setForm({ ...form, negative_marks: e.target.value })}
+                        />
+                      </Field>
+                    </div>
+
+                    {/* Toggles */}
+                    <div className="grid grid-cols-2 gap-3">
+                      {[
+                        { id: "sectional", label: "Sectional Timing", key: "sectional_timing" as const },
+                        { id: "isfree",    label: "Free Test",        key: "is_free"          as const },
+                      ].map(({ id, label, key }) => (
+                        <label
+                          key={id}
+                          htmlFor={id}
+                          className={cn(
+                            "flex cursor-pointer items-center gap-3 rounded-xl border px-4 py-3 transition-all",
+                            form[key]
+                              ? "border-brand-gold/50 bg-brand-gold/10 text-brand-gold"
+                              : "border-white/10 bg-white/5 text-white/60 hover:border-white/20"
+                          )}
+                        >
+                          <input
+                            type="checkbox"
+                            id={id}
+                            checked={form[key] as boolean}
+                            onChange={(e) => setForm({ ...form, [key]: e.target.checked })}
+                            className="h-4 w-4 accent-amber-400"
+                          />
+                          <span className="text-sm font-medium">{label}</span>
+                        </label>
+                      ))}
+                    </div>
+
+                    <div className="flex justify-end gap-3 pt-2 border-t border-white/10">
+                      <button
+                        type="button"
+                        onClick={resetAndClose}
+                        className="rounded-xl border border-white/15 px-5 py-2.5 text-sm font-semibold text-white/70 transition-colors hover:bg-white/10 hover:text-white"
+                      >
+                        Cancel
+                      </button>
+                      <button
+                        type="submit"
+                        disabled={creating}
+                        className="flex items-center gap-2 rounded-xl bg-brand-gold px-6 py-2.5 text-sm font-bold text-brand-blue transition-opacity hover:opacity-90 disabled:opacity-60"
+                      >
+                        {creating && <Loader2 className="h-4 w-4 animate-spin" />}
+                        Next: Upload Questions →
+                      </button>
+                    </div>
+                  </form>
+                )}
+
+                {/* Step 2 — upload */}
+                {step === "questions" && (
+                  <div className="bg-slate-50 p-7 space-y-5">
+                    <ExcelUpload onParsed={setParsedQs} />
+                    <div className="flex justify-end gap-3 pt-2 border-t border-slate-200">
+                      <Button variant="outline" onClick={resetAndClose} className="text-sm">
+                        Done / Close
+                      </Button>
+                      <Button
+                        onClick={handleUploadQuestions}
+                        disabled={uploading || !parsedQs.length || parsedQs.some((q) => q.errors.length > 0)}
+                        className="bg-brand-blue text-white hover:bg-brand-blue/90 text-sm"
+                      >
+                        {uploading && <Loader2 className="h-4 w-4 mr-1 animate-spin" />}
+                        <FileUp className="h-4 w-4 mr-1" />
+                        Upload {parsedQs.length > 0 ? `(${parsedQs.length} questions)` : "Questions"}
+                      </Button>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
