@@ -1,23 +1,16 @@
-import { Metadata } from 'next';
-import SectionHeader from '@/components/shared/SectionHeader';
+import type { Metadata } from 'next';
+import { sanityClient } from '@/lib/sanity/client';
+import { magazinesQuery } from '@/lib/sanity/queries';
+import MagazineClient from '@/components/magazine/MagazineClient';
 
 export const metadata: Metadata = {
-  title: 'Monthly Magazine',
-  description: "Download Dhyeya IAS Greater Noida's monthly current affairs magazine.",
+  title: 'Monthly Magazine | Dhyeya IAS Greater Noida',
+  description: 'Download Dhyeya IAS monthly current affairs magazine — comprehensive UPSC preparation material covering all GS topics.',
 };
 
-export default function MagazinePage() {
-  return (
-    <section className="py-16">
-      <div className="container mx-auto px-4">
-        <SectionHeader
-          titleKey="navbar.magazine"
-          subtitleKey="home.courses.subtitle"
-        />
-        <div className="mt-8">
-          {/* Magazine PDFs from Sanity */}
-        </div>
-      </div>
-    </section>
-  );
+export const revalidate = 3600;
+
+export default async function MagazinePage() {
+  const issues = await sanityClient.fetch(magazinesQuery).catch(() => []);
+  return <MagazineClient issues={issues} />;
 }

@@ -6,7 +6,7 @@ import { useLocale } from "next-intl";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Plus, Eye, Send, BookOpen, Loader2, CheckCircle2, XCircle,
-  X, FileUp, Shield,
+  X, FileUp, Shield, Newspaper, ExternalLink, FileText,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import ExcelUpload from "@/components/admin/ExcelUpload";
@@ -135,16 +135,69 @@ export default function AdminTestsPage() {
   return (
     <div className="min-h-screen bg-slate-50">
       {/* ── Page header ── */}
-      <div className="border-b bg-white px-6 py-4 flex items-center justify-between shadow-sm">
-        <div className="flex items-center gap-3">
-          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-brand-blue/10">
-            <Shield className="h-5 w-5 text-brand-blue" />
-          </div>
-          <div>
-            <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Admin Panel</p>
-            <h1 className="text-lg font-bold text-slate-800">Test Management</h1>
+      <div className="border-b bg-white px-6 py-4 shadow-sm">
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center gap-3">
+            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-brand-blue/10">
+              <Shield className="h-5 w-5 text-brand-blue" />
+            </div>
+            <div>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Admin Panel</p>
+              <h1 className="text-lg font-bold text-slate-800">Content Management</h1>
+            </div>
           </div>
         </div>
+        {/* Quick links to CMS sections */}
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+          {[
+            { icon: FileText, label: "Test Series", sub: "Create & publish tests", active: true, onClick: () => {} },
+            { icon: Newspaper, label: "Current Affairs", sub: "Add daily articles", href: "/studio/desk/currentAffairs" },
+            { icon: BookOpen, label: "Magazine", sub: "Upload monthly issues", href: "/studio/desk/magazine" },
+            { icon: ExternalLink, label: "Sanity Studio", sub: "All content types", href: "/studio" },
+          ].map(({ icon: Icon, label, sub, active, onClick, href }) => (
+            href ? (
+              <a
+                key={label}
+                href={href}
+                target={href.startsWith("/studio") ? "_blank" : undefined}
+                rel="noopener noreferrer"
+                className="flex items-center gap-3 rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm hover:border-brand-blue/30 hover:bg-brand-blue/5 transition-all group"
+              >
+                <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-white border border-slate-200 group-hover:border-brand-blue/20">
+                  <Icon className="h-4 w-4 text-slate-500 group-hover:text-brand-blue" />
+                </div>
+                <div className="min-w-0">
+                  <p className="font-semibold text-slate-700 text-xs">{label}</p>
+                  <p className="text-[10px] text-slate-400 truncate">{sub}</p>
+                </div>
+              </a>
+            ) : (
+              <button
+                key={label}
+                onClick={onClick}
+                className={cn(
+                  "flex items-center gap-3 rounded-xl border px-4 py-3 text-sm transition-all text-left",
+                  active ? "border-brand-blue/30 bg-brand-blue/5" : "border-slate-200 bg-slate-50 hover:border-brand-blue/30 hover:bg-brand-blue/5"
+                )}
+              >
+                <div className={cn("flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border", active ? "bg-brand-blue border-brand-blue" : "bg-white border-slate-200")}>
+                  <Icon className={cn("h-4 w-4", active ? "text-white" : "text-slate-500")} />
+                </div>
+                <div className="min-w-0">
+                  <p className={cn("font-semibold text-xs", active ? "text-brand-blue" : "text-slate-700")}>
+                    {label} {active && <span className="text-[9px] text-brand-gold ml-1">ACTIVE</span>}
+                  </p>
+                  <p className="text-[10px] text-slate-400 truncate">{sub}</p>
+                </div>
+              </button>
+            )
+          ))}
+        </div>
+      </div>
+
+      {/* ── Test section sub-header ── */}
+      <div className="bg-white border-b px-6 py-3 flex items-center justify-between">
+        <h2 className="text-sm font-bold text-slate-700">Test Series</h2>
         <div className="flex gap-2">
           <a href="/api/admin/tests/template" download>
             <Button variant="outline" size="sm" className="text-xs">Download Template</Button>

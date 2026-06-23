@@ -134,9 +134,7 @@ export const NAV_ITEMS: NavItem[] = [
     alignRight: true,
     children: [
       { label: 'Daily Current Affairs', href: '/current-affairs/daily', icon: Calendar, description: "Today's key news for UPSC" },
-      { label: 'Weekly Roundup', href: '/current-affairs/weekly', icon: CalendarDays, description: '7-day comprehensive summary' },
       { label: 'Monthly Magazine', href: '/magazine', icon: Newspaper, description: 'In-depth monthly compilation' },
-      { label: 'Editorial Analysis', href: '/current-affairs/editorial', icon: Edit, description: 'The Hindu & IE editorials' },
     ],
   },
   {
