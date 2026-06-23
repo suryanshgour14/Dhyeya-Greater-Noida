@@ -1,32 +1,33 @@
-﻿{
-  "title": "हमारे कोर्सेज",
-  "subtitle": "UPSC और UPPSC की व्यापक तैयारी - हर आकांक्षी के लिए",
+{
+  "title": "हमारे पाठ्यक्रम",
+  "subtitle": "प्रत्येक अभ्यर्थी के लिए व्यापक UPSC और UPPSC तैयारी कार्यक्रम",
   "hero": {
     "stats": {
-      "programmes": "प्रोग्राम",
+      "programmes": "PROGRAM'S",
       "selectionRate": "चयन दर",
       "selections": "चयन",
-      "faculty": "विशेषज्ञ फैकल्टी"
+      "faculty": "विशेषज्ञ संकाय"
     }
   },
   "filters": {
     "exam": "परीक्षा",
     "phase": "चरण",
-    "all": "सभी कोर्स",
+    "all": "सभी पाठ्यक्रम",
     "allExams": "सभी",
     "allPhases": "सभी",
     "ias": "IAS",
-    "pcs": "PCS",
+    "pcs": "पीसी",
     "iasPcs": "IAS+PCS",
-    "foundation": "फाउंडेशन",
-    "prelims": "प्रीलिम्स",
-    "mains": "मेंस",
-    "interview": "इंटरव्यू",
+    "foundation": "नींव",
+    "prelims": "Prelims",
+    "mains": "Mains",
+    "interview": "साक्षात्कार",
     "allPhasesFull": "सभी चरण",
-    "showing": "दिखाया जा रहा",
-    "programme": "प्रोग्राम",
-    "programmes": "प्रोग्राम",
-    "clearFilters": "फ़िल्टर हटाएं"
+    "showing": "दिखा",
+    "programme": "program'",
+    "programmes": "PROGRAM'S",
+    "for": "के लिए",
+    "clearFilters": "फ़िल्टर साफ़ करें"
   },
   "card": {
     "duration": "अवधि",
@@ -35,23 +36,23 @@
     "fee": "शुल्क",
     "emi": "या",
     "viewDetails": "विवरण देखें",
-    "enroll": "अभी नामांकन करें",
+    "enroll": "अभी दाखिला लें",
     "new": "नया"
   },
   "detail": {
-    "overview": "कोर्स अवलोकन",
-    "whatYouCover": "आप क्या सीखेंगे",
+    "overview": "पाठ्यक्रम अवलोकन",
+    "whatYouCover": "आप क्या कवर करेंगे",
     "whatsIncluded": "क्या शामिल है",
     "roadmap": "लर्निंग रोडमैप",
     "whoFor": "यह किसके लिए है?",
-    "faq": "अक्सर पूछे जाने वाले प्रश्न",
-    "enquire": "इस कोर्स के बारे में पूछताछ करें",
-    "enrollNow": "अभी नामांकन करें",
-    "learnMore": "और जानें",
-    "callUs": "कॉल करें",
+    "faq": "अक्सर पूछे जाने वाले प्रश्नों",
+    "enquire": "इस पाठ्यक्रम के बारे में पूछताछ करें",
+    "enrollNow": "अभी दाखिला लें",
+    "learnMore": "और अधिक जानें",
+    "callUs": "हमें कॉल करें",
     "whatsapp": "WhatsApp",
-    "visitCentre": "केंद्र आएं",
-    "chatInstantly": "हमसे तुरंत चैट करें"
+    "visitCentre": "केंद्र पर जाएँ",
+    "chatInstantly": "तुरंत हमसे चैट करें"
   },
-  "notFound": "आपके मानदंडों से मेल खाने वाला कोई कोर्स नहीं मिला।"
+  "notFound": "आपके मानदंडों से मेल खाता कोई पाठ्यक्रम नहीं मिला।"
 }

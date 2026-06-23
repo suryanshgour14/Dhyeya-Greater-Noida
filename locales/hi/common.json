@@ -1,46 +1,46 @@
 {
   "navbar": {
-    "home": "होम",
-    "courses": "कोर्सेज",
+    "home": "घर",
+    "courses": "पाठ्यक्रम",
     "about": "हमारे बारे में",
-    "faculty": "फैकल्टी",
+    "faculty": "संकाय",
     "results": "परिणाम",
-    "currentAffairs": "करंट अफेयर्स",
+    "currentAffairs": "सामयिकी",
     "magazine": "पत्रिका",
     "contact": "संपर्क",
-    "login": "लॉगिन",
-    "signup": "साइन अप",
+    "login": "लॉग इन करें",
+    "signup": "साइन अप करें",
     "dashboard": "डैशबोर्ड"
   },
   "footer": {
-    "tagline": "सिविल सेवा उत्कृष्टता की ओर आकांक्षाओं को सशक्त बनाना",
+    "tagline": "सिविल सेवा उत्कृष्टता के लिए उम्मीदवारों को सशक्त बनाना",
     "address": "ग्रेटर नोएडा, उत्तर प्रदेश, भारत",
     "phone": "+91-XXXXXXXXXX",
     "email": "info@dhyeyagreaternoida.com",
     "rights": "सर्वाधिकार सुरक्षित।",
-    "quickLinks": "त्वरित लिंक",
-    "followUs": "हमें फॉलो करें"
+    "quickLinks": "त्वरित सम्पक",
+    "followUs": "हमारे पर का पालन करें"
   },
   "announcement": {
-    "admissionsOpen": "2024-25 बैच के लिए प्रवेश खुले हैं! सीमित सीटें उपलब्ध हैं।",
-    "contactNow": "अभी पूछताछ करें"
+    "admissionsOpen": "2024-25 बैच के लिए प्रवेश प्रारंभ! सीमित सीटें उपलब्ध हैं.",
+    "contactNow": "अब पूछताछ करें"
   },
   "cta": {
-    "enquireNow": "अभी पूछताछ करें",
-    "learnMore": "और जानें",
+    "enquireNow": "अब पूछताछ करें",
+    "learnMore": "और अधिक जानें",
     "downloadBrochure": "ब्रोशर डाउनलोड करें",
-    "applyNow": "अभी आवेदन करें",
-    "viewAll": "सब देखें"
+    "applyNow": "अभी अप्लाई करें",
+    "viewAll": "सभी को देखें"
   },
   "loading": "लोड हो रहा है...",
   "error": {
     "title": "कुछ गलत हो गया",
     "tryAgain": "पुनः प्रयास करें",
-    "goHome": "होम जाएं"
+    "goHome": "घर जाओ"
   },
   "notFound": {
-    "title": "पेज नहीं मिला",
-    "description": "आप जिस पेज को खोज रहे हैं वह मौजूद नहीं है।",
-    "goHome": "होम पर वापस जाएं"
+    "title": "पृष्ठ नहीं मिला",
+    "description": "आप जिस पृष्ठ की तलाश कर रहे हैं वह मौजूद नहीं है।",
+    "goHome": "घर वापस जाओ"
   }
 }

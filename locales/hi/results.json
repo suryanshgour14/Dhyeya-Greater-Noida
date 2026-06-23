@@ -5,12 +5,12 @@
     "all": "सभी वर्ष",
     "year": "वर्ष",
     "exam": "परीक्षा",
-    "upsc": "UPSC CSE",
-    "uppcs": "UPPCS",
+    "upsc": "UPSC सीएसई",
+    "uppcs": "यूपीपीसीएस",
     "other": "अन्य"
   },
   "card": {
-    "rank": "रैंक",
+    "rank": "Rank",
     "year": "वर्ष",
     "service": "सेवा",
     "optional": "वैकल्पिक विषय",
