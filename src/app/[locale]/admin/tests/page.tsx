@@ -30,6 +30,18 @@ interface TestRow {
 
 const EXAM_TYPES = ["UPSC Prelims", "UPSC Mains", "CSAT", "UPPSC", "UKPSC", "BPSC", "Current Affairs"];
 
+const inputCls = "w-full rounded-xl border border-white/10 bg-white/10 px-4 py-2.5 text-sm text-white placeholder-white/40 outline-none ring-offset-0 focus:border-brand-gold/60 focus:bg-white/15 focus:ring-2 focus:ring-brand-gold/30 transition-all";
+const selectCls = "w-full rounded-xl border border-white/10 bg-[#0d2050] px-4 py-2.5 text-sm text-white outline-none focus:border-brand-gold/60 focus:ring-2 focus:ring-brand-gold/30 transition-all";
+
+function Field({ label, children }: { label: string; children: React.ReactNode }) {
+  return (
+    <div>
+      <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-slate-400">{label}</label>
+      {children}
+    </div>
+  );
+}
+
 export default function AdminTestsPage() {
   const locale = useLocale();
   const [tests, setTests] = useState<TestRow[]>([]);
@@ -119,16 +131,6 @@ export default function AdminTestsPage() {
     setForm({ title: "", title_hi: "", exam_type: "", total_duration_min: "90", marks_per_q: "2", negative_marks: "0.66", sectional_timing: false, is_free: false });
     loadTests();
   }
-
-  const Field = ({ label, children }: { label: string; children: React.ReactNode }) => (
-    <div>
-      <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-slate-400">{label}</label>
-      {children}
-    </div>
-  );
-
-  const inputCls = "w-full rounded-xl border border-white/10 bg-white/10 px-4 py-2.5 text-sm text-white placeholder-white/40 outline-none ring-offset-0 focus:border-brand-gold/60 focus:bg-white/15 focus:ring-2 focus:ring-brand-gold/30 transition-all";
-  const selectCls = "w-full rounded-xl border border-white/10 bg-[#0d2050] px-4 py-2.5 text-sm text-white outline-none focus:border-brand-gold/60 focus:ring-2 focus:ring-brand-gold/30 transition-all";
 
   return (
     <div className="min-h-screen bg-slate-50">
