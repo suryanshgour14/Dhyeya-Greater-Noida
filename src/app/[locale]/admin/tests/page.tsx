@@ -151,8 +151,8 @@ export default function AdminTestsPage() {
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
           {[
             { icon: FileText, label: "Test Series", sub: "Create & publish tests", active: true, onClick: () => {} },
-            { icon: Newspaper, label: "Current Affairs", sub: "Add daily articles", href: "/studio/desk/currentAffairs" },
-            { icon: BookOpen, label: "Magazine", sub: "Upload monthly issues", href: "/studio/desk/magazine" },
+            { icon: Newspaper, label: "Current Affairs", sub: "Add daily articles", href: "/studio/structure/currentAffairs" },
+            { icon: BookOpen, label: "Magazine", sub: "Upload monthly issues", href: "/studio/structure/magazine" },
             { icon: ExternalLink, label: "Sanity Studio", sub: "All content types", href: "/studio" },
           ].map(({ icon: Icon, label, sub, active, onClick, href }) => (
             href ? (
