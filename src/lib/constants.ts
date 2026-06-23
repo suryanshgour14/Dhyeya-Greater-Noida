@@ -101,6 +101,7 @@ export const NAV_ITEMS: NavItem[] = [
     href: '/test-series',
     columns: 2,
     children: [
+      { label: 'Live Tests', href: '/tests', icon: Monitor, description: 'Take live mock tests online' },
       { label: 'Prelims', href: '', isHeader: true },
       { label: 'Mains', href: '', isHeader: true },
       { label: 'IAS Prelims', href: '/test-series/ias-prelims', icon: ClipboardList, description: 'GS + CSAT mock tests' },
@@ -121,7 +122,7 @@ export const NAV_ITEMS: NavItem[] = [
       { label: 'Free Resources', href: '/student-zone/resources', icon: Download },
       { label: 'Books & Notes', href: '/student-zone/books', icon: Book },
       { label: 'UPSC FAQs', href: '/student-zone/faqs', icon: HelpCircle },
-      { label: 'Exam Info', href: '/student-zone/exam-info', icon: FileText },
+      { label: 'Live Test', href: '/tests', icon: Monitor },
       { label: 'Latest Notifications', href: '/student-zone/notifications', icon: Bell },
       { label: 'Test Results', href: '/student-zone/results', icon: Trophy },
       { label: 'IAS Olympiad', href: '/student-zone/olympiad', icon: Award },

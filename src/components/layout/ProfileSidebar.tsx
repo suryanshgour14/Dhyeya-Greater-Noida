@@ -1,6 +1,6 @@
-﻿"use client";
+"use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useLocale } from "next-intl";
@@ -8,7 +8,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import {
   X, LogOut, BookOpen, ClipboardList, Bell,
   Download, Trophy, FileText, HelpCircle, GraduationCap,
-  ShoppingBag, Award, ChevronRight, Loader2, Settings,
+  ShoppingBag, Award, ChevronRight, Loader2, Settings, Shield,
 } from "lucide-react";
 import type { User as SupabaseUser } from "@supabase/supabase-js";
 import { createClient } from "@/lib/supabase/client";
@@ -42,6 +42,7 @@ export default function ProfileSidebar({ user }: Props) {
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const [loggingOut, setLoggingOut] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
   const supabase = createClient();
 
   const name = (user.user_metadata?.name as string) || user.email?.split("@")[0] || "Aspirant";
@@ -49,6 +50,17 @@ export default function ProfileSidebar({ user }: Props) {
   const initial = firstName.charAt(0).toUpperCase();
   const email = user.email ?? "";
   const provider = user.app_metadata?.provider === "google" ? "Google" : "Email";
+
+  useEffect(() => {
+    supabase
+      .from("profiles")
+      .select("role")
+      .eq("id", user.id)
+      .single()
+      .then(({ data }) => {
+        if (data?.role === "admin" || data?.role === "faculty") setIsAdmin(true);
+      });
+  }, [user.id]);
 
   async function handleLogout() {
     setLoggingOut(true);
@@ -118,6 +130,27 @@ export default function ProfileSidebar({ user }: Props) {
 
               {/* Scrollable content */}
               <div className="flex-1 overflow-y-auto">
+                {/* Admin Panel — only for admin/faculty */}
+                {isAdmin && (
+                  <>
+                    <div className="px-4 pt-5 pb-2">
+                      <p className="mb-2 text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
+                        Administration
+                      </p>
+                      <Link
+                        href={`/${locale}/admin/tests`}
+                        onClick={() => setOpen(false)}
+                        className="group flex items-center gap-3 rounded-xl bg-brand-blue/5 border border-brand-blue/20 px-3 py-2.5 text-sm font-semibold text-brand-blue transition-colors hover:bg-brand-blue/10"
+                      >
+                        <Shield className="h-4 w-4 shrink-0 text-brand-blue" />
+                        Admin Panel
+                        <ChevronRight className="ml-auto h-3.5 w-3.5 text-brand-blue/40 group-hover:text-brand-blue" />
+                      </Link>
+                    </div>
+                    <div className="mx-4 my-2 h-px bg-border" />
+                  </>
+                )}
+
                 {/* My Account */}
                 <div className="px-4 pt-5 pb-2">
                   <p className="mb-2 text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
