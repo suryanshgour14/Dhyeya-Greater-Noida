@@ -243,23 +243,22 @@ export default function AdminTestsPage() {
       <AnimatePresence>
         {showCreate && (
           <>
-            {/* Backdrop */}
+            {/* Backdrop — also acts as the flex centering container */}
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.2 }}
-              className="fixed inset-0 z-[9998] bg-black/60 backdrop-blur-sm"
+              className="fixed inset-0 z-[9998] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4"
               onClick={resetAndClose}
-            />
-
+            >
             {/* Modal panel */}
             <motion.div
-              initial={{ opacity: 0, scale: 0.96, y: 20 }}
+              initial={{ opacity: 0, scale: 0.96, y: 16 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.96, y: 20 }}
+              exit={{ opacity: 0, scale: 0.96, y: 16 }}
               transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
-              className="fixed inset-x-4 top-[50%] z-[9999] mx-auto max-w-2xl -translate-y-1/2 overflow-hidden rounded-3xl shadow-2xl"
+              className="relative w-full max-w-2xl overflow-hidden rounded-3xl shadow-2xl"
               style={{ maxHeight: "90vh" }}
               onClick={(e) => e.stopPropagation()}
             >
@@ -439,6 +438,7 @@ export default function AdminTestsPage() {
                   </div>
                 )}
               </div>
+            </motion.div>
             </motion.div>
           </>
         )}
