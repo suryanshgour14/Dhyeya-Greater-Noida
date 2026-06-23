@@ -1,6 +1,5 @@
 import type { Metadata } from 'next';
-import { sanityClient } from '@/lib/sanity/client';
-import { currentAffairsQuery } from '@/lib/sanity/queries';
+import { createServerClient } from '@/lib/supabase/server';
 import CurrentAffairsClient from '@/components/current-affairs/CurrentAffairsClient';
 
 export const metadata: Metadata = {
@@ -12,7 +11,11 @@ export const metadata: Metadata = {
 export const revalidate = 3600;
 
 export default async function DailyCurrentAffairsPage() {
-  const articles = await sanityClient.fetch(currentAffairsQuery).catch(() => []);
+  const supabase = createServerClient();
+  const { data: articles } = await supabase
+    .from('current_affairs')
+    .select('id, title, title_hi, slug, excerpt, excerpt_hi, category, gs_relevance, tags, is_important, image_url, published_at')
+    .order('published_at', { ascending: false });
 
-  return <CurrentAffairsClient articles={articles} />;
+  return <CurrentAffairsClient articles={articles ?? []} />;
 }
