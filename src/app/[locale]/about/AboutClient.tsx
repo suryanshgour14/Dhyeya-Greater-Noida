@@ -431,6 +431,96 @@ function WhySection({ locale }: { locale: string }) {
   );
 }
 
+// ─── Section 5 - Leadership ───────────────────────────────────────────────────
+
+const DIRECTORS = [
+  {
+    name: "Mr. Vinay Singh",
+    role: "CEO & Founder",
+    image: "https://res.cloudinary.com/dl9t48lyt/image/upload/v1782413925/7bf60d6e-b0f1-4c89-aac0-a3390671bb0c.png",
+    message:
+      "The guiding philosophy of the institute has been the creation of knowledge. The objectives of imparting education, combined with creation, dissemination and application of knowledge, are being met in an integrated form to create a synergetic impact. The institute fosters and nurtures leaders capable of making a difference — inculcating human values and professional ethics so that students make decisions that are good not just for them, but for society, the nation, and the world as a whole.",
+  },
+  {
+    name: "Mr. Q. H. Khan",
+    role: "Managing Director",
+    image: "https://res.cloudinary.com/dl9t48lyt/image/upload/v1782413887/WhatsApp_Image_2026-04-28_at_13.50.32_meo740.jpg",
+    message:
+      "Dhyeya IAS aims at the complete development of every student. Our faculty are hand-picked and highly qualified to ensure each aspirant receives every possible support in their academic journey. We are a multidisciplinary institution — students have ready access to a wide range of academic material. Our brand of education does not have narrow horizons; we believe in exposure. Our students are encouraged to widen their knowledge base well beyond the confines of the syllabus.",
+  },
+  {
+    name: "Mr. Iqbal Ahmed",
+    role: "Director, Greater Noida",
+    image: "https://res.cloudinary.com/dl9t48lyt/image/upload/v1782414079/12f08302-4b32-4703-a558-4d99419e34fb.png",
+    message:
+      "Our core mission is transforming aspirants into future leaders by bridging academic knowledge with real-world governance. We move beyond rote learning to cultivate analytical thinking, administrative ethics, and a deep understanding of public policy. Through strategic mentorship, conceptual clarity, and psychological resilience, we provide a rigorous ecosystem for success — dedicated to nurturing competent, empathetic officers who will serve our nation with absolute integrity and excellence.",
+  },
+];
+
+function LeadershipSection() {
+  return (
+    <section id="leadership" className="bg-white py-20">
+      <div className="container mx-auto px-4">
+        <FadeUp className="mb-14 text-center">
+          <span className="mb-3 inline-flex items-center gap-2 rounded-full border border-brand-gold/40 bg-brand-gold/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-widest text-brand-blue">
+            Leadership
+          </span>
+          <h2 className="text-3xl font-extrabold text-brand-blue md:text-4xl">
+            Voices That Guide Us
+          </h2>
+          <p className="mt-3 mx-auto max-w-xl text-base text-muted-foreground">
+            The people whose vision, dedication, and experience have shaped every aspirant's journey at Dhyeya IAS.
+          </p>
+        </FadeUp>
+
+        <div className="grid gap-8 md:grid-cols-3">
+          {DIRECTORS.map(({ name, role, image, message }, i) => (
+            <FadeUp key={name} delay={0.1 * i}>
+              <div className="group flex h-full flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition-shadow duration-300 hover:shadow-lg">
+                {/* Photo */}
+                <div className="relative overflow-hidden bg-slate-100" style={{ aspectRatio: "4/5" }}>
+                  <img
+                    src={image}
+                    alt={name}
+                    className="h-full w-full object-cover object-top transition-transform duration-500 group-hover:scale-[1.03]"
+                  />
+                  {/* Gold overlay strip at bottom of image */}
+                  <div className="absolute bottom-0 left-0 right-0 h-1 bg-brand-gold" />
+                </div>
+
+                {/* Content */}
+                <div className="flex flex-1 flex-col p-6">
+                  <div className="mb-4">
+                    <p className="text-[10px] font-bold uppercase tracking-widest text-brand-gold">
+                      {role}
+                    </p>
+                    <h3 className="mt-0.5 text-lg font-extrabold leading-tight text-brand-blue">
+                      {name}
+                    </h3>
+                  </div>
+
+                  {/* Quote */}
+                  <div className="relative flex-1 border-l-2 border-brand-gold/40 pl-4">
+                    <span
+                      aria-hidden
+                      className="absolute -left-3 -top-2 text-5xl font-serif leading-none text-brand-gold/25 select-none"
+                    >
+                      "
+                    </span>
+                    <p className="text-xs leading-relaxed text-muted-foreground">
+                      {message}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </FadeUp>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
 // ─── Root client component ────────────────────────────────────────────────────
 export default function AboutClient() {
   const locale = useLocale();
@@ -439,6 +529,7 @@ export default function AboutClient() {
       <MissionSection />
       <AimsSection />
       <MethodologySection />
+      <LeadershipSection />
       <WhySection locale={locale} />
     </main>
   );
