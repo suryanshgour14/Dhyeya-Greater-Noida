@@ -2,7 +2,7 @@
 
 import { useRef } from "react";
 import { motion, useInView } from "framer-motion";
-import { Crown } from "lucide-react";
+import { Crown, Users2 } from "lucide-react";
 
 // ─── Shared helpers ───────────────────────────────────────────────────────────
 
@@ -181,6 +181,136 @@ function DirectorsSection() {
   );
 }
 
+// ─── Advisory Board data ──────────────────────────────────────────────────────
+
+const ADVISORY = [
+  { name: "Mr. N C Saxena",         designation: "Ex. Secretary, Govt. of India",                                       image: "https://www.dhyeyaias.com/storage/media/3_team.jpg" },
+  { name: "Mr. Shashank",           designation: "Ex. Foreign Secretary",                                               image: "https://www.dhyeyaias.com/storage/media/4_team.jpg" },
+  { name: "Mr. S Y Quraishi",       designation: "Ex. Chief Election Commissioner",                                     image: "https://www.dhyeyaias.com/storage/media/5_team.jpg" },
+  { name: "Mr. Noor Mohammed",      designation: "Ex. Secretary, Govt. of India",                                       image: "https://www.dhyeyaias.com/storage/media/6_team.jpg" },
+  { name: "Mr. Manjeet Singh",      designation: "Ex. Secretary Home & Finance",                                        image: "https://www.dhyeyaias.com/storage/media/7_team.jpg" },
+  { name: "Mr. Vibhuti Narain Rai", designation: "Retd. IPS — Ex. DGP (UP)",                                           image: "https://www.dhyeyaias.com/storage/media/8_team.jpg" },
+  { name: "Mr. Vikram Singh",       designation: "Retd. IPS — Ex. DGP (UP)",                                           image: "https://www.dhyeyaias.com/storage/media/9_team.jpg" },
+  { name: "Mr. A. H. K. Ghauri",   designation: "Retd. IRS — Ex. Governance Advisor, British High Commission",         image: "https://www.dhyeyaias.com/storage/media/10_team.jpg" },
+  { name: "Mr. S K Mishra",         designation: "Retd. IRS — Ex. Member Revenue Board, Ex. Member CBIC",              image: "https://www.dhyeyaias.com/storage/media/11_team.jpg" },
+  { name: "Mr. T H K Ghauri",       designation: "Retd. IRS — Ex. Chief Commissioner Custom & Excise",                 image: "https://www.dhyeyaias.com/storage/media/12_team.jpg" },
+  { name: "Mr. Qamar Agha",         designation: "Sr. Journalist",                                                     image: "https://www.dhyeyaias.com/storage/media/13_team.jpg" },
+  { name: "Mr. Qurban Ali",         designation: "Ex. Director, Rajya Sabha TV",                                       image: "https://www.dhyeyaias.com/storage/media/14_team.jpg" },
+  { name: "Mr. S. N. Ali",          designation: "Senior Journalist",                                                  image: "https://www.dhyeyaias.com/storage/media/15_team.jpg" },
+  { name: "Mr. Gaurav Bansal",      designation: "IRTS",                                                               image: "https://www.dhyeyaias.com/storage/media/16_team.jpg" },
+  { name: "Mr. Sunil Kumar Rai",    designation: "IPS",                                                                image: "https://www.dhyeyaias.com/storage/media/17_team.jpg" },
+  { name: "Mr. Saurabh Rao",        designation: "IAS",                                                                image: "https://www.dhyeyaias.com/storage/media/18_team.jpg" },
+  { name: "Mr. Arshi",              designation: "IPS",                                                                image: "https://www.dhyeyaias.com/storage/media/20_team.jpg" },
+];
+
+// ─── Advisory card ────────────────────────────────────────────────────────────
+
+function AdvisoryCard({
+  name,
+  designation,
+  image,
+  index,
+}: {
+  name: string;
+  designation: string;
+  image: string;
+  index: number;
+}) {
+  const ref = useRef(null);
+  const inView = useInView(ref, { once: true, margin: "-60px" });
+
+  return (
+    <motion.div
+      ref={ref}
+      initial={{ opacity: 0, y: 24 }}
+      animate={inView ? { opacity: 1, y: 0 } : {}}
+      transition={{ duration: 0.5, delay: (index % 5) * 0.07, ease: EASE }}
+    >
+      <motion.div
+        whileHover={{ y: -4, boxShadow: "0 16px 40px -8px rgba(11,28,61,0.14)" }}
+        transition={{ duration: 0.22, ease: "easeOut" }}
+        className="flex flex-col items-center rounded-2xl border border-slate-200 bg-white px-5 py-7 text-center shadow-sm"
+      >
+        {/* Circular photo */}
+        <div
+          className="relative mb-5 shrink-0"
+          style={{ width: 96, height: 96 }}
+        >
+          <div
+            className="absolute inset-0 rounded-full"
+            style={{
+              boxShadow:
+                "0 0 0 3px #fff, 0 0 0 5px rgba(11,28,61,0.12), 0 8px 24px -4px rgba(11,28,61,0.18)",
+            }}
+          />
+          <img
+            src={image}
+            alt={name}
+            width={96}
+            height={96}
+            className="h-full w-full rounded-full object-cover object-top"
+            style={{ imageRendering: "auto" }}
+            loading="lazy"
+          />
+          {/* Gold ring accent */}
+          <div
+            className="pointer-events-none absolute inset-0 rounded-full"
+            style={{
+              boxShadow: "inset 0 0 0 2px rgba(201,161,59,0.35)",
+            }}
+          />
+        </div>
+
+        {/* Name */}
+        <h4 className="text-sm font-bold leading-snug text-brand-blue">
+          {name}
+        </h4>
+
+        {/* Gold rule */}
+        <div className="mx-auto my-2.5 h-px w-8 bg-brand-gold" />
+
+        {/* Designation */}
+        <p className="text-[11px] leading-relaxed text-slate-500">
+          {designation}
+        </p>
+      </motion.div>
+    </motion.div>
+  );
+}
+
+// ─── Advisory Board section ───────────────────────────────────────────────────
+
+function AdvisorySection() {
+  return (
+    <section id="advisory" className="border-t border-slate-100 bg-slate-50 py-20">
+      <div className="container mx-auto px-4">
+        {/* Header */}
+        <FadeIn direction="up" className="mb-14 text-center">
+          <span className="mb-4 inline-flex items-center gap-2 rounded-full border border-brand-blue/20 bg-brand-blue/5 px-4 py-1.5 text-xs font-semibold uppercase tracking-widest text-brand-blue">
+            <Users2 className="h-3.5 w-3.5" />
+            Advisory Board
+          </span>
+          <h2 className="text-3xl font-extrabold text-brand-blue md:text-4xl">
+            Our Advisory Board
+          </h2>
+          <p className="mt-3 mx-auto max-w-xl text-base text-slate-500">
+            Distinguished IAS, IPS, and IRS officers, senior journalists, and
+            governance experts who shape the academic and strategic direction of
+            Dhyeya IAS.
+          </p>
+        </FadeIn>
+
+        {/* Grid */}
+        <div className="grid gap-5 grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
+          {ADVISORY.map((member, i) => (
+            <AdvisoryCard key={member.name} {...member} index={i} />
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
 // ─── Coming soon placeholder ──────────────────────────────────────────────────
 
 function ComingSoonSection({
@@ -249,11 +379,7 @@ export default function TeamClient() {
     <main>
       <TeamHero />
       <DirectorsSection />
-      <ComingSoonSection
-        id="advisory"
-        title="Advisory Board"
-        subtitle="IAS officers and subject experts who shape our curriculum and strategy."
-      />
+      <AdvisorySection />
       <ComingSoonSection
         id="faculty"
         title="Our Faculty"
