@@ -16,66 +16,101 @@ const ROW_2 = TOPPERS.slice(14);
 // ─── Single topper card ───────────────────────────────────────────────────────
 
 function TopperCard({ topper }: { topper: (typeof TOPPERS)[number] }) {
-  const isTopRank = parseInt(topper.rank.replace("AIR ", "")) <= 10;
+  const airNum = parseInt(topper.rank.replace("AIR ", ""));
+  const isTopRank = airNum <= 10;
+  const isFirst   = airNum === 1;
 
   return (
-    <div
-      className={`group relative w-[188px] shrink-0 overflow-hidden rounded-2xl bg-white transition-all duration-300 hover:-translate-y-1.5 ${
-        isTopRank
-          ? "shadow-[0_2px_16px_-4px_rgba(201,161,59,0.3)] ring-1 ring-brand-gold/40"
-          : "shadow-md ring-1 ring-slate-200/80"
-      } hover:shadow-[0_20px_48px_-8px_rgba(11,28,61,0.28)]`}
+    <motion.div
+      whileHover={{ y: -5, boxShadow: "0 18px 40px -8px rgba(11,28,61,0.32)" }}
+      transition={{ duration: 0.22, ease: "easeOut" }}
+      className={`relative flex w-[160px] shrink-0 flex-col items-center rounded-2xl px-4 pb-5 pt-6 ${
+        isFirst
+          ? "bg-gradient-to-b from-[#0e1f40] to-[#0a1628] ring-1 ring-brand-gold/50"
+          : "bg-[#0c1730] ring-1 ring-white/[0.06]"
+      }`}
     >
-      {/* ── Photo ── */}
-      <div className="relative h-[230px] overflow-hidden bg-slate-100">
+      {/* AIR 01 glow halo */}
+      {isFirst && (
+        <div className="pointer-events-none absolute inset-0 rounded-2xl bg-brand-gold/[0.04]" />
+      )}
+
+      {/* ── Circular photo ── */}
+      <div className="relative mb-4" style={{ width: 80, height: 80 }}>
+        {/* Outer glow ring for top rankers */}
+        {isTopRank && (
+          <div
+            className="absolute -inset-1 rounded-full"
+            style={{
+              background:
+                "conic-gradient(from 0deg, rgba(201,161,59,0.6) 0%, rgba(201,161,59,0.05) 60%, rgba(201,161,59,0.6) 100%)",
+            }}
+          />
+        )}
+
+        {/* Photo ring layers: white gap → shadow → photo */}
+        <div
+          className="absolute inset-0 rounded-full"
+          style={{
+            boxShadow: isFirst
+              ? "0 0 0 2px #fff, 0 0 0 4px rgba(201,161,59,0.55), 0 6px 20px -4px rgba(201,161,59,0.3)"
+              : "0 0 0 2px #fff, 0 0 0 4px rgba(11,28,61,0.4), 0 6px 16px -4px rgba(0,0,0,0.4)",
+          }}
+        />
+
         <img
           src={topper.photo}
           alt={topper.name}
-          className="h-full w-full object-cover object-top transition-transform duration-500 group-hover:scale-[1.04]"
+          width={80}
+          height={80}
+          className="relative h-full w-full rounded-full object-cover object-top"
           loading="lazy"
           decoding="async"
         />
 
-        {/* Soft bottom gradient so info panel blends */}
-        <div className="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-white via-white/40 to-transparent" />
+        {/* Gold inset ring */}
+        <div
+          className="pointer-events-none absolute inset-0 rounded-full"
+          style={{
+            boxShadow: `inset 0 0 0 1.5px ${isTopRank ? "rgba(201,161,59,0.45)" : "rgba(255,255,255,0.08)"}`,
+          }}
+        />
 
-        {/* AIR 01 crown */}
-        {topper.rank === "AIR 01" && (
-          <div className="absolute right-2.5 top-2.5 flex h-7 w-7 items-center justify-center rounded-full bg-brand-gold shadow-lg shadow-brand-gold/40">
-            <Star className="h-3.5 w-3.5 fill-brand-blue text-brand-blue" />
+        {/* AIR 01 star */}
+        {isFirst && (
+          <div className="absolute -right-1 -top-1 flex h-6 w-6 items-center justify-center rounded-full bg-brand-gold shadow-md shadow-brand-gold/40">
+            <Star className="h-3 w-3 fill-brand-blue text-brand-blue" />
           </div>
         )}
       </div>
 
-      {/* ── Info panel ── */}
-      <div className="px-4 pb-4 pt-2">
-        {/* Rank row */}
-        <div className="flex items-center gap-1.5">
-          <Trophy
-            className={`h-3.5 w-3.5 shrink-0 ${
-              isTopRank ? "text-brand-gold" : "text-slate-400"
-            }`}
-          />
-          <span
-            className={`text-[13px] font-extrabold tracking-tight ${
-              isTopRank ? "text-brand-gold" : "text-slate-500"
-            }`}
-          >
-            {topper.rank}
-          </span>
-        </div>
-
-        {/* Name */}
-        <p className="mt-1 text-[13px] font-bold leading-snug text-brand-blue">
-          {topper.name}
-        </p>
-
-        {/* Exam label */}
-        <p className="mt-0.5 text-[10px] font-semibold uppercase tracking-widest text-slate-400">
-          {topper.exam}
-        </p>
+      {/* ── Rank ── */}
+      <div className="flex items-center gap-1">
+        <Trophy
+          className={`h-3 w-3 shrink-0 ${isTopRank ? "text-brand-gold" : "text-slate-500"}`}
+        />
+        <span
+          className={`text-[13px] font-extrabold tracking-tight ${
+            isTopRank ? "text-brand-gold" : "text-slate-400"
+          }`}
+        >
+          {topper.rank}
+        </span>
       </div>
-    </div>
+
+      {/* Gold hairline */}
+      <div className={`my-2 h-px w-8 ${isTopRank ? "bg-brand-gold/60" : "bg-white/10"}`} />
+
+      {/* ── Name ── */}
+      <p className="text-center text-[12px] font-bold leading-snug text-white">
+        {topper.name}
+      </p>
+
+      {/* ── Exam ── */}
+      <p className="mt-1 text-[10px] font-semibold uppercase tracking-widest text-slate-500">
+        {topper.exam}
+      </p>
+    </motion.div>
   );
 }
 
