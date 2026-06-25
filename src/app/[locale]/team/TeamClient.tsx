@@ -108,19 +108,21 @@ function DirectorsSection() {
                   delay={0.05}
                   className={`order-1 ${imageRight ? "md:order-2" : "md:order-1"}`}
                 >
-                  <div className="relative overflow-hidden bg-slate-100 md:rounded-none">
-                    {/* aspect box */}
-                    <div className="relative aspect-[3/4] w-full overflow-hidden">
+                  <div
+                    className={`flex items-end justify-center px-6 pb-0 pt-8 ${
+                      imageRight ? "bg-brand-blue/5" : "bg-slate-100"
+                    }`}
+                  >
+                    <div className="relative w-full max-w-[320px]">
                       <img
                         src={image}
                         alt={name}
-                        className="h-full w-full object-cover object-top"
+                        className="block w-full object-contain object-bottom"
+                        style={{ maxHeight: "420px" }}
                       />
-                      {/* Overlay gradient at bottom */}
-                      <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-brand-blue/60 to-transparent" />
-                      {/* Role chip over image */}
-                      <div className="absolute bottom-5 left-5">
-                        <span className="rounded-full bg-brand-gold px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-brand-blue shadow">
+                      {/* Role chip */}
+                      <div className="absolute bottom-3 left-0 right-0 flex justify-center">
+                        <span className="rounded-full bg-brand-gold px-4 py-1 text-[10px] font-bold uppercase tracking-widest text-brand-blue shadow-md">
                           {role}
                         </span>
                       </div>
