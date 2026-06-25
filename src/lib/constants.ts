@@ -163,27 +163,39 @@ export interface Topper {
   id: string;
   name: string;
   rank: string;
-  year: number;
   exam: string;
-  service: string;
-  optional: string;
   photo: string;
-  quote: string;
 }
 
 export const TOPPERS: Topper[] = [
-  { id: '1', name: 'Priya Sharma', rank: 'AIR 12', year: 2024, exam: 'UPSC CSE', service: 'IAS', optional: 'Sociology', photo: '/images/toppers/topper-1.jpg', quote: 'Dhyeya IAS taught me to think like an administrator, not just a student.' },
-  { id: '2', name: 'Rahul Verma', rank: 'AIR 45', year: 2024, exam: 'UPSC CSE', service: 'IPS', optional: 'Political Sci.', photo: '/images/toppers/topper-2.jpg', quote: 'The mentorship here is unmatched. Faculty genuinely cares about your success.' },
-  { id: '3', name: 'Anjali Singh', rank: 'AIR 78', year: 2024, exam: 'UPSC CSE', service: 'IFS', optional: 'History', photo: '/images/toppers/topper-3.jpg', quote: 'Quality of study material and test series gave me the edge I needed.' },
-  { id: '4', name: 'Vikram Gupta', rank: 'AIR 102', year: 2023, exam: 'UPSC CSE', service: 'IAS', optional: 'PSIR', photo: '/images/toppers/topper-4.jpg', quote: 'Three years at Dhyeya and I finally cracked it. The structured approach works.' },
-  { id: '5', name: 'Neha Yadav', rank: 'AIR 134', year: 2024, exam: 'UPSC CSE', service: 'IRS', optional: 'Geography', photo: '/images/toppers/topper-5.jpg', quote: 'Current affairs classes here are the best I experienced across any institute.' },
-  { id: '6', name: 'Arjun Mishra', rank: 'AIR 167', year: 2023, exam: 'UPSC CSE', service: 'IAS', optional: 'Pub. Admin.', photo: '/images/toppers/topper-6.jpg', quote: 'Mock interviews by the panel completely transformed my confidence.' },
-  { id: '7', name: 'Deepika Rao', rank: 'AIR 198', year: 2024, exam: 'UPSC CSE', service: 'IPS', optional: 'Anthropology', photo: '/images/toppers/topper-7.jpg', quote: 'Online batch gave me the flexibility I needed while maintaining quality.' },
-  { id: '8', name: 'Suresh Tiwari', rank: 'AIR 223', year: 2023, exam: 'UPSC CSE', service: 'IAS', optional: 'Law', photo: '/images/toppers/topper-8.jpg', quote: 'The integrated approach of prelims, mains, and interview prep is superb.' },
-  { id: '9', name: 'Kavita Nair', rank: 'AIR 256', year: 2024, exam: 'UPSC CSE', service: 'IFS', optional: 'Sociology', photo: '/images/toppers/topper-9.jpg', quote: 'Faculty availability after class hours for doubt-clearing is a game changer.' },
-  { id: '10', name: 'Manish Dubey', rank: 'AIR 289', year: 2023, exam: 'UPSC CSE', service: 'IRS', optional: 'Eco & Eco', photo: '/images/toppers/topper-10.jpg', quote: 'The UDAAN scholarship made quality IAS coaching accessible for me.' },
-  { id: '11', name: 'Pooja Chauhan', rank: 'AIR 312', year: 2024, exam: 'UPSC CSE', service: 'IAS', optional: 'Hindi Lit.', photo: '/images/toppers/topper-11.jpg', quote: 'Hindi medium aspirants finally have a world-class option in Greater Noida.' },
-  { id: '12', name: 'Abhishek Kumar', rank: 'AIR 1', year: 2022, exam: 'UPPCS', service: 'PCS', optional: 'History', photo: '/images/toppers/topper-12.jpg', quote: 'Topped UPPCS in my first attempt thanks to the focused PCS batch here.' },
+  { id: '1',  name: 'Kanishak Kataria',   rank: 'AIR 01',  exam: 'UPSC CSE', photo: 'https://www.dhyeyaias.com/storage/media/fMWXbFosdw4tyk2ChjpUA4wN6StCMj3SbitYdT8i.png' },
+  { id: '2',  name: 'Junaid Ahmed',        rank: 'AIR 03',  exam: 'UPSC CSE', photo: 'https://www.dhyeyaias.com/storage/media/6I66eXXGGRC0230LySjema7Pewe7AcByRIncmdrK.png' },
+  { id: '3',  name: 'Saumya Pandey',       rank: 'AIR 04',  exam: 'UPSC CSE', photo: 'https://www.dhyeyaias.com/storage/media/oLNEE4sanXA7ANnHbwEu9iNuMfQP0hs862h6XHqP.png' },
+  { id: '4',  name: 'Lok Bandhu',          rank: 'AIR 07',  exam: 'UPSC CSE', photo: 'https://www.dhyeyaias.com/storage/media/YoQY8FW9WbzRFsV4BiIuIDfG6iAGnqBsN0U5Rr49.png' },
+  { id: '5',  name: 'Suryapal Gangwar',    rank: 'AIR 08',  exam: 'UPSC CSE', photo: 'https://www.dhyeyaias.com/storage/media/RRcALYfxiPmJP3hOFgtd9kDPDPmjAKsVdX4NCpmT.png' },
+  { id: '6',  name: 'Jaiprakash Maurya',   rank: 'AIR 09',  exam: 'UPSC CSE', photo: 'https://www.dhyeyaias.com/storage/media/d2SJZqRFC7nWgKapAdsRPTqrqvVkLkW92mPW6n9i.png' },
+  { id: '7',  name: 'Mahesh Kumar',        rank: 'AIR 14',  exam: 'UPSC CSE', photo: 'https://www.dhyeyaias.com/storage/media/WayNnDayeeCxhdROoRxiilZvwoyErja7JaSLNKP3.png' },
+  { id: '8',  name: 'Shivani Goyal',       rank: 'AIR 15',  exam: 'UPSC CSE', photo: 'https://www.dhyeyaias.com/storage/media/OcRookF1Kruunyg8QYAXPulckNd8bt4MgYEFDjrw.png' },
+  { id: '9',  name: 'Shweta Singhal',      rank: 'AIR 17',  exam: 'UPSC CSE', photo: 'https://www.dhyeyaias.com/storage/media/ZbILFw85fCp7YjJqB3GdzJSm9IOZRPVp6FGf1ORa.png' },
+  { id: '10', name: 'Sriman Hukla',        rank: 'AIR 18',  exam: 'UPSC CSE', photo: 'https://www.dhyeyaias.com/storage/media/h8t1bySN7Jarm0zFdJCP1K3bcG7cllM6vWRGdbO7.png' },
+  { id: '11', name: 'Priyanka Niranjan',   rank: 'AIR 20',  exam: 'UPSC CSE', photo: 'https://www.dhyeyaias.com/storage/media/VlY4dLixvHY6B5YbNMS1YpnoeY1xcPmi1D7nH6uV.png' },
+  { id: '12', name: 'Adesh Titarmare',     rank: 'AIR 21',  exam: 'UPSC CSE', photo: 'https://www.dhyeyaias.com/storage/media/ICwx75jPLmtIivfHuv4OMXV0XufCF6F8zL2oLym5.png' },
+  { id: '13', name: 'Neha Prakash',        rank: 'AIR 22',  exam: 'UPSC CSE', photo: 'https://www.dhyeyaias.com/storage/media/nryoQD5Wij65eVEL2JQDVYYss3B0GLXTbXsFOWD9.png' },
+  { id: '14', name: 'Anuraj Jain',         rank: 'AIR 24',  exam: 'UPSC CSE', photo: 'https://www.dhyeyaias.com/storage/media/muJtU99iOUzJkjSzsWJCSiPzyyg0h8j71F1aOXWn.png' },
+  { id: '15', name: 'Dibya Jyoti Parida',  rank: 'AIR 26',  exam: 'UPSC CSE', photo: 'https://www.dhyeyaias.com/storage/media/CiL6zuBdffB1jCLmNzCKtng2XcOAEIqvgl5WNtDr.png' },
+  { id: '16', name: 'Karamveer Sharma',    rank: 'AIR 28',  exam: 'UPSC CSE', photo: 'https://www.dhyeyaias.com/storage/media/Eg93Dh1CdS0n3Jt8tOK51wOYQ1iAJk6BxNXs5dkU.png' },
+  { id: '17', name: 'Anjanay Kumar',       rank: 'AIR 29',  exam: 'UPSC CSE', photo: 'https://www.dhyeyaias.com/storage/media/AgR1OxUxzhdd30DWFELcCF3rKV7yezeiMPy1UkCL.png' },
+  { id: '18', name: 'Pari Bishnoi',        rank: 'AIR 30',  exam: 'UPSC CSE', photo: 'https://www.dhyeyaias.com/storage/media/s59c5GbI5jaOFL03ul8iY3ExQynCLhfRKh4oOlqJ.png' },
+  { id: '19', name: 'Ganga Singh',         rank: 'AIR 33',  exam: 'UPSC CSE', photo: 'https://www.dhyeyaias.com/storage/media/RoJYBaW91P9XhiWozn7CXYjlwWx1pKpvEshkBRtA.png' },
+  { id: '20', name: 'Arun Raj',            rank: 'AIR 34',  exam: 'UPSC CSE', photo: 'https://www.dhyeyaias.com/storage/media/Lngb4U9s4B1qBuPDnK6ssmDTdHSCrLcPJPDogDCR.png' },
+  { id: '21', name: 'Arnav Mishra',        rank: 'AIR 56',  exam: 'UPSC CSE', photo: 'https://www.dhyeyaias.com/storage/media/pz0G0fO4nK11yRHoYft6vOjKLzD0FkTA6jD2cTdW.png' },
+  { id: '22', name: 'Zufishan Haque',      rank: 'AIR 193', exam: 'UPSC CSE', photo: 'https://www.dhyeyaias.com/storage/media/r6yb4dnkz4Atfb1u88YoCI7zKARrjV4dX5mzgeLy.png' },
+  { id: '23', name: 'Rajat Singh',         rank: 'AIR 379', exam: 'UPSC CSE', photo: 'https://www.dhyeyaias.com/storage/media/uVRUucG3OrglRClwyd7kCeqdhL9iPZCJsPtAfeMo.png' },
+  { id: '24', name: 'Pankaj Verma',        rank: 'AIR 515', exam: 'UPSC CSE', photo: 'https://www.dhyeyaias.com/storage/media/s9gAVfKsm7JpMjnNLSvalUVCjDGgI174yejfuULh.png' },
+  { id: '25', name: 'Rohit Kardam',        rank: 'AIR 517', exam: 'UPSC CSE', photo: 'https://www.dhyeyaias.com/storage/media/4o7fE9NrZjVRnaXDZk2hRqVRHHc5lxGFqjltXG72.png' },
+  { id: '26', name: 'Adarsh Patel',        rank: 'AIR 520', exam: 'UPSC CSE', photo: 'https://www.dhyeyaias.com/storage/media/6wI91pG14AhRBYUIfjSedycrptWslHcHlchAadHu.png' },
+  { id: '27', name: 'Vipin Dubay',         rank: 'AIR 708', exam: 'UPSC CSE', photo: 'https://www.dhyeyaias.com/storage/media/jt8QfCojoruZKRqg3oVskUGViTQ8bYv0bVMsoCC8.png' },
+  { id: '28', name: 'Ayush Agrawal',       rank: 'AIR 822', exam: 'UPSC CSE', photo: 'https://www.dhyeyaias.com/storage/media/0gynj7zmNbkT65vxRV5Hyxy9ARJ2J3xRRknI2ygN.png' },
 ];
 
 // ─── Homepage Courses ────────────────────────────────────────────────────────
