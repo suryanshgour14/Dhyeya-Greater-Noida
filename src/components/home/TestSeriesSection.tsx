@@ -1,216 +1,311 @@
-﻿"use client";
+"use client";
 
 import Link from "next/link";
 import { useLocale } from "next-intl";
 import { motion } from "framer-motion";
-import { Button } from "@/components/ui/button";
-import {
-  ClipboardList,
-  Edit3,
-  Target,
-  TrendingUp,
-  CheckCircle2,
-  ArrowRight,
-  Users,
-  Trophy,
-  BarChart3,
-} from "lucide-react";
+import { ClipboardList, Edit3, Target, ArrowRight } from "lucide-react";
 
 const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
 
-const TEST_SERIES = [
+const serif = `var(--font-newsreader, "Newsreader"), Georgia, serif`;
+const sans  = `var(--font-plus-jakarta, "Plus Jakarta Sans"), system-ui, sans-serif`;
+
+const SERIES = [
   {
-    id: "prelims",
-    label: "Prelims",
-    title: "All India Prelims Test Series 2025",
-    desc: "50 full-length mock tests - GS Paper I + CSAT - with detailed solutions, rank analysis, and subject-wise performance reports.",
-    icon: ClipboardList,
-    color: "blue",
-    features: ["50 Full Mocks", "All India Rank", "Detailed Solutions", "Previous Year Papers"],
+    id: "ias-prelims",
+    category: "Prelims",
+    exam: "IAS",
+    title: "All India IAS Prelims Test Series 2026",
+    short: "GS Paper I + CSAT mock tests",
+    features: ["50 Full Mocks", "All India Rank"],
     price: "₹3,999",
-    badge: "Most Popular",
-    href: "/test-series/prelims",
+    icon: ClipboardList,
+    accent: "#1e3a6e",
+    pill: "#e8eef7",
+    pillText: "#1e3a6e",
+    href: "/test-series/ias-prelims",
   },
   {
-    id: "mains",
-    label: "Mains",
-    title: "GS Mains Answer Writing Programme",
-    desc: "Structured answer writing practice for all 4 GS papers with expert evaluation, model answers, and personalised feedback.",
-    icon: Edit3,
-    color: "gold",
-    features: ["360 Questions", "Expert Evaluation", "Model Answers", "1-on-1 Feedback"],
+    id: "ias-mains",
+    category: "Mains",
+    exam: "IAS",
+    title: "GS Mains Answer Writing Programme 2026",
+    short: "Answer writing mock tests",
+    features: ["360 Questions", "Expert Evaluation"],
     price: "₹5,999",
-    badge: "Highest Rated",
-    href: "/test-series/mains",
+    icon: Edit3,
+    accent: "#C9A13B",
+    pill: "#fdf6e4",
+    pillText: "#92710e",
+    href: "/test-series/ias-mains",
+  },
+  {
+    id: "uppcs-prelims",
+    category: "Prelims",
+    exam: "UPPCS",
+    title: "UPPCS Prelims Test Series 2026",
+    short: "UP PCS prelims mock tests",
+    features: ["30 Full Mocks", "UP Special Papers"],
+    price: "₹2,499",
+    icon: ClipboardList,
+    accent: "#ea580c",
+    pill: "#fff3ed",
+    pillText: "#c2410c",
+    href: "/test-series/uppcs-prelims",
+  },
+  {
+    id: "uppcs-mains",
+    category: "Mains",
+    exam: "UPPCS",
+    title: "UPPCS Mains Test Series 2026",
+    short: "UP PCS mains answer practice",
+    features: ["18 Tests", "Papers 5 & 6 Included"],
+    price: "₹3,499",
+    icon: Edit3,
+    accent: "#7c3aed",
+    pill: "#f5f0ff",
+    pillText: "#6d28d9",
+    href: "/test-series/uppcs-mains",
+  },
+  {
+    id: "ukpsc-prelims",
+    category: "Prelims",
+    exam: "UKPSC",
+    title: "UKPSC Prelims Test Series 2026",
+    short: "Uttarakhand prelims series",
+    features: ["20 Full Mocks", "UK GK Coverage"],
+    price: "₹1,499",
+    icon: ClipboardList,
+    accent: "#0891b2",
+    pill: "#e0f7fa",
+    pillText: "#0e7490",
+    href: "/test-series/ukpsc-prelims",
+  },
+  {
+    id: "ukpsc-mains",
+    category: "Mains",
+    exam: "UKPSC",
+    title: "UKPSC Mains Test Series 2026",
+    short: "Uttarakhand mains series",
+    features: ["12 Tests", "UK Special Papers"],
+    price: "₹2,999",
+    icon: Edit3,
+    accent: "#059669",
+    pill: "#ecfdf5",
+    pillText: "#047857",
+    href: "/test-series/ukpsc-mains",
   },
   {
     id: "integrated",
-    label: "Integrated",
-    title: "Integrated Prelims + Mains Series",
-    desc: "Complete package covering Prelims GS + CSAT and all Mains GS papers - best value for serious aspirants.",
-    icon: Target,
-    color: "orange",
-    features: ["50 Prelims Mocks", "360 Mains Questions", "Interview Guidance", "All India Rank"],
+    category: "Integrated",
+    exam: "UPSC",
+    title: "Integrated Prelims + Mains Series 2026",
+    short: "Complete package — best value",
+    features: ["50 Prelims + 360 Mains", "Interview Guidance"],
     price: "₹8,999",
-    badge: "Best Value",
+    icon: Target,
+    accent: "#be123c",
+    pill: "#fff1f3",
+    pillText: "#9f1239",
     href: "/test-series/integrated",
   },
 ];
 
-const WHY_TEST = [
-  { icon: BarChart3, title: "All India Ranking", desc: "Compare your performance with 10,000+ aspirants across India" },
-  { icon: TrendingUp, title: "Performance Analytics", desc: "Detailed subject-wise, topic-wise analysis to fix weak areas" },
-  { icon: Users, title: "Expert Evaluation", desc: "Mains answers evaluated by IAS officers and subject experts" },
-  { icon: Trophy, title: "Topper Benchmark", desc: "See how toppers answered the same questions to improve your approach" },
-];
+// Triple for seamless loop
+const TRACK = [...SERIES, ...SERIES, ...SERIES];
 
-const COLOR_MAP = {
-  blue: {
-    accent: "bg-brand-blue",
-    badge: "bg-brand-blue/10 text-brand-blue",
-    icon: "bg-brand-blue/10 text-brand-blue",
-    ring: "ring-brand-blue/30",
-    cta: "bg-brand-blue hover:bg-brand-blue/90",
-  },
-  gold: {
-    accent: "bg-brand-gold",
-    badge: "bg-brand-gold/10 text-amber-700",
-    icon: "bg-brand-gold/10 text-brand-gold",
-    ring: "ring-brand-gold/30",
-    cta: "bg-brand-gold text-brand-blue hover:bg-brand-gold/90",
-  },
-  orange: {
-    accent: "bg-brand-orange",
-    badge: "bg-brand-orange/10 text-brand-orange",
-    icon: "bg-brand-orange/10 text-brand-orange",
-    ring: "ring-brand-orange/30",
-    cta: "bg-brand-orange hover:bg-brand-orange/90",
-  },
-} as const;
+const marqueeKeyframes = `
+@keyframes ts-scroll {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-33.3333%); }
+}
+`;
 
 export default function TestSeriesSection() {
   const locale = useLocale();
 
   return (
-    <section className="bg-white py-20">
-      <div className="container mx-auto px-4">
+    <section style={{ background: "#fff", padding: "80px 0", fontFamily: sans, overflow: "hidden" }}>
+      <style>{marqueeKeyframes}</style>
 
-        {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5, ease: EASE }}
-          className="mb-14 text-center"
+      {/* Header */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.5, ease: EASE }}
+        style={{ textAlign: "center", marginBottom: 48, padding: "0 24px" }}
+      >
+        <span style={{
+          display: "inline-block", marginBottom: 10,
+          fontSize: 11, fontWeight: 700, letterSpacing: "0.16em",
+          textTransform: "uppercase", color: "#ea580c",
+        }}>
+          Practice &amp; Perform
+        </span>
+        <h2 style={{
+          fontFamily: serif,
+          fontSize: "clamp(28px, 4vw, 46px)",
+          fontWeight: 400, lineHeight: 1.1,
+          letterSpacing: "-0.02em",
+          color: "#0B1C3D", margin: "0 0 12px",
+        }}>
+          Upcoming{" "}
+          <em style={{ fontStyle: "italic", color: "#C9A13B" }}>2026</em>{" "}
+          Test Series
+        </h2>
+        <p style={{ fontSize: 15, color: "#64748b", margin: 0, maxWidth: 480, marginInline: "auto" }}>
+          All India ranking · Expert evaluation · Deep performance analytics
+        </p>
+      </motion.div>
+
+      {/* Scrolling track */}
+      <div style={{ overflow: "hidden" }}>
+        <div
+          style={{
+            display: "flex",
+            gap: 20,
+            width: "max-content",
+            animation: "ts-scroll 40s linear infinite",
+            willChange: "transform",
+          }}
         >
-          <span className="mb-2 inline-block text-xs font-bold uppercase tracking-widest text-brand-orange">
-            Practice & Perform
-          </span>
-          <h2 className="text-3xl font-bold text-brand-blue sm:text-4xl">
-            UPSC Test Series 2025
-          </h2>
-          <p className="mt-3 text-muted-foreground max-w-xl mx-auto">
-            Exam-like practice with All India ranking, expert evaluation, and deep performance analytics - everything you need to crack UPSC.
-          </p>
-        </motion.div>
-
-        {/* Cards */}
-        <motion.div
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-60px" }}
-          variants={{ hidden: {}, visible: { transition: { staggerChildren: 0.1 } } }}
-          className="mb-16 grid gap-6 md:grid-cols-3"
-        >
-          {TEST_SERIES.map((series) => {
-            const colors = COLOR_MAP[series.color as keyof typeof COLOR_MAP];
-            const Icon = series.icon;
-
+          {TRACK.map((s, idx) => {
+            const Icon = s.icon;
             return (
-              <motion.div
-                key={series.id}
-                variants={{
-                  hidden: { opacity: 0, y: 24 },
-                  visible: { opacity: 1, y: 0, transition: { duration: 0.45, ease: EASE } },
+              <div
+                key={`${s.id}-${idx}`}
+                style={{
+                  width: 270,
+                  flexShrink: 0,
+                  background: "#fff",
+                  borderRadius: 16,
+                  border: "1.5px solid #e8eef7",
+                  padding: "22px 20px 18px",
+                  boxShadow: "0 2px 12px rgba(30,58,110,0.06)",
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: 0,
+                  position: "relative",
+                  overflow: "hidden",
                 }}
-                className={`group relative flex flex-col rounded-2xl border bg-white p-6 shadow-sm ring-1 ring-transparent transition-all hover:shadow-lg hover:ring-2 ${colors.ring}`}
               >
-                {/* Accent top bar */}
-                <div className={`absolute inset-x-0 top-0 h-1 rounded-t-2xl ${colors.accent}`} />
+                {/* Accent top */}
+                <div style={{
+                  position: "absolute", top: 0, left: 0, right: 0,
+                  height: 3, background: s.accent, borderRadius: "14px 14px 0 0",
+                }} />
 
-                {/* Badge */}
-                <span className={`mb-4 self-start rounded-full px-2.5 py-0.5 text-[11px] font-bold ${colors.badge}`}>
-                  {series.badge}
-                </span>
+                {/* Category pill */}
+                <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 14 }}>
+                  <span style={{
+                    background: s.pill, color: s.pillText,
+                    borderRadius: 999, fontSize: 10.5, fontWeight: 700,
+                    padding: "3px 10px", letterSpacing: "0.04em",
+                    textTransform: "uppercase",
+                  }}>
+                    {s.exam}
+                  </span>
+                  <span style={{
+                    background: "#f8fafc", color: "#64748b",
+                    borderRadius: 999, fontSize: 10.5, fontWeight: 600,
+                    padding: "3px 9px",
+                  }}>
+                    {s.category}
+                  </span>
+                </div>
 
-                {/* Icon + label */}
-                <span className={`mb-3 flex h-11 w-11 items-center justify-center rounded-xl ${colors.icon}`}>
-                  <Icon className="h-5 w-5" />
-                </span>
+                {/* Icon */}
+                <div style={{
+                  width: 38, height: 38, borderRadius: 10,
+                  background: s.pill,
+                  display: "flex", alignItems: "center", justifyContent: "center",
+                  marginBottom: 12,
+                }}>
+                  <Icon size={18} color={s.accent} />
+                </div>
 
-                <p className="mb-1 text-xs font-bold uppercase tracking-wider text-muted-foreground">
-                  {series.label}
+                {/* Title */}
+                <p style={{
+                  fontSize: 13.5, fontWeight: 700, color: "#0f172a",
+                  lineHeight: 1.4, margin: "0 0 4px",
+                }}>
+                  {s.title}
                 </p>
-                <h3 className="mb-3 text-base font-bold text-foreground leading-snug">
-                  {series.title}
-                </h3>
-                <p className="mb-4 text-sm leading-relaxed text-muted-foreground">
-                  {series.desc}
+                <p style={{ fontSize: 12, color: "#94a3b8", margin: "0 0 12px", lineHeight: 1.5 }}>
+                  {s.short}
                 </p>
 
                 {/* Features */}
-                <ul className="mb-5 flex-1 space-y-1.5">
-                  {series.features.map((f) => (
-                    <li key={f} className="flex items-center gap-2 text-xs text-muted-foreground">
-                      <CheckCircle2 className="h-3.5 w-3.5 shrink-0 text-emerald-500" />
+                <div style={{ display: "flex", flexWrap: "wrap", gap: 5, marginBottom: 16 }}>
+                  {s.features.map((f) => (
+                    <span key={f} style={{
+                      fontSize: 10.5, fontWeight: 600,
+                      color: "#475569",
+                      background: "#f1f5f9",
+                      borderRadius: 6, padding: "3px 8px",
+                    }}>
                       {f}
-                    </li>
+                    </span>
                   ))}
-                </ul>
+                </div>
 
                 {/* Price + CTA */}
-                <div className="flex items-center justify-between mt-auto pt-4 border-t border-border">
+                <div style={{
+                  marginTop: "auto",
+                  paddingTop: 14,
+                  borderTop: "1px solid #f1f5f9",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                }}>
                   <div>
-                    <p className="text-xs text-muted-foreground">Starting from</p>
-                    <p className="text-xl font-bold text-foreground">{series.price}</p>
+                    <div style={{ fontSize: 10, color: "#94a3b8", fontWeight: 500 }}>Starting from</div>
+                    <div style={{ fontSize: 18, fontWeight: 800, color: "#0B1C3D", lineHeight: 1.2 }}>{s.price}</div>
                   </div>
-                  <Button asChild size="sm" className={`text-white ${colors.cta}`}>
-                    <Link href={`/${locale}${series.href}`}>
-                      Enroll
-                      <ArrowRight className="ml-1 h-3.5 w-3.5" />
-                    </Link>
-                  </Button>
+                  <Link
+                    href={`/${locale}${s.href}`}
+                    style={{
+                      display: "inline-flex", alignItems: "center", gap: 5,
+                      background: s.accent, color: "#fff",
+                      borderRadius: 8, padding: "8px 14px",
+                      fontSize: 12, fontWeight: 700,
+                      textDecoration: "none", letterSpacing: "0.01em",
+                      whiteSpace: "nowrap",
+                    }}
+                  >
+                    Enroll Now
+                    <ArrowRight size={12} />
+                  </Link>
                 </div>
-              </motion.div>
+              </div>
             );
           })}
-        </motion.div>
-
-        {/* Why test series strip */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5, ease: EASE }}
-          className="rounded-2xl bg-brand-blue p-8"
-        >
-          <h3 className="mb-6 text-center text-lg font-bold text-white">
-            Why Test Series Makes All the Difference
-          </h3>
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-            {WHY_TEST.map(({ icon: Icon, title, desc }) => (
-              <div key={title} className="flex flex-col items-center text-center">
-                <span className="mb-3 flex h-11 w-11 items-center justify-center rounded-xl bg-white/10">
-                  <Icon className="h-5 w-5 text-brand-gold" />
-                </span>
-                <p className="mb-1 text-sm font-semibold text-white">{title}</p>
-                <p className="text-xs leading-relaxed text-slate-400">{desc}</p>
-              </div>
-            ))}
-          </div>
-        </motion.div>
-
+        </div>
       </div>
+
+      {/* View all link */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        viewport={{ once: true }}
+        transition={{ delay: 0.3 }}
+        style={{ textAlign: "center", marginTop: 36 }}
+      >
+        <Link
+          href={`/${locale}/test-series`}
+          style={{
+            display: "inline-flex", alignItems: "center", gap: 6,
+            fontSize: 13.5, fontWeight: 700,
+            color: "#1e3a6e", textDecoration: "none",
+            borderBottom: "1.5px solid #1e3a6e",
+            paddingBottom: 1,
+          }}
+        >
+          View All Test Series
+          <ArrowRight size={14} />
+        </Link>
+      </motion.div>
     </section>
   );
 }

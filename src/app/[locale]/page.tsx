@@ -1,44 +1,53 @@
+import { createClient } from "@supabase/supabase-js";
 import HeroSection from "@/components/home/HeroSection";
 import WelcomeSection from "@/components/home/WelcomeSection";
 import StatsCounter from "@/components/home/StatsCounter";
 import ToppersMarquee from "@/components/home/ToppersMarquee";
 import UdaanPromo from "@/components/home/UdaanPromo";
-import CoursesGrid from "@/components/home/CoursesGrid";
+import CoursesSection from "@/components/home/CoursesSection";
 import Notifications from "@/components/home/Notifications";
 import TestSeriesSection from "@/components/home/TestSeriesSection";
-import ActiveBatches from "@/components/home/ActiveBatches";
-import StudyMaterial from "@/components/home/StudyMaterial";
 import WhyChooseUs from "@/components/home/WhyChooseUs";
 import StudentZone from "@/components/home/StudentZone";
 import DownloadApp from "@/components/home/DownloadApp";
-import YouTubeSection from "@/components/home/YouTubeSection";
-import DhyeyaStore from "@/components/home/DhyeyaStore";
-import TeamSection from "@/components/home/TeamSection";
 import Testimonials from "@/components/home/Testimonials";
-import BlogSection from "@/components/home/BlogSection";
 import CTASection from "@/components/home/CTASection";
 
-export default function HomePage() {
+async function getNotifications() {
+  try {
+    const supabase = createClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+    );
+    const { data } = await supabase
+      .from("notifications")
+      .select("id, title, description, date_label, is_new, show_in_bar, sort_order, created_at")
+      .eq("is_active", true)
+      .order("sort_order", { ascending: true })
+      .order("created_at", { ascending: false });
+    return data ?? [];
+  } catch {
+    return [];
+  }
+}
+
+export default async function HomePage() {
+  const notifications = await getNotifications();
+
   return (
     <>
       <HeroSection />
       <StatsCounter />
       <WelcomeSection />
-      <CoursesGrid />
+      <CoursesSection />
       <UdaanPromo />
       <ToppersMarquee />
-      <Notifications />
+      <Notifications initialItems={notifications} />
       <TestSeriesSection />
-      <ActiveBatches />
-      <StudyMaterial />
-      <YouTubeSection />
       <WhyChooseUs />
-      <TeamSection />
       <StudentZone />
-      <DhyeyaStore />
       <DownloadApp />
       <Testimonials />
-      <BlogSection />
       <CTASection />
     </>
   );

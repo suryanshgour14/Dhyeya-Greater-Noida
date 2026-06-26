@@ -31,14 +31,7 @@ export const SOCIAL_LINKS = {
 };
 
 // ─── Announcement ────────────────────────────────────────────────────────────
-export const ANNOUNCEMENT_ITEMS = [
-  'UKPCS Prelims Test Series 2026 Starting 15 June 2026 - Online ₹1,499 | Offline ₹4,999 - Enroll Now',
-  'New UPSC IAS Foundation Batch Starting July 2026 - Limited Seats of 60 - Book Your Seat Today',
-  '4-Month UPPCS Prelims Crash Course - October 2026 Batch Open - Exam-Ready Programme Enrollments Live',
-  'UDAAN 3-Year Integrated Programme - Merit Scholarship Up to ₹2 Lakh - Apply Before Seats Fill',
-  'Free Demo Class Every Saturday 10:00 AM - Walk In Welcome at Knowledge Park I, Greater Noida',
-  'UPPCS Mains Test Series 2026 - 18 Tests Including UP Special Papers 5 & 6 - Register Now',
-];
+export const ANNOUNCEMENT_ITEMS: string[] = [];
 
 // ─── Navigation ──────────────────────────────────────────────────────────────
 export interface NavChild {

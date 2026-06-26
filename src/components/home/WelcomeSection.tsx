@@ -83,7 +83,7 @@ export default function WelcomeSection() {
             <motion.div variants={fadeUp}>
               <Button
                 asChild
-                className="bg-brand-blue hover:bg-brand-blue/90"
+                className="bg-brand-blue text-white hover:bg-brand-blue/90"
               >
                 <Link href={`/${locale}/about`}>
                   {t("welcome.cta")}
@@ -155,11 +155,6 @@ export default function WelcomeSection() {
               </div>
             </div>
 
-            {/* Floating accent - top left */}
-            <div className="absolute -left-5 -top-5 rounded-2xl border border-brand-blue/10 bg-white p-4 shadow-xl">
-              <p className="text-xs font-medium text-muted-foreground">UPSC 2024</p>
-              <p className="text-lg font-bold text-brand-blue">47 Selections</p>
-            </div>
           </motion.div>
         </div>
       </div>

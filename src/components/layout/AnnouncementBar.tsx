@@ -3,13 +3,18 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, ChevronRight } from "lucide-react";
-import { ANNOUNCEMENT_ITEMS } from "@/lib/constants";
 
-export default function AnnouncementBar() {
+interface Props {
+  items: string[];
+}
+
+export default function AnnouncementBar({ items }: Props) {
   const [visible, setVisible] = useState(true);
   const [paused, setPaused] = useState(false);
 
-  const repeated = [...ANNOUNCEMENT_ITEMS, ...ANNOUNCEMENT_ITEMS];
+  if (!items.length) return null;
+
+  const repeated = [...items, ...items];
 
   return (
     <AnimatePresence>

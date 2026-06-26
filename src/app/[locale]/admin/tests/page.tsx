@@ -6,7 +6,7 @@ import { useLocale } from "next-intl";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Plus, Eye, Send, BookOpen, Loader2, CheckCircle2, XCircle,
-  X, FileUp, Shield, Newspaper, FileText, Trash2, Star, Calendar,
+  X, FileUp, Shield, Newspaper, FileText, Trash2, Star, Calendar, Bell,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import ExcelUpload from "@/components/admin/ExcelUpload";
@@ -80,7 +80,7 @@ export default function AdminPage() {
           </div>
         </div>
         {/* Tab bar */}
-        <div className="flex gap-1">
+        <div className="flex flex-wrap gap-1">
           {([
             { key: "tests", icon: FileText, label: "Test Series" },
             { key: "ca", icon: Newspaper, label: "Current Affairs" },
@@ -99,6 +99,12 @@ export default function AdminPage() {
               <Icon className="h-4 w-4" /> {label}
             </button>
           ))}
+          <Link
+            href={`/${locale}/admin/notifications`}
+            className="flex items-center gap-2 rounded-xl px-4 py-2 text-sm font-semibold text-slate-500 hover:bg-slate-100 transition-all"
+          >
+            <Bell className="h-4 w-4" /> Notifications
+          </Link>
         </div>
       </div>
 
