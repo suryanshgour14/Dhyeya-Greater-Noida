@@ -1207,42 +1207,73 @@ export const FACULTY_MEMBERS: FacultyMember[] = [
   { id: 'f8', name: 'Mrs. Deepali Joshi', designation: 'Interview Panelist', subject: 'IFS (Retd.) | Communication', experience: '16+ yrs', category: 'interview', photo: '/images/faculty/f8.jpg' },
 ];
 
-// ─── Testimonials ────────────────────────────────────────────────────────────
-export interface TestimonialItem {
+// ─── Testimonials (text-only, no photos) ─────────────────────────────────────
+export interface Testimonial {
   id: string;
   name: string;
-  rank: string;
-  year: number;
-  text: string;
-  photo: string;
-  offset?: boolean;
+  achievement: string;        // e.g. "AIR 01 • UPSC" or "UPPCS 2024 • Rank 02 (SDM)"
+  exam: 'UPSC' | 'UPPCS';
+  quote: string;
+  featured?: boolean;         // shown in the homepage carousel
 }
 
-export const TESTIMONIALS_DATA: TestimonialItem[] = [
+export const TESTIMONIALS: Testimonial[] = [
+  { id: 't1', name: 'Kanishak Kataria', achievement: 'AIR 01 • UPSC', exam: 'UPSC', featured: true,
+    quote: 'Dhyeya IAS provided me with a disciplined preparation strategy and continuous mentor support.' },
+  { id: 't2', name: 'Junaid Ahmed', achievement: 'AIR 03 • UPSC', exam: 'UPSC', featured: true,
+    quote: "The faculty's depth of knowledge and the rigorous test series sharpened my answers for the final exam." },
+  { id: 't3', name: 'Saumya Pandey', achievement: 'AIR 04 • UPSC', exam: 'UPSC', featured: true,
+    quote: 'Consistent mentorship and timely feedback on my answer writing made all the difference.' },
+  { id: 't4', name: 'Ananaya Trivedi', achievement: 'UPPCS 2024 • Rank 02 (SDM)', exam: 'UPPCS', featured: true,
+    quote: 'The structured mentorship and answer writing sessions kept me focused throughout my preparation.' },
+  { id: 't5', name: 'Anamika Mishra', achievement: 'UPPCS 2024 • Rank 04 (SDM)', exam: 'UPPCS', featured: true,
+    quote: "Dhyeya's UP-specific material and General Hindi guidance gave me a clear edge in the Mains exam." },
+  { id: 't6', name: 'Deepti Verma', achievement: 'UPPCS 2024 • Rank 06 (SDM)', exam: 'UPPCS', featured: true,
+    quote: 'From prelims strategy to interview guidance, every stage was backed by personal attention.' },
+  { id: 't7', name: 'Pari Bishnoi', achievement: 'AIR 30 • UPSC', exam: 'UPSC', featured: true,
+    quote: 'The disciplined environment and quality of daily current affairs kept my preparation on track.' },
+  { id: 't8', name: 'Sonali Singh', achievement: 'UPPCS 2024 • Rank 32 (SDM)', exam: 'UPPCS', featured: true,
+    quote: 'Regular evaluated tests and one-on-one mentorship helped me convert hard work into a selection.' },
+  { id: 't9', name: 'Lok Bandhu', achievement: 'AIR 07 • UPSC', exam: 'UPSC',
+    quote: "The institute's roadmap simplified a vast syllabus into a clear, achievable plan." },
+  { id: 't10', name: 'Mahesh Kumar', achievement: 'AIR 14 • UPSC', exam: 'UPSC',
+    quote: 'Comprehensive notes and regular revision tests made my prelims preparation rock solid.' },
+  { id: 't11', name: 'Shivani Goyal', achievement: 'AIR 15 • UPSC', exam: 'UPSC',
+    quote: 'Mock interviews with experienced panelists prepared me thoroughly for the personality test.' },
+  { id: 't12', name: 'Priyanka Niranjan', achievement: 'AIR 20 • UPSC', exam: 'UPSC',
+    quote: 'Continuous mentorship kept me motivated even during the toughest phase of preparation.' },
+];
+
+// ─── Featured Alumni Visits (real photographs) ───────────────────────────────
+export interface AchieverVisit {
+  id: string;
+  name: string;
+  achievement: string;
+  photo: string;
+  caption: string;
+}
+
+export const ACHIEVER_VISITS: AchieverVisit[] = [
   {
-    id: 'tm1',
-    name: 'Priya Sharma',
-    rank: 'AIR 12 · UPSC 2024',
-    year: 2024,
-    text: 'Dhyeya IAS completely changed my approach to UPSC preparation. The faculty not only teaches the syllabus but also instils the mindset of a civil servant. I would not have cracked it without their constant guidance and the rigorous test series.',
-    photo: '/images/toppers/topper-1.jpg',
+    id: 'av1',
+    name: 'Junaid Ahmed',
+    achievement: 'AIR 03 • UPSC',
+    photo: 'https://res.cloudinary.com/dl9t48lyt/image/upload/v1782474606/WhatsApp_Image_2026-04-28_at_14.26.22_umyvid.jpg',
+    caption: 'Junaid Ahmed visited Dhyeya IAS to interact with aspirants and shared his preparation strategy, answer writing techniques, and interview experience.',
   },
   {
-    id: 'tm2',
-    name: 'Vikram Gupta',
-    rank: 'AIR 102 · UPSC 2023',
-    year: 2023,
-    text: 'After two failed attempts elsewhere, joining Dhyeya IAS was the turning point. The structured programme, daily answer writing practice, and mock interview sessions gave me the edge I needed. Third attempt, first rank from this institute.',
-    photo: '/images/toppers/topper-4.jpg',
-    offset: true,
+    id: 'av2',
+    name: 'Saumya Pandey',
+    achievement: 'AIR 04 • UPSC',
+    photo: 'https://res.cloudinary.com/dl9t48lyt/image/upload/v1782474606/WhatsApp_Image_2026-04-28_at_14.25.09_qnhezc.jpg',
+    caption: 'Saumya Pandey visited Dhyeya IAS to mentor future civil service aspirants and discuss effective preparation strategies, revision methods, and interview guidance.',
   },
   {
-    id: 'tm3',
-    name: 'Neha Yadav',
-    rank: 'AIR 134 · UPSC 2024',
-    year: 2024,
-    text: "Coming from a small town, I was initially intimidated. But the teachers here made me feel at home. The current affairs sessions are gold - concise, relevant, and exam-focused. The library resources are simply the best I've seen.",
-    photo: '/images/toppers/topper-5.jpg',
+    id: 'av3',
+    name: 'UPPCS 2024 Selections',
+    achievement: 'UPPCS 2024 • Selected Officers',
+    photo: 'https://res.cloudinary.com/dl9t48lyt/image/upload/v1782474663/WhatsApp_Image_2026-04-21_at_23.55.58_q333gq.jpg',
+    caption: 'Our UPPCS 2024 selected students celebrating their success at Dhyeya IAS — a proud moment for the entire Dhyeya family.',
   },
 ];
 
@@ -1336,15 +1367,14 @@ export interface StudentZoneItem {
   color: string;
 }
 
+// Mirrors the navbar "Student Zone" dropdown — keep these in sync.
 export const STUDENT_ZONE_ITEMS: StudentZoneItem[] = [
   { id: 'sz1', title: 'Batch Details', Icon: Users, href: '/student-zone/batches', color: 'blue' },
   { id: 'sz2', title: 'Free Resources', Icon: Download, href: '/student-zone/resources', color: 'gold' },
-  { id: 'sz3', title: 'Books & Notes', Icon: Book, href: '/student-zone/books', color: 'orange' },
-  { id: 'sz4', title: 'UPSC FAQs', Icon: HelpCircle, href: '/student-zone/faqs', color: 'blue' },
-  { id: 'sz5', title: 'Exam Info', Icon: FileText, href: '/student-zone/exam-info', color: 'gold' },
-  { id: 'sz6', title: 'Brochure', Icon: Download, href: '/student-zone/brochure', color: 'orange' },
-  { id: 'sz7', title: 'Notifications', Icon: Bell, href: '/student-zone/notifications', color: 'blue' },
-  { id: 'sz8', title: 'IAS Olympiad', Icon: Award, href: '/student-zone/olympiad', color: 'gold' },
+  { id: 'sz3', title: 'UPSC FAQs', Icon: HelpCircle, href: '/student-zone/faqs', color: 'orange' },
+  { id: 'sz4', title: 'Live Test', Icon: Monitor, href: '/tests', color: 'blue' },
+  { id: 'sz5', title: 'Latest Notifications', Icon: Bell, href: '/student-zone/notifications', color: 'gold' },
+  { id: 'sz6', title: 'Test Results', Icon: Trophy, href: '/student-zone/results', color: 'orange' },
 ];
 
 // ─── Why Choose Us ────────────────────────────────────────────────────────────
