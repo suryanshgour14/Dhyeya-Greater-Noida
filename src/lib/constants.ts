@@ -14,11 +14,14 @@ export const SITE_URL =
   process.env.NEXT_PUBLIC_SITE_URL || 'https://dhyeyagreaternoida.com';
 
 export const CONTACT_INFO = {
-  address: 'Plot No. 3, Knowledge Park III, Greater Noida, UP – 201310',
-  phone: '+91-9999-000-111',
-  whatsapp: '+919999000111',
+  address:
+    'Dhyeya IAS, Plot No. 039A, Greater Noida – 201310, Gautam Buddh Nagar, Uttar Pradesh, India',
+  phone: '+91 92053 36037',
+  phone2: '+91 82998 99757',
+  whatsapp: '+919205336037',
   email: 'info@dhyeyagreaternoida.com',
-  mapUrl: 'https://maps.google.com',
+  mapUrl:
+    'https://www.google.com/maps/place/DHYEYA+IAS+Greater+Noida/@28.4688528,77.5072156,766m/data=!3m1!1e3!4m6!3m5!1s0x390cea04b83fccfd:0xce2b8195ec7b7d63!8m2!3d28.4688561!4d77.507212!16s%2Fg%2F11dyn8w7rl?hl=en',
   hours: 'Mon – Sat: 9:00 AM – 7:00 PM',
 };
 

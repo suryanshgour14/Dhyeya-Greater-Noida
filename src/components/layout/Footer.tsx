@@ -1,4 +1,4 @@
-﻿import Link from "next/link";
+﻿import { Link } from "@/i18n/navigation";
 import { Phone, Mail, MapPin, Clock, Send } from "lucide-react";
 import { CONTACT_INFO, SOCIAL_LINKS, SITE_NAME } from "@/lib/constants";
 import DhyeyaLogo from "@/components/shared/DhyeyaLogo";
@@ -14,26 +14,25 @@ const QUICK_LINKS = [
   { label: "Courses", href: "/courses" },
   { label: "Test Series", href: "/test-series" },
   { label: "Current Affairs", href: "/current-affairs" },
-  { label: "Blog", href: "/blogs" },
   { label: "Contact Us", href: "/contact" },
 ];
 
 const COURSES_LINKS = [
-  { label: "Dhyeya Udaan", href: "/courses/udaan" },
-  { label: "Classroom Programme", href: "/courses/classroom" },
-  { label: "Online Courses", href: "/courses/online" },
-  { label: "Optional Subjects", href: "/courses/optional" },
-  { label: "Prelims Test Series", href: "/test-series/prelims" },
-  { label: "Mains Test Series", href: "/test-series/mains" },
+  { label: "UPSC IAS Foundation", href: "/courses/upsc-ias-foundation" },
+  { label: "UPPSC PCS Comprehensive", href: "/courses/uppsc-pcs-comprehensive" },
+  { label: "Udaan 3-Year – IAS/PCS", href: "/courses/udaan-3-year-integrated" },
+  { label: "UPSC Mentorship Program", href: "/courses/upsc-ias-mentorship" },
+  { label: "CSAT Mastery – IAS/PCS", href: "/courses/csat-mastery" },
+  { label: "UPPCS Prelims Crash Course", href: "/courses/uppsc-prelims-crash-course" },
 ];
 
 const STUDENT_LINKS = [
   { label: "Batch Details", href: "/student-zone/batches" },
   { label: "Free Resources", href: "/student-zone/resources" },
-  { label: "Books & Notes", href: "/student-zone/books" },
   { label: "UPSC FAQs", href: "/student-zone/faqs" },
-  { label: "Notifications", href: "/student-zone/notifications" },
-  { label: "IAS Olympiad", href: "/student-zone/olympiad" },
+  { label: "Live Test", href: "/tests" },
+  { label: "Latest Notifications", href: "/student-zone/notifications" },
+  { label: "Test Results", href: "/student-zone/results" },
 ];
 
 export default function Footer() {
@@ -57,13 +56,26 @@ export default function Footer() {
             <ul className="space-y-2.5 text-sm">
               <li className="flex items-start gap-2.5">
                 <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-brand-gold" />
-                <span className="text-slate-400">{CONTACT_INFO.address}</span>
+                <a
+                  href={CONTACT_INFO.mapUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-slate-400 hover:text-white transition-colors"
+                >
+                  {CONTACT_INFO.address}
+                </a>
               </li>
               <li className="flex items-center gap-2.5">
                 <Phone className="h-4 w-4 shrink-0 text-brand-gold" />
-                <a href={`tel:${CONTACT_INFO.phone}`} className="text-slate-400 hover:text-white transition-colors">
-                  {CONTACT_INFO.phone}
-                </a>
+                <span className="text-slate-400">
+                  <a href={`tel:${CONTACT_INFO.phone.replace(/\s/g, "")}`} className="hover:text-white transition-colors">
+                    {CONTACT_INFO.phone}
+                  </a>
+                  {" / "}
+                  <a href={`tel:${CONTACT_INFO.phone2.replace(/\s/g, "")}`} className="hover:text-white transition-colors">
+                    {CONTACT_INFO.phone2}
+                  </a>
+                </span>
               </li>
               <li className="flex items-center gap-2.5">
                 <Mail className="h-4 w-4 shrink-0 text-brand-gold" />
