@@ -3,6 +3,7 @@
 import { useRef } from "react";
 import { motion, useInView } from "framer-motion";
 import { Crown, Users2 } from "lucide-react";
+import InterviewPanelSection from "./InterviewPanelSection";
 
 // ─── Shared helpers ───────────────────────────────────────────────────────────
 
@@ -194,11 +195,9 @@ const ADVISORY = [
   { name: "Mr. A. H. K. Ghauri",   designation: "Retd. IRS — Ex. Governance Advisor, British High Commission",         image: "https://www.dhyeyaias.com/storage/media/10_team.jpg" },
   { name: "Mr. S K Mishra",         designation: "Retd. IRS — Ex. Member Revenue Board, Ex. Member CBIC",              image: "https://www.dhyeyaias.com/storage/media/11_team.jpg" },
   { name: "Mr. T H K Ghauri",       designation: "Retd. IRS — Ex. Chief Commissioner Custom & Excise",                 image: "https://www.dhyeyaias.com/storage/media/12_team.jpg" },
-  { name: "Mr. Qamar Agha",         designation: "Sr. Journalist",                                                     image: "https://www.dhyeyaias.com/storage/media/13_team.jpg" },
   { name: "Mr. Qurban Ali",         designation: "Ex. Director, Rajya Sabha TV",                                       image: "https://www.dhyeyaias.com/storage/media/14_team.jpg" },
   { name: "Mr. S. N. Ali",          designation: "Senior Journalist",                                                  image: "https://www.dhyeyaias.com/storage/media/15_team.jpg" },
   { name: "Mr. Gaurav Bansal",      designation: "IRTS",                                                               image: "https://www.dhyeyaias.com/storage/media/16_team.jpg" },
-  { name: "Mr. Sunil Kumar Rai",    designation: "IPS",                                                                image: "https://www.dhyeyaias.com/storage/media/17_team.jpg" },
   { name: "Mr. Saurabh Rao",        designation: "IAS",                                                                image: "https://www.dhyeyaias.com/storage/media/18_team.jpg" },
   { name: "Mr. Arshi",              designation: "IPS",                                                                image: "https://www.dhyeyaias.com/storage/media/20_team.jpg" },
 ];
@@ -311,31 +310,174 @@ function AdvisorySection() {
   );
 }
 
-// ─── Coming soon placeholder ──────────────────────────────────────────────────
+// ─── Administration data ──────────────────────────────────────────────────────
 
-function ComingSoonSection({
-  id,
-  title,
-  subtitle,
+const ADMIN_TEAM = [
+  {
+    name: "Mr. Abhishek Singh",
+    role: "Centre Head",
+    tag: "Greater Noida",
+    image:
+      "https://res.cloudinary.com/dl9t48lyt/image/upload/v1782416590/0bb87933-eb14-4856-af43-57eb38d93c65.png",
+    quote:
+      "Every great officer was once an aspirant who chose to persist. At Dhyeya IAS Greater Noida, my commitment to each one of you is personal — we walk this journey together, every single step of the way.",
+  },
+  {
+    name: "Neha Ma'am",
+    role: "Administrative Head",
+    tag: "Greater Noida",
+    image:
+      "https://res.cloudinary.com/dl9t48lyt/image/upload/v1782416560/6ff48502-bba4-4c38-88bb-1d9b0ecaa572.png",
+    quote:
+      "Success in UPSC is built on consistency, the right environment, and knowing that someone genuinely believes in you. I am here to make sure you never feel alone in this pursuit.",
+  },
+  {
+    name: "Arif Ghauri Sir",
+    role: "Mentor",
+    tag: "Ex-IRS",
+    image:
+      "https://res.cloudinary.com/dl9t48lyt/image/upload/v1782416653/WhatsApp_Image_2026-04-19_at_20.43.16_gmfgu8.jpg",
+    quote:
+      "The civil services path is demanding by design — it selects those with resilience, character, and true purpose. I have walked this road. I am here to illuminate yours.",
+  },
+];
+
+const TEAM_PHOTOS = [
+  "https://res.cloudinary.com/dl9t48lyt/image/upload/v1782416815/IMG_4898.JPG_rha5lp.jpg",
+  "https://res.cloudinary.com/dl9t48lyt/image/upload/v1782416821/DSC05053-2.jpg_uusuix.jpg",
+];
+
+// ─── Admin person card ────────────────────────────────────────────────────────
+
+function AdminCard({
+  name,
+  role,
+  tag,
+  image,
+  quote,
+  index,
 }: {
-  id: string;
-  title: string;
-  subtitle: string;
+  name: string;
+  role: string;
+  tag: string;
+  image: string;
+  quote: string;
+  index: number;
 }) {
+  const ref = useRef(null);
+  const inView = useInView(ref, { once: true, margin: "-60px" });
+
   return (
-    <section id={id} className="border-t border-slate-100 bg-slate-50 py-16">
-      <div className="container mx-auto px-4 text-center">
-        <FadeIn>
-          <p className="text-xs font-bold uppercase tracking-widest text-brand-gold">
-            Coming Soon
+    <motion.div
+      ref={ref}
+      initial={{ opacity: 0, y: 32 }}
+      animate={inView ? { opacity: 1, y: 0 } : {}}
+      transition={{ duration: 0.6, delay: index * 0.1, ease: EASE }}
+    >
+      <motion.div
+        whileHover={{ y: -6, boxShadow: "0 24px 48px -12px rgba(11,28,61,0.16)" }}
+        transition={{ duration: 0.22, ease: "easeOut" }}
+        className="flex h-full flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm"
+      >
+        {/* Photo — fixed height so all cards align */}
+        <div className="relative h-80 w-full shrink-0 overflow-hidden bg-slate-100">
+          <img
+            src={image}
+            alt={name}
+            className="h-full w-full object-contain object-bottom transition-transform duration-500 hover:scale-[1.03]"
+            loading="lazy"
+          />
+          {/* Role overlay at bottom */}
+          <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent px-5 pb-4 pt-10">
+            <span className="inline-block rounded-full bg-brand-gold px-3 py-0.5 text-[10px] font-bold uppercase tracking-widest text-brand-blue">
+              {role} · {tag}
+            </span>
+          </div>
+        </div>
+
+        {/* Text */}
+        <div className="px-6 py-6">
+          <h3 className="text-lg font-extrabold text-brand-blue">{name}</h3>
+          <div className="mb-4 mt-2 h-px w-10 bg-brand-gold" />
+          <p className="relative text-[0.82rem] italic leading-relaxed text-slate-500">
+            <span
+              aria-hidden
+              className="pointer-events-none absolute -left-1 -top-3 select-none font-serif text-5xl leading-none text-brand-blue/10"
+            >
+              "
+            </span>
+            {quote}
           </p>
-          <h3 className="mt-2 text-xl font-extrabold text-brand-blue">{title}</h3>
-          <p className="mt-2 text-sm text-slate-500">{subtitle}</p>
+        </div>
+      </motion.div>
+    </motion.div>
+  );
+}
+
+// ─── Administration section ───────────────────────────────────────────────────
+
+function AdministrationSection() {
+  const photosRef = useRef(null);
+  const photosInView = useInView(photosRef, { once: true, margin: "-60px" });
+
+  return (
+    <section id="admin" className="border-t border-slate-100 bg-[#f8f7f4] py-20">
+      <div className="container mx-auto px-4">
+        {/* Header */}
+        <FadeIn direction="up" className="mb-14 text-center">
+          <span className="mb-4 inline-flex items-center gap-2 rounded-full border border-brand-blue/20 bg-brand-blue/5 px-4 py-1.5 text-xs font-semibold uppercase tracking-widest text-brand-blue">
+            <Users2 className="h-3.5 w-3.5" />
+            Administration
+          </span>
+          <h2 className="text-3xl font-extrabold text-brand-blue md:text-4xl">
+            The People Who Run It All
+          </h2>
+          <p className="mt-3 mx-auto max-w-xl text-base text-slate-500">
+            Behind every successful aspirant is a team that keeps the campus
+            running, the doors open, and the spirit alive.
+          </p>
         </FadeIn>
+
+        {/* Three person cards */}
+        <div className="grid items-stretch gap-7 sm:grid-cols-2 lg:grid-cols-3">
+          {ADMIN_TEAM.map((person, i) => (
+            <AdminCard key={person.name} {...person} index={i} />
+          ))}
+        </div>
+
+        {/* Whole-team photos */}
+        <motion.div
+          ref={photosRef}
+          initial={{ opacity: 0, y: 40 }}
+          animate={photosInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.7, delay: 0.15, ease: EASE }}
+          className="mt-16"
+        >
+          <p className="mb-6 text-center text-xs font-bold uppercase tracking-[0.2em] text-brand-gold">
+            Our Team
+          </p>
+          <div className="grid gap-4 sm:grid-cols-2">
+            {TEAM_PHOTOS.map((src, i) => (
+              <div
+                key={i}
+                className="overflow-hidden rounded-2xl bg-slate-200 shadow-md"
+                style={{ aspectRatio: "16/10" }}
+              >
+                <img
+                  src={src}
+                  alt={`Dhyeya IAS Greater Noida team ${i + 1}`}
+                  className="h-full w-full object-cover object-center transition-transform duration-700 hover:scale-[1.03]"
+                  loading="lazy"
+                />
+              </div>
+            ))}
+          </div>
+        </motion.div>
       </div>
     </section>
   );
 }
+
 
 // ─── Page hero ────────────────────────────────────────────────────────────────
 
@@ -380,16 +522,8 @@ export default function TeamClient() {
       <TeamHero />
       <DirectorsSection />
       <AdvisorySection />
-      <ComingSoonSection
-        id="faculty"
-        title="Our Faculty"
-        subtitle="Hand-picked educators and specialists who deliver every class."
-      />
-      <ComingSoonSection
-        id="admin"
-        title="Administration"
-        subtitle="The operations and support team keeping everything running smoothly."
-      />
+      <InterviewPanelSection />
+      <AdministrationSection />
     </main>
   );
 }

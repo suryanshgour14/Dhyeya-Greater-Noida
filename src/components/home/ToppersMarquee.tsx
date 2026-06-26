@@ -9,74 +9,69 @@ import { TOPPERS } from "@/lib/constants";
 
 const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
 
-// Split into two rows
-const ROW_1 = TOPPERS.slice(0, 14);
+// AIR 01 centred in row 1 — surround with others on each side
+const ROW_1 = [
+  ...TOPPERS.slice(1, 7),   // AIR 03–14  (6 cards left of centre)
+  TOPPERS[0],               // AIR 01     (centre spotlight)
+  ...TOPPERS.slice(7, 14),  // AIR 15–24  (7 cards right of centre)
+];
 const ROW_2 = TOPPERS.slice(14);
 
-// ─── Single topper card ───────────────────────────────────────────────────────
+// ─── Card ─────────────────────────────────────────────────────────────────────
 
 function TopperCard({ topper }: { topper: (typeof TOPPERS)[number] }) {
-  const airNum = parseInt(topper.rank.replace("AIR ", ""));
+  const airNum    = parseInt(topper.rank.replace("AIR ", ""));
   const isTopRank = airNum <= 10;
   const isFirst   = airNum === 1;
 
   return (
     <motion.div
-      whileHover={{ y: -5, boxShadow: "0 18px 40px -8px rgba(11,28,61,0.32)" }}
-      transition={{ duration: 0.22, ease: "easeOut" }}
-      className={`relative flex w-[160px] shrink-0 flex-col items-center rounded-2xl px-4 pb-5 pt-6 ${
+      whileHover={{ y: -6, boxShadow: "0 20px 44px -8px rgba(11,28,61,0.22)" }}
+      transition={{ duration: 0.2, ease: "easeOut" }}
+      className={`relative flex w-[158px] shrink-0 flex-col items-center rounded-2xl px-4 pb-5 pt-6 shadow-sm ${
         isFirst
           ? "bg-gradient-to-b from-[#0e1f40] to-[#0a1628] ring-1 ring-brand-gold/50"
-          : "bg-[#0c1730] ring-1 ring-white/[0.06]"
+          : "bg-[#0c1730] ring-1 ring-white/[0.07]"
       }`}
     >
-      {/* AIR 01 glow halo */}
       {isFirst && (
-        <div className="pointer-events-none absolute inset-0 rounded-2xl bg-brand-gold/[0.04]" />
+        <div className="pointer-events-none absolute inset-0 rounded-2xl bg-brand-gold/[0.03]" />
       )}
 
-      {/* ── Circular photo ── */}
-      <div className="relative mb-4" style={{ width: 80, height: 80 }}>
-        {/* Outer glow ring for top rankers */}
+      {/* Circular photo */}
+      <div className="relative mb-4 shrink-0" style={{ width: 78, height: 78 }}>
         {isTopRank && (
           <div
-            className="absolute -inset-1 rounded-full"
+            className="absolute -inset-[3px] rounded-full"
             style={{
               background:
-                "conic-gradient(from 0deg, rgba(201,161,59,0.6) 0%, rgba(201,161,59,0.05) 60%, rgba(201,161,59,0.6) 100%)",
+                "conic-gradient(from 180deg,rgba(201,161,59,0.7) 0%,rgba(201,161,59,0.05) 55%,rgba(201,161,59,0.7) 100%)",
             }}
           />
         )}
-
-        {/* Photo ring layers: white gap → shadow → photo */}
         <div
           className="absolute inset-0 rounded-full"
           style={{
             boxShadow: isFirst
-              ? "0 0 0 2px #fff, 0 0 0 4px rgba(201,161,59,0.55), 0 6px 20px -4px rgba(201,161,59,0.3)"
-              : "0 0 0 2px #fff, 0 0 0 4px rgba(11,28,61,0.4), 0 6px 16px -4px rgba(0,0,0,0.4)",
+              ? "0 0 0 2px #fff,0 0 0 4px rgba(201,161,59,0.6),0 6px 18px -4px rgba(201,161,59,0.25)"
+              : "0 0 0 2px #1e2d47,0 0 0 3.5px rgba(255,255,255,0.1),0 4px 14px -4px rgba(0,0,0,0.5)",
           }}
         />
-
         <img
           src={topper.photo}
           alt={topper.name}
-          width={80}
-          height={80}
+          width={78}
+          height={78}
           className="relative h-full w-full rounded-full object-cover object-top"
           loading="lazy"
           decoding="async"
         />
-
-        {/* Gold inset ring */}
         <div
           className="pointer-events-none absolute inset-0 rounded-full"
           style={{
-            boxShadow: `inset 0 0 0 1.5px ${isTopRank ? "rgba(201,161,59,0.45)" : "rgba(255,255,255,0.08)"}`,
+            boxShadow: `inset 0 0 0 1.5px ${isTopRank ? "rgba(201,161,59,0.4)" : "rgba(255,255,255,0.06)"}`,
           }}
         />
-
-        {/* AIR 01 star */}
         {isFirst && (
           <div className="absolute -right-1 -top-1 flex h-6 w-6 items-center justify-center rounded-full bg-brand-gold shadow-md shadow-brand-gold/40">
             <Star className="h-3 w-3 fill-brand-blue text-brand-blue" />
@@ -84,82 +79,70 @@ function TopperCard({ topper }: { topper: (typeof TOPPERS)[number] }) {
         )}
       </div>
 
-      {/* ── Rank ── */}
+      {/* Rank */}
       <div className="flex items-center gap-1">
-        <Trophy
-          className={`h-3 w-3 shrink-0 ${isTopRank ? "text-brand-gold" : "text-slate-500"}`}
-        />
-        <span
-          className={`text-[13px] font-extrabold tracking-tight ${
-            isTopRank ? "text-brand-gold" : "text-slate-400"
-          }`}
-        >
+        <Trophy className={`h-3 w-3 shrink-0 ${isTopRank ? "text-brand-gold" : "text-slate-600"}`} />
+        <span className={`text-[13px] font-extrabold ${isTopRank ? "text-brand-gold" : "text-slate-400"}`}>
           {topper.rank}
         </span>
       </div>
 
-      {/* Gold hairline */}
-      <div className={`my-2 h-px w-8 ${isTopRank ? "bg-brand-gold/60" : "bg-white/10"}`} />
+      <div className={`my-2 h-px w-8 ${isTopRank ? "bg-brand-gold/50" : "bg-white/[0.08]"}`} />
 
-      {/* ── Name ── */}
-      <p className="text-center text-[12px] font-bold leading-snug text-white">
-        {topper.name}
-      </p>
-
-      {/* ── Exam ── */}
-      <p className="mt-1 text-[10px] font-semibold uppercase tracking-widest text-slate-500">
-        {topper.exam}
-      </p>
+      <p className="text-center text-[12px] font-bold leading-snug text-white">{topper.name}</p>
+      <p className="mt-1 text-[10px] font-semibold uppercase tracking-widest text-slate-500">{topper.exam}</p>
     </motion.div>
   );
 }
 
-// ─── Infinite marquee row ─────────────────────────────────────────────────────
+// ─── CSS-based seamless marquee row ───────────────────────────────────────────
 
 function MarqueeRow({
   toppers,
   direction,
-  speed,
+  duration,
 }: {
   toppers: (typeof TOPPERS)[number][];
   direction: "left" | "right";
-  speed: number;
+  duration: number;
 }) {
-  const doubled = [...toppers, ...toppers];
-  const from = direction === "left" ? "0%" : "-50%";
-  const to   = direction === "left" ? "-50%" : "0%";
+  // Triple the items so the loop is invisible at any viewport width
+  const items = [...toppers, ...toppers, ...toppers];
 
   return (
     <div className="relative overflow-hidden">
-      {/* Left fade */}
-      <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-28 bg-gradient-to-r from-[#060e1b] to-transparent" />
-      {/* Right fade */}
-      <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-28 bg-gradient-to-l from-[#060e1b] to-transparent" />
-
-      <motion.div
-        className="flex gap-4 px-4 will-change-transform"
-        animate={{ x: [from, to] }}
-        transition={{
-          duration: speed,
-          repeat: Infinity,
-          ease: "linear",
-          repeatType: "loop",
+      {/*
+        CSS animation approach — truly gapless because:
+        - translateX(-33.33%) moves exactly one copy's width
+        - animation: linear infinite with no delay = no pause
+      */}
+      <div
+        className="flex gap-4 px-4"
+        style={{
+          width: "max-content",
+          animation: `marquee-${direction} ${duration}s linear infinite`,
+          willChange: "transform",
         }}
       >
-        {doubled.map((topper, i) => (
+        {items.map((topper, i) => (
           <TopperCard key={`${topper.id}-${i}`} topper={topper} />
         ))}
-      </motion.div>
+      </div>
+
+      {/* Keyframes injected inline — avoids needing a global CSS file */}
+      <style>{`
+        @keyframes marquee-left  { from { transform: translateX(0); } to { transform: translateX(-33.3333%); } }
+        @keyframes marquee-right { from { transform: translateX(-33.3333%); } to { transform: translateX(0); } }
+      `}</style>
     </div>
   );
 }
 
-// ─── Section header ───────────────────────────────────────────────────────────
+// ─── Header ───────────────────────────────────────────────────────────────────
 
 function SectionHeader() {
-  const ref = useRef(null);
+  const ref   = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-80px" });
-  const locale = useLocale();
 
   return (
     <motion.div
@@ -169,43 +152,35 @@ function SectionHeader() {
       transition={{ duration: 0.6, ease: EASE }}
       className="container mx-auto mb-12 px-4 text-center"
     >
-      {/* Overline */}
       <div className="mb-4 flex items-center justify-center gap-3">
-        <div className="h-px w-12 bg-brand-gold/40" />
+        <div className="h-px w-10 bg-brand-gold/50" />
         <span className="text-[11px] font-bold uppercase tracking-[0.2em] text-brand-gold">
           Hall of Fame
         </span>
-        <div className="h-px w-12 bg-brand-gold/40" />
+        <div className="h-px w-10 bg-brand-gold/50" />
       </div>
 
-      {/* Heading */}
-      <h2 className="text-3xl font-extrabold text-white md:text-4xl">
+      <h2 className="text-3xl font-extrabold text-brand-blue md:text-4xl">
         Our{" "}
         <span className="relative inline-block">
           <span className="relative z-10 text-brand-gold">Toppers</span>
-          {/* Underline accent */}
-          <span
-            aria-hidden
-            className="absolute -bottom-1 left-0 right-0 h-0.5 rounded-full bg-brand-gold/40"
-          />
+          <span aria-hidden className="absolute -bottom-1 left-0 right-0 h-0.5 rounded-full bg-brand-gold/35" />
         </span>
       </h2>
 
-      <p className="mt-4 text-sm text-slate-400 md:text-base">
-        Proud achievements of our students — from AIR 01 to hundreds of selections
-        across UPSC Civil Services.
+      <p className="mt-3 text-sm text-slate-500 md:text-base">
+        Proud achievements of our students — AIR 01 to hundreds of UPSC selections.
       </p>
 
-      {/* Stats strip */}
-      <div className="mt-8 flex flex-wrap items-center justify-center gap-x-8 gap-y-3">
+      <div className="mt-8 flex flex-wrap items-center justify-center gap-x-10 gap-y-3">
         {[
           { value: "500+", label: "UPSC Selections" },
           { value: "AIR 01", label: "All India Rank 1" },
           { value: "12 yrs", label: "Consistent Results" },
         ].map(({ value, label }) => (
           <div key={label} className="text-center">
-            <p className="text-xl font-extrabold text-brand-gold">{value}</p>
-            <p className="text-[11px] font-medium text-slate-500">{label}</p>
+            <p className="text-xl font-extrabold text-brand-blue">{value}</p>
+            <p className="text-[11px] font-medium text-slate-400">{label}</p>
           </div>
         ))}
       </div>
@@ -213,28 +188,24 @@ function SectionHeader() {
   );
 }
 
-// ─── Root export ──────────────────────────────────────────────────────────────
+// ─── Root ─────────────────────────────────────────────────────────────────────
 
 export default function ToppersMarquee() {
   const locale = useLocale();
 
   return (
-    <section className="overflow-hidden bg-[#060e1b] py-20">
+    <section className="overflow-x-hidden bg-white py-20">
       <SectionHeader />
 
-      {/* Row 1 — scrolls left */}
       <div className="mb-4">
-        <MarqueeRow toppers={ROW_1} direction="left" speed={36} />
+        <MarqueeRow toppers={ROW_1} direction="left" duration={60} />
       </div>
+      <MarqueeRow toppers={ROW_2} direction="right" duration={54} />
 
-      {/* Row 2 — scrolls right */}
-      <MarqueeRow toppers={ROW_2} direction="right" speed={32} />
-
-      {/* CTA */}
       <div className="mt-12 flex justify-center">
         <Link
           href={`/${locale}/results`}
-          className="group inline-flex items-center gap-2.5 rounded-full border border-brand-gold/30 bg-brand-gold/10 px-6 py-2.5 text-sm font-semibold text-brand-gold transition-all duration-200 hover:bg-brand-gold hover:text-brand-blue"
+          className="group inline-flex items-center gap-2.5 rounded-full border border-brand-blue/20 bg-brand-blue/5 px-6 py-2.5 text-sm font-semibold text-brand-blue transition-all duration-200 hover:bg-brand-blue hover:text-white"
         >
           View All Toppers
           <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5" />

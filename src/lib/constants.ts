@@ -143,9 +143,8 @@ export const NAV_ITEMS: NavItem[] = [
     children: [
       { label: 'Directors', href: '/team#directors', icon: Crown, description: 'Leadership & vision' },
       { label: 'Advisory Board', href: '/team#advisory', icon: Users2, description: 'IAS officers & experts' },
+      { label: 'Mock Interview Panel', href: '/team#interview-panel', icon: MessageSquare, description: 'Personality test prep' },
       { label: 'Administration', href: '/team#admin', icon: Settings, description: 'Operations & support' },
-      { label: 'Faculty', href: '/team#faculty', icon: GraduationCap, description: 'Subject matter experts' },
-      { label: 'Mock Interview Panel', href: '/team#interview', icon: MessageSquare, description: 'Personality test prep' },
     ],
   },
 ];
