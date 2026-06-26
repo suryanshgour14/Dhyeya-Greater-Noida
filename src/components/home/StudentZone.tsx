@@ -54,7 +54,7 @@ export default function StudentZone() {
           whileInView="visible"
           viewport={{ once: true, margin: "-60px" }}
           variants={{ hidden: {}, visible: { transition: { staggerChildren: 0.07 } } }}
-          className="grid gap-4 grid-cols-2 sm:grid-cols-3 lg:grid-cols-4"
+          className="mx-auto grid max-w-5xl gap-4 grid-cols-2 sm:grid-cols-3 lg:grid-cols-3"
         >
           {STUDENT_ZONE_ITEMS.map((item) => {
             const colors = COLOR_MAP[item.color as keyof typeof COLOR_MAP];
