@@ -60,7 +60,7 @@ const WHY_ITEMS: WhyItem[] = [
 const STATS = [
   { value: "500+",  label: "UPSC Selections"   },
   { value: "12+",   label: "Years of Excellence"},
-  { value: "4.9 ★", label: "Google Rating"      },
+  { value: "4.4 ★", label: "Google Rating"      },
 ];
 
 const EASE = [0.22, 1, 0.36, 1] as const;
