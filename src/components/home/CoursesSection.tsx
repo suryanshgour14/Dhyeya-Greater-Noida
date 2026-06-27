@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useLocale } from "next-intl";
+import BuyButton from "@/components/payments/BuyButton";
 
 // ── Design tokens ──────────────────────────────────────────────────────────────
 const T = {
@@ -38,6 +39,7 @@ interface Course {
   bc: BadgeColor;
   desc: string;
   href: string;
+  productId: string;
 }
 
 // ── Course data ────────────────────────────────────────────────────────────────
@@ -54,6 +56,7 @@ const COURSES: Course[] = [
     bc: "blue",
     desc: "Concept to AIR — NCERT basics through evaluated Mains answer writing and interview readiness.",
     href: "/courses/upsc-ias-foundation",
+    productId: "cc000001-0000-0000-0000-000000000001",
   },
   {
     title: "1-Year UPPSC PCS Comprehensive",
@@ -67,6 +70,7 @@ const COURSES: Course[] = [
     bc: "gold",
     desc: "Complete SA syllabus, UP Special Papers 5 & 6, General Hindi and answer writing — taught bilingually.",
     href: "/courses/uppsc-pcs-comprehensive",
+    productId: "cc000001-0000-0000-0000-000000000002",
   },
   {
     title: "3-Year Integrated UDAAN",
@@ -80,6 +84,7 @@ const COURSES: Course[] = [
     bc: "orange",
     desc: "Flagship scholarship programme synchronised with your college year — multiple services, one track.",
     href: "/courses/udaan-3-year-integrated",
+    productId: "cc000001-0000-0000-0000-000000000003",
   },
   {
     title: "6-Month UPSC CSE Mentorship",
@@ -92,6 +97,7 @@ const COURSES: Course[] = [
     bc: "blue",
     desc: "One-on-one mentoring, micro-targeted schedules and granular answer evaluation built around your gaps.",
     href: "/courses/upsc-ias-mentorship",
+    productId: "cc000001-0000-0000-0000-000000000004",
   },
   {
     title: "4-Month CSAT Mastery",
@@ -105,6 +111,7 @@ const COURSES: Course[] = [
     bc: "orange",
     desc: "Turn CSAT from a qualifying barrier into a scoring advantage — non-math-background friendly.",
     href: "/courses/csat-mastery",
+    productId: "cc000001-0000-0000-0000-000000000005",
   },
   {
     title: "4-Month UPPCS Prelims Crash",
@@ -118,6 +125,7 @@ const COURSES: Course[] = [
     bc: "gold",
     desc: "Last-mile prelims preparation reverse-engineered from the UPPSC paper — 15 full-length simulators.",
     href: "/courses/uppsc-prelims-crash-course",
+    productId: "cc000001-0000-0000-0000-000000000006",
   },
   {
     title: "UP Special Paper 5 & 6",
@@ -130,6 +138,7 @@ const COURSES: Course[] = [
     bc: "gold",
     desc: "Master the 400-mark UP-exclusive papers that define your UPPSC merit rank — data-rich answer drills.",
     href: "/courses/up-special-paper-5-6",
+    productId: "cc000001-0000-0000-0000-000000000007",
   },
   {
     title: "BPSC CCE Complete Prep",
@@ -142,6 +151,7 @@ const COURSES: Course[] = [
     bc: "orange",
     desc: "End-to-end Bihar PCS preparation — Prelims to Personality Test, with Bihar-specific content integration.",
     href: "/courses/bpsc-cce-prep",
+    productId: "cc000001-0000-0000-0000-000000000008",
   },
   {
     title: "120-Day Mains Answer Writing",
@@ -154,6 +164,7 @@ const COURSES: Course[] = [
     bc: "gold",
     desc: "Write to the rank — five evaluated answers a day with overnight faculty feedback and model answers.",
     href: "/courses/uppsc-mains-answer-writing",
+    productId: "cc000001-0000-0000-0000-000000000009",
   },
 ];
 
@@ -176,7 +187,7 @@ const TABS: { cat: Tab; label: string }[] = [
 ];
 
 // ── Single course card ─────────────────────────────────────────────────────────
-function CourseCard({ course, index, locale }: { course: Course; index: number; locale: string }) {
+function CourseCard({ course, index }: { course: Course; index: number; locale: string }) {
   const [hovered, setHovered] = useState(false);
   const badge = course.badge ? BADGE_STYLES[course.bc] : null;
 
@@ -313,15 +324,13 @@ function CourseCard({ course, index, locale }: { course: Course; index: number; 
       {/* Footer */}
       <div
         style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
           marginTop: 22,
           paddingTop: 20,
           borderTop: `1px solid ${T.lineSoft}`,
         }}
       >
-        <div style={{ fontFamily: T.serif, fontSize: 20, color: T.ink, lineHeight: 1 }}>
+        {/* Price row */}
+        <div style={{ fontFamily: T.serif, fontSize: 20, color: T.ink, lineHeight: 1, marginBottom: 16 }}>
           {course.originalFee && (
             <s
               style={{
@@ -339,27 +348,35 @@ function CourseCard({ course, index, locale }: { course: Course; index: number; 
           {fmt(course.fee)}
         </div>
 
-        <Link
-          href={`/${locale}${course.href}`}
-          style={{
-            display: "inline-flex",
-            alignItems: "center",
-            gap: 7,
-            fontWeight: 600,
-            fontSize: 13,
-            color: hovered ? T.saffron : T.ink,
-            borderBottom: `1.5px solid ${T.gold}`,
-            paddingBottom: 2,
-            textDecoration: "none",
-            fontFamily: T.sans,
-            transition: "color .18s",
-          }}
-        >
-          Details
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} width={13} height={13}>
-            <path d="M5 12h14M13 6l6 6-6 6" />
-          </svg>
-        </Link>
+        {/* Action row */}
+        <div style={{ display: "flex", gap: 10, alignItems: "center" }}>
+          <BuyButton
+            productId={course.productId}
+            redirectTo={course.href}
+            label="Enroll Now"
+            size="sm"
+            variant="navy"
+            className="flex-1 !rounded-lg"
+          />
+          <Link
+            href="#"
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: 5,
+              fontWeight: 600,
+              fontSize: 12.5,
+              color: T.inkSoft,
+              textDecoration: "none",
+              fontFamily: T.sans,
+              whiteSpace: "nowrap",
+              borderBottom: `1px solid ${T.line}`,
+              paddingBottom: 1,
+            }}
+          >
+            Details
+          </Link>
+        </div>
       </div>
     </article>
   );
@@ -513,7 +530,7 @@ export default function CoursesSection() {
           }}
         >
           {visible.map((course, i) => (
-            <CourseCard key={course.href} course={course} index={i} locale={locale} />
+            <CourseCard key={course.href} course={course} index={i} locale={locale as string} />
           ))}
         </div>
 

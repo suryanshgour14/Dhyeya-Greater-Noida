@@ -1,9 +1,8 @@
 "use client";
 
-import Link from "next/link";
-import { useLocale } from "next-intl";
 import { motion } from "framer-motion";
-import { ClipboardList, Edit3, Target, ArrowRight } from "lucide-react";
+import { ClipboardList, Edit3, Target } from "lucide-react";
+import BuyButton from "@/components/payments/BuyButton";
 
 const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
 
@@ -23,7 +22,7 @@ const SERIES = [
     accent: "#1e3a6e",
     pill: "#e8eef7",
     pillText: "#1e3a6e",
-    href: "/test-series/ias-prelims",
+    productId: "dd000001-0000-0000-0000-000000000001",
   },
   {
     id: "ias-mains",
@@ -37,7 +36,7 @@ const SERIES = [
     accent: "#C9A13B",
     pill: "#fdf6e4",
     pillText: "#92710e",
-    href: "/test-series/ias-mains",
+    productId: "dd000001-0000-0000-0000-000000000002",
   },
   {
     id: "uppcs-prelims",
@@ -51,7 +50,7 @@ const SERIES = [
     accent: "#ea580c",
     pill: "#fff3ed",
     pillText: "#c2410c",
-    href: "/test-series/uppcs-prelims",
+    productId: "dd000001-0000-0000-0000-000000000003",
   },
   {
     id: "uppcs-mains",
@@ -65,7 +64,7 @@ const SERIES = [
     accent: "#7c3aed",
     pill: "#f5f0ff",
     pillText: "#6d28d9",
-    href: "/test-series/uppcs-mains",
+    productId: "dd000001-0000-0000-0000-000000000004",
   },
   {
     id: "ukpsc-prelims",
@@ -79,7 +78,7 @@ const SERIES = [
     accent: "#0891b2",
     pill: "#e0f7fa",
     pillText: "#0e7490",
-    href: "/test-series/ukpsc-prelims",
+    productId: "dd000001-0000-0000-0000-000000000005",
   },
   {
     id: "ukpsc-mains",
@@ -93,7 +92,7 @@ const SERIES = [
     accent: "#059669",
     pill: "#ecfdf5",
     pillText: "#047857",
-    href: "/test-series/ukpsc-mains",
+    productId: "dd000001-0000-0000-0000-000000000006",
   },
   {
     id: "integrated",
@@ -107,7 +106,7 @@ const SERIES = [
     accent: "#be123c",
     pill: "#fff1f3",
     pillText: "#9f1239",
-    href: "/test-series/integrated",
+    productId: "dd000001-0000-0000-0000-000000000007",
   },
 ];
 
@@ -122,7 +121,6 @@ const marqueeKeyframes = `
 `;
 
 export default function TestSeriesSection() {
-  const locale = useLocale();
 
   return (
     <section style={{ background: "#fff", padding: "80px 0", fontFamily: sans, overflow: "hidden" }}>
@@ -263,20 +261,14 @@ export default function TestSeriesSection() {
                     <div style={{ fontSize: 10, color: "#94a3b8", fontWeight: 500 }}>Starting from</div>
                     <div style={{ fontSize: 18, fontWeight: 800, color: "#0B1C3D", lineHeight: 1.2 }}>{s.price}</div>
                   </div>
-                  <Link
-                    href={`/${locale}${s.href}`}
-                    style={{
-                      display: "inline-flex", alignItems: "center", gap: 5,
-                      background: s.accent, color: "#fff",
-                      borderRadius: 8, padding: "8px 14px",
-                      fontSize: 12, fontWeight: 700,
-                      textDecoration: "none", letterSpacing: "0.01em",
-                      whiteSpace: "nowrap",
-                    }}
-                  >
-                    Enroll Now
-                    <ArrowRight size={12} />
-                  </Link>
+                  <BuyButton
+                    productId={s.productId}
+                    redirectTo="/student-zone"
+                    label="Enroll Now"
+                    size="sm"
+                    variant="navy"
+                    className="!rounded-lg !text-[11px]"
+                  />
                 </div>
               </div>
             );
@@ -284,28 +276,6 @@ export default function TestSeriesSection() {
         </div>
       </div>
 
-      {/* View all link */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-        viewport={{ once: true }}
-        transition={{ delay: 0.3 }}
-        style={{ textAlign: "center", marginTop: 36 }}
-      >
-        <Link
-          href={`/${locale}/test-series`}
-          style={{
-            display: "inline-flex", alignItems: "center", gap: 6,
-            fontSize: 13.5, fontWeight: 700,
-            color: "#1e3a6e", textDecoration: "none",
-            borderBottom: "1.5px solid #1e3a6e",
-            paddingBottom: 1,
-          }}
-        >
-          View All Test Series
-          <ArrowRight size={14} />
-        </Link>
-      </motion.div>
     </section>
   );
 }
