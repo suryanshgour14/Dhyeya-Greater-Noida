@@ -94,7 +94,15 @@ export default function BuyButton({
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ productId }),
       });
-      const data = await res.json();
+
+      let data: Record<string, string> = {};
+      try {
+        data = await res.json();
+      } catch {
+        flash("Server error — check console for details", false);
+        setBusy(false);
+        return;
+      }
 
       if (!res.ok) {
         flash(data.error ?? "Could not create order", false);
