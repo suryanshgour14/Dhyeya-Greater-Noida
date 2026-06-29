@@ -32,6 +32,21 @@ export default async function TestsPage({ params }: { params: { locale: string }
     .eq("status", "in_progress");
   const inProgressSet = new Set((inProgress ?? []).map((a) => a.test_id));
 
+  // Track latest submitted attempt per test for "Result & Analysis" button
+  const { data: submitted } = await supabase
+    .from("attempts")
+    .select("test_id, id")
+    .eq("student_id", user.id)
+    .in("status", ["submitted", "auto_submitted"])
+    .order("created_at", { ascending: false });
+
+  const submittedAttemptMap = new Map<string, string>();
+  for (const a of (submitted ?? [])) {
+    if (!submittedAttemptMap.has(a.test_id)) {
+      submittedAttemptMap.set(a.test_id, a.id);
+    }
+  }
+
   // Products + enrollments for access gating
   const { data: products } = await supabase
     .from("products")
@@ -90,9 +105,11 @@ export default async function TestsPage({ params }: { params: { locale: string }
         ) : (
           <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {(tests as TestWithCounts[]).map((test) => {
-              const gradient  = EXAM_COLORS[test.exam_type ?? ""] ?? "from-slate-700 to-slate-900";
-              const resumable = inProgressSet.has(test.id);
-              const qCount    = test.questions?.[0]?.count ?? 0;
+              const gradient         = EXAM_COLORS[test.exam_type ?? ""] ?? "from-slate-700 to-slate-900";
+              const resumable        = inProgressSet.has(test.id);
+              const submittedAttemptId = submittedAttemptMap.get(test.id);
+              const isSubmitted      = !!submittedAttemptId;
+              const qCount           = test.questions?.[0]?.count ?? 0;
               const sCount    = test.test_sections?.[0]?.count ?? 0;
               const productId = productByTestId.get(test.id);
               const enrolled  = productId ? enrolledProductIds.has(productId) : false;
@@ -131,13 +148,16 @@ export default async function TestsPage({ params }: { params: { locale: string }
                     ))}
                   </div>
 
-                  <div className="flex items-center justify-between p-4">
+                  <div className="flex flex-col gap-3 p-4">
                     <div className="flex gap-2 flex-wrap">
                       {test.is_free && (
                         <span className="rounded-full bg-green-100 px-2.5 py-0.5 text-[10px] font-bold text-green-700">FREE</span>
                       )}
                       {!test.is_free && enrolled && (
                         <span className="rounded-full bg-blue-100 px-2.5 py-0.5 text-[10px] font-bold text-blue-700">ENROLLED</span>
+                      )}
+                      {isSubmitted && (
+                        <span className="rounded-full bg-emerald-100 px-2.5 py-0.5 text-[10px] font-bold text-emerald-700">COMPLETED</span>
                       )}
                       <span className="flex items-center gap-1 rounded-full bg-slate-100 px-2.5 py-0.5 text-[10px] font-semibold text-slate-600">
                         <Clock className="h-3 w-3" />{test.total_duration_min} min
@@ -147,27 +167,53 @@ export default async function TestsPage({ params }: { params: { locale: string }
                       </span>
                     </div>
 
-                    {canStart ? (
-                      <Link
-                        href={`/${locale}/tests/${test.id}/attempt`}
-                        className="flex items-center gap-1 rounded-xl bg-brand-blue px-4 py-2 text-sm font-bold text-white hover:bg-blue-700 transition-colors"
-                      >
-                        {resumable ? "Resume" : "Start"}<ChevronRight className="h-4 w-4" />
-                      </Link>
-                    ) : productId ? (
-                      <BuyButton
-                        productId={productId}
-                        isEnrolled={false}
-                        redirectTo={`/tests/${test.id}/attempt`}
-                        label="Buy"
-                        size="sm"
-                        variant="gold"
-                      />
-                    ) : (
-                      <span className="flex items-center gap-1 rounded-xl bg-slate-100 px-4 py-2 text-sm font-semibold text-slate-400">
-                        <Lock className="h-3.5 w-3.5" /> Paid
-                      </span>
-                    )}
+                    <div className="flex items-center justify-end gap-2 flex-wrap">
+                      {resumable ? (
+                        <Link
+                          href={`/${locale}/tests/${test.id}/attempt`}
+                          className="flex items-center gap-1 rounded-xl bg-brand-blue px-4 py-2 text-sm font-bold text-white hover:bg-blue-700 transition-colors"
+                        >
+                          Resume<ChevronRight className="h-4 w-4" />
+                        </Link>
+                      ) : isSubmitted ? (
+                        <>
+                          <Link
+                            href={`/${locale}/tests/${test.id}/result/${submittedAttemptId}`}
+                            className="flex items-center gap-1 rounded-xl bg-emerald-600 px-4 py-2 text-sm font-bold text-white hover:bg-emerald-700 transition-colors"
+                          >
+                            Result &amp; Analysis<ChevronRight className="h-4 w-4" />
+                          </Link>
+                          {canStart && (
+                            <Link
+                              href={`/${locale}/tests/${test.id}/attempt`}
+                              className="flex items-center gap-1 rounded-xl border border-brand-blue px-4 py-2 text-sm font-bold text-brand-blue hover:bg-blue-50 transition-colors"
+                            >
+                              Retest<ChevronRight className="h-4 w-4" />
+                            </Link>
+                          )}
+                        </>
+                      ) : canStart ? (
+                        <Link
+                          href={`/${locale}/tests/${test.id}/attempt`}
+                          className="flex items-center gap-1 rounded-xl bg-brand-blue px-4 py-2 text-sm font-bold text-white hover:bg-blue-700 transition-colors"
+                        >
+                          Start<ChevronRight className="h-4 w-4" />
+                        </Link>
+                      ) : productId ? (
+                        <BuyButton
+                          productId={productId}
+                          isEnrolled={false}
+                          redirectTo={`/tests/${test.id}/attempt`}
+                          label="Buy"
+                          size="sm"
+                          variant="gold"
+                        />
+                      ) : (
+                        <span className="flex items-center gap-1 rounded-xl bg-slate-100 px-4 py-2 text-sm font-semibold text-slate-400">
+                          <Lock className="h-3.5 w-3.5" /> Paid
+                        </span>
+                      )}
+                    </div>
                   </div>
                 </div>
               );

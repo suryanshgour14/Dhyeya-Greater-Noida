@@ -13,38 +13,104 @@ export default async function ResultPage({
 }: {
   params: { locale: string; id: string; attemptId: string };
 }) {
-  const { locale, id, attemptId } = params;
+  const { locale, attemptId } = params;
   const supabase = createServerClient();
   const { data: { user } } = await supabase.auth.getUser();
 
   if (!user) redirect(`/${locale}/login`);
 
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
-  const cookie = (await import("next/headers")).cookies();
-  const cookieHeader = cookie
-    .getAll()
-    .map((c) => `${c.name}=${c.value}`)
-    .join("; ");
+  // Load attempt (owner check)
+  const { data: attempt } = await supabase
+    .from("attempts")
+    .select("*")
+    .eq("id", attemptId)
+    .eq("student_id", user.id)
+    .single();
 
-  const res = await fetch(`${baseUrl}/api/tests/result/${attemptId}`, {
-    headers: { Cookie: cookieHeader },
-    cache: "no-store",
+  if (!attempt) redirect(`/${locale}/tests`);
+  if (attempt.status === "in_progress") redirect(`/${locale}/tests`);
+
+  // Load test + sections + questions in parallel
+  const [{ data: test }, { data: sections }, { data: questions }, { data: answers }] =
+    await Promise.all([
+      supabase.from("tests").select("*").eq("id", attempt.test_id).single(),
+      supabase.from("test_sections").select("*").eq("test_id", attempt.test_id).order("order_index"),
+      supabase.from("questions").select("*").eq("test_id", attempt.test_id).order("section_id").order("order_index"),
+      supabase.from("answers").select("*").eq("attempt_id", attemptId),
+    ]);
+
+  if (!test) redirect(`/${locale}/tests`);
+
+  // Per-section breakdown
+  const sectionMap: Record<string, { name: string; total: number; correct: number; wrong: number; skip: number }> = {};
+  for (const sec of (sections ?? [])) {
+    sectionMap[sec.id] = { name: sec.name, total: 0, correct: 0, wrong: 0, skip: 0 };
+  }
+
+  type AnswerRow = { question_id: string; section_id: string; selected_option: string | null; is_correct: boolean };
+  const answerMap: Record<string, AnswerRow> = {};
+  for (const a of (answers ?? [])) {
+    answerMap[a.question_id] = a;
+    if (sectionMap[a.section_id]) {
+      sectionMap[a.section_id].total++;
+      if (a.selected_option === null) sectionMap[a.section_id].skip++;
+      else if (a.is_correct) sectionMap[a.section_id].correct++;
+      else sectionMap[a.section_id].wrong++;
+    }
+  }
+
+  // Rank / percentile across all submitted attempts
+  const { data: rankData } = await supabase
+    .from("attempts")
+    .select("score")
+    .eq("test_id", attempt.test_id)
+    .in("status", ["submitted", "auto_submitted"])
+    .not("score", "is", null);
+
+  let rank = 1;
+  let percentile = 100;
+  if (rankData && rankData.length > 1) {
+    const myScore = attempt.score ?? 0;
+    const sorted = [...rankData].sort((a, b) => (b.score ?? 0) - (a.score ?? 0));
+    rank = sorted.findIndex((r) => (r.score ?? 0) <= myScore) + 1;
+    const below = sorted.filter((r) => (r.score ?? 0) < myScore).length;
+    percentile = Math.round((below / rankData.length) * 100);
+  }
+
+  // Build question review with explanations
+  const review = (questions ?? []).map((q) => {
+    const ans = answerMap[q.id];
+    return {
+      id: q.id,
+      section_id: q.section_id,
+      question_en: q.question_en,
+      question_hi: q.question_hi,
+      option_a_en: q.option_a_en,
+      option_b_en: q.option_b_en,
+      option_c_en: q.option_c_en,
+      option_d_en: q.option_d_en,
+      option_a_hi: q.option_a_hi ?? null,
+      option_b_hi: q.option_b_hi ?? null,
+      option_c_hi: q.option_c_hi ?? null,
+      option_d_hi: q.option_d_hi ?? null,
+      explanation_en: q.explanation_en ?? null,
+      explanation_hi: q.explanation_hi ?? null,
+      correct: q.correct,
+      selected: ans?.selected_option ?? null,
+      is_correct: ans?.is_correct ?? false,
+    };
   });
-
-  if (!res.ok) redirect(`/${locale}/tests`);
-
-  const data = await res.json();
 
   return (
     <ResultClient
-      attempt={data.attempt}
-      test={data.test}
-      sections={data.sections}
-      sectionBreakdown={data.sectionBreakdown}
-      review={data.review}
-      rank={data.rank}
-      percentile={data.percentile}
-      totalTakers={data.totalTakers}
+      attempt={attempt}
+      test={test}
+      sections={sections ?? []}
+      sectionBreakdown={Object.values(sectionMap)}
+      review={review}
+      rank={rank}
+      percentile={percentile}
+      totalTakers={rankData?.length ?? 1}
     />
   );
 }

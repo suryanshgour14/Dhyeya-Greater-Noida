@@ -31,15 +31,22 @@ export interface DBQuestion {
   order_index: number;
   question_en: string;
   question_hi: string | null;
-  option_a: string;
-  option_b: string;
-  option_c: string;
-  option_d: string;
+  option_a_en: string;
+  option_b_en: string;
+  option_c_en: string;
+  option_d_en: string;
+  option_a_hi: string | null;
+  option_b_hi: string | null;
+  option_c_hi: string | null;
+  option_d_hi: string | null;
+  explanation_en: string | null;
+  explanation_hi: string | null;
   correct: 'a' | 'b' | 'c' | 'd';
   created_at: string;
 }
 
-export type ClientQuestion = Omit<DBQuestion, 'correct'>;
+// correct + explanations are server-only — never sent to client during a live test
+export type ClientQuestion = Omit<DBQuestion, 'correct' | 'explanation_en' | 'explanation_hi'>;
 
 export interface DBAttempt {
   id: string;
@@ -82,12 +89,18 @@ export interface ParsedQuestion {
   rowNum: number;
   section: string;
   question_en: string;
-  option_a: string;
-  option_b: string;
-  option_c: string;
-  option_d: string;
+  option_a_en: string;
+  option_b_en: string;
+  option_c_en: string;
+  option_d_en: string;
   correct: string;
   question_hi: string;
+  option_a_hi: string;
+  option_b_hi: string;
+  option_c_hi: string;
+  option_d_hi: string;
+  explanation_en: string;
+  explanation_hi: string;
   errors: string[];
 }
 

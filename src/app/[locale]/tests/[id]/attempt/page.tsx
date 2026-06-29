@@ -96,7 +96,7 @@ export default async function AttemptPage({
     supabase
       .from("questions")
       .select(
-        "id, test_id, section_id, order_index, question_en, question_hi, option_a, option_b, option_c, option_d, created_at"
+        "id, test_id, section_id, order_index, question_en, question_hi, option_a_en, option_b_en, option_c_en, option_d_en, option_a_hi, option_b_hi, option_c_hi, option_d_hi, created_at"
       )
       .eq("test_id", id)
       .order("section_id")

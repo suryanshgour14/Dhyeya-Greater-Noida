@@ -31,10 +31,16 @@ interface ReviewQuestion {
   section_id: string;
   question_en: string;
   question_hi: string | null;
-  option_a: string;
-  option_b: string;
-  option_c: string;
-  option_d: string;
+  option_a_en: string;
+  option_b_en: string;
+  option_c_en: string;
+  option_d_en: string;
+  option_a_hi: string | null;
+  option_b_hi: string | null;
+  option_c_hi: string | null;
+  option_d_hi: string | null;
+  explanation_en: string | null;
+  explanation_hi: string | null;
   correct: string;
   selected: string | null;
   is_correct: boolean;
@@ -263,7 +269,11 @@ export default function ResultClient({ attempt, test, sectionBreakdown, review, 
                       <p className="text-sm text-slate-700 leading-relaxed">{displayQ}</p>
                       <div className="mt-2 grid grid-cols-2 gap-1.5">
                         {(["a","b","c","d"] as const).map((opt) => {
-                          const text = q[`option_${opt}` as keyof ReviewQuestion] as string;
+                          const hiKey = `option_${opt}_hi` as keyof ReviewQuestion;
+                          const enKey = `option_${opt}_en` as keyof ReviewQuestion;
+                          const text = (reviewLang === "hi" && q[hiKey])
+                            ? q[hiKey] as string
+                            : q[enKey] as string;
                           const isCorrect = q.correct === opt;
                           const isSelected = q.selected === opt;
                           return (
@@ -284,6 +294,12 @@ export default function ResultClient({ attempt, test, sectionBreakdown, review, 
                       </div>
                       {!q.selected && (
                         <p className="mt-2 text-xs text-slate-400 italic">Skipped — Correct: ({q.correct.toUpperCase()})</p>
+                      )}
+                      {(q.explanation_en || q.explanation_hi) && (
+                        <div className="mt-3 rounded-xl border border-amber-200 bg-amber-50 px-3 py-2 text-xs text-amber-800">
+                          <span className="font-bold">Explanation: </span>
+                          {reviewLang === "hi" && q.explanation_hi ? q.explanation_hi : q.explanation_en}
+                        </div>
                       )}
                     </div>
                   </div>

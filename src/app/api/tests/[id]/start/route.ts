@@ -101,7 +101,7 @@ export async function POST(request: NextRequest, { params }: { params: { id: str
 
   const { data: questions } = await supabase
     .from('questions')
-    .select('id, test_id, section_id, order_index, question_en, question_hi, option_a, option_b, option_c, option_d')
+    .select('id, test_id, section_id, order_index, question_en, question_hi, option_a_en, option_b_en, option_c_en, option_d_en, option_a_hi, option_b_hi, option_c_hi, option_d_hi')
     .eq('test_id', testId)
     .order('section_id')
     .order('order_index');

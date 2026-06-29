@@ -351,7 +351,11 @@ export default function TestAttemptClient({
               {/* Options */}
               <div className="space-y-3">
                 {(["a", "b", "c", "d"] as const).map((opt) => {
-                  const text = currentQ?.[`option_${opt}` as keyof ClientQuestion] as string;
+                  const hiKey = `option_${opt}_hi` as keyof ClientQuestion;
+                  const enKey = `option_${opt}_en` as keyof ClientQuestion;
+                  const text = (lang === "hi" && currentQ?.[hiKey])
+                    ? currentQ[hiKey] as string
+                    : currentQ?.[enKey] as string;
                   const selected = progress.answers?.[currentQ?.id] === opt;
                   return (
                     <button

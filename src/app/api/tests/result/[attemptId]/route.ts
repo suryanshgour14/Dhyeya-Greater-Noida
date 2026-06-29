@@ -84,7 +84,7 @@ export async function GET(request: NextRequest, { params }: { params: { attemptI
     percentile = Math.round((below / rankData.length) * 100);
   }
 
-  // Build question review (attach student answer to each question)
+  // Build question review (attach student answer + explanation to each question)
   const review = (questions ?? []).map((q) => {
     const ans = answerMap[q.id];
     return {
@@ -92,10 +92,16 @@ export async function GET(request: NextRequest, { params }: { params: { attemptI
       section_id: q.section_id,
       question_en: q.question_en,
       question_hi: q.question_hi,
-      option_a: q.option_a,
-      option_b: q.option_b,
-      option_c: q.option_c,
-      option_d: q.option_d,
+      option_a_en: q.option_a_en,
+      option_b_en: q.option_b_en,
+      option_c_en: q.option_c_en,
+      option_d_en: q.option_d_en,
+      option_a_hi: q.option_a_hi ?? null,
+      option_b_hi: q.option_b_hi ?? null,
+      option_c_hi: q.option_c_hi ?? null,
+      option_d_hi: q.option_d_hi ?? null,
+      explanation_en: q.explanation_en ?? null,
+      explanation_hi: q.explanation_hi ?? null,
       correct: q.correct,              // safe: this is the result page, auth check passed
       selected: ans?.selected_option ?? null,
       is_correct: ans?.is_correct ?? false,

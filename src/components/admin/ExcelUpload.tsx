@@ -16,7 +16,7 @@ import { cn } from "@/lib/utils";
 import type { ParsedQuestion } from "@/lib/test-types";
 
 const VALID_CORRECT = ["a", "b", "c", "d"];
-const REQUIRED_COLS = ["section", "question_en", "option_a", "option_b", "option_c", "option_d", "correct"];
+const REQUIRED_COLS = ["section", "question_en", "option_a_en", "option_b_en", "option_c_en", "option_d_en", "correct"];
 
 function validateRow(row: Record<string, string>, rowNum: number): ParsedQuestion {
   const errors: string[] = [];
@@ -34,12 +34,18 @@ function validateRow(row: Record<string, string>, rowNum: number): ParsedQuestio
     rowNum,
     section: get("section"),
     question_en: get("question_en"),
-    option_a: get("option_a"),
-    option_b: get("option_b"),
-    option_c: get("option_c"),
-    option_d: get("option_d"),
-    correct: correct,
+    option_a_en: get("option_a_en"),
+    option_b_en: get("option_b_en"),
+    option_c_en: get("option_c_en"),
+    option_d_en: get("option_d_en"),
+    correct,
     question_hi: get("question_hi"),
+    option_a_hi: get("option_a_hi"),
+    option_b_hi: get("option_b_hi"),
+    option_c_hi: get("option_c_hi"),
+    option_d_hi: get("option_d_hi"),
+    explanation_en: get("explanation_en"),
+    explanation_hi: get("explanation_hi"),
     errors,
   };
 }
@@ -187,10 +193,10 @@ export default function ExcelUpload({ onParsed }: Props) {
                         )}
                         {q.question_en || <span className="italic text-red-400">missing</span>}
                       </td>
-                      <td className="max-w-[80px] truncate px-3 py-2 text-xs text-slate-600">{q.option_a}</td>
-                      <td className="max-w-[80px] truncate px-3 py-2 text-xs text-slate-600">{q.option_b}</td>
-                      <td className="max-w-[80px] truncate px-3 py-2 text-xs text-slate-600">{q.option_c}</td>
-                      <td className="max-w-[80px] truncate px-3 py-2 text-xs text-slate-600">{q.option_d}</td>
+                      <td className="max-w-[80px] truncate px-3 py-2 text-xs text-slate-600">{q.option_a_en}</td>
+                      <td className="max-w-[80px] truncate px-3 py-2 text-xs text-slate-600">{q.option_b_en}</td>
+                      <td className="max-w-[80px] truncate px-3 py-2 text-xs text-slate-600">{q.option_c_en}</td>
+                      <td className="max-w-[80px] truncate px-3 py-2 text-xs text-slate-600">{q.option_d_en}</td>
                       <td className="px-3 py-2 text-xs font-bold uppercase text-green-700">{q.correct || "—"}</td>
                       <td className="px-3 py-2 text-xs text-slate-400">{q.question_hi ? "✓" : "—"}</td>
                       <td className="px-3 py-2">
@@ -233,10 +239,10 @@ export default function ExcelUpload({ onParsed }: Props) {
               <div className="grid grid-cols-2 gap-2">
                 {(["a","b","c","d"] as const).map((opt) => (
                   <div key={opt}>
-                    <Label>Option {opt.toUpperCase()} *</Label>
+                    <Label>Option {opt.toUpperCase()} (EN) *</Label>
                     <Input
-                      value={editDraft[`option_${opt}` as keyof ParsedQuestion] as string}
-                      onChange={(e) => setEditDraft({ ...editDraft, [`option_${opt}`]: e.target.value })}
+                      value={editDraft[`option_${opt}_en` as keyof ParsedQuestion] as string}
+                      onChange={(e) => setEditDraft({ ...editDraft, [`option_${opt}_en`]: e.target.value })}
                     />
                   </div>
                 ))}
@@ -250,7 +256,7 @@ export default function ExcelUpload({ onParsed }: Props) {
                 >
                   <option value="">Select...</option>
                   {["a","b","c","d"].map((o) => (
-                    <option key={o} value={o}>({o.toUpperCase()}) {editDraft[`option_${o}` as keyof ParsedQuestion]}</option>
+                    <option key={o} value={o}>({o.toUpperCase()}) {editDraft[`option_${o}_en` as keyof ParsedQuestion]}</option>
                   ))}
                 </select>
               </div>
@@ -261,6 +267,35 @@ export default function ExcelUpload({ onParsed }: Props) {
                   rows={2}
                   value={editDraft.question_hi}
                   onChange={(e) => setEditDraft({ ...editDraft, question_hi: e.target.value })}
+                />
+              </div>
+              <div className="grid grid-cols-2 gap-2">
+                {(["a","b","c","d"] as const).map((opt) => (
+                  <div key={opt}>
+                    <Label>Option {opt.toUpperCase()} (HI)</Label>
+                    <Input
+                      value={editDraft[`option_${opt}_hi` as keyof ParsedQuestion] as string}
+                      onChange={(e) => setEditDraft({ ...editDraft, [`option_${opt}_hi`]: e.target.value })}
+                    />
+                  </div>
+                ))}
+              </div>
+              <div>
+                <Label>Explanation (English) — optional</Label>
+                <textarea
+                  className="mt-1 w-full rounded-md border border-input px-3 py-2 text-sm"
+                  rows={2}
+                  value={editDraft.explanation_en}
+                  onChange={(e) => setEditDraft({ ...editDraft, explanation_en: e.target.value })}
+                />
+              </div>
+              <div>
+                <Label>Explanation (Hindi) — optional</Label>
+                <textarea
+                  className="mt-1 w-full rounded-md border border-input px-3 py-2 text-sm"
+                  rows={2}
+                  value={editDraft.explanation_hi}
+                  onChange={(e) => setEditDraft({ ...editDraft, explanation_hi: e.target.value })}
                 />
               </div>
               <div className="flex justify-end gap-2 pt-2">

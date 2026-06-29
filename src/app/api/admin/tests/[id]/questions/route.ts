@@ -20,10 +20,16 @@ export async function POST(request: NextRequest, { params }: { params: { id: str
       section: string;
       question_en: string;
       question_hi?: string;
-      option_a: string;
-      option_b: string;
-      option_c: string;
-      option_d: string;
+      option_a_en: string;
+      option_b_en: string;
+      option_c_en: string;
+      option_d_en: string;
+      option_a_hi?: string;
+      option_b_hi?: string;
+      option_c_hi?: string;
+      option_d_hi?: string;
+      explanation_en?: string;
+      explanation_hi?: string;
       correct: string;
     }>;
   };
@@ -91,10 +97,16 @@ export async function POST(request: NextRequest, { params }: { params: { id: str
       order_index: orderInSection,
       question_en: q.question_en,
       question_hi: q.question_hi || null,
-      option_a: q.option_a,
-      option_b: q.option_b,
-      option_c: q.option_c,
-      option_d: q.option_d,
+      option_a_en: q.option_a_en,
+      option_b_en: q.option_b_en,
+      option_c_en: q.option_c_en,
+      option_d_en: q.option_d_en,
+      option_a_hi: q.option_a_hi || null,
+      option_b_hi: q.option_b_hi || null,
+      option_c_hi: q.option_c_hi || null,
+      option_d_hi: q.option_d_hi || null,
+      explanation_en: q.explanation_en || null,
+      explanation_hi: q.explanation_hi || null,
       correct: q.correct.toLowerCase(),
     };
   });
