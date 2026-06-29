@@ -38,7 +38,7 @@ export default function UdaanPromo() {
         pointerEvents: "none",
       }} />
 
-      <div style={{ maxWidth: 1240, margin: "0 auto", padding: "0 40px", position: "relative" }}>
+      <div className="px-5 sm:px-10" style={{ maxWidth: 1240, margin: "0 auto", position: "relative" }}>
         <motion.div
           ref={ref}
           initial={{ opacity: 0, y: 28 }}
@@ -73,7 +73,7 @@ export default function UdaanPromo() {
           </h2>
 
           {/* Two-col */}
-          <div style={{ display: "grid", gridTemplateColumns: "1fr auto", gap: 48, alignItems: "start" }}>
+          <div className="grid grid-cols-1 lg:grid-cols-[1fr_auto]" style={{ gap: 48, alignItems: "start" }}>
 
             {/* Left: description + chip + CTA */}
             <div>

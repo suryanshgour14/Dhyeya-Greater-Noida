@@ -187,8 +187,9 @@ const TABS: { cat: Tab; label: string }[] = [
 ];
 
 // ── Single course card ─────────────────────────────────────────────────────────
-function CourseCard({ course, index }: { course: Course; index: number; locale: string }) {
+function CourseCard({ course, index, locale }: { course: Course; index: number; locale: string }) {
   const [hovered, setHovered] = useState(false);
+  const [dHover, setDHover] = useState(false);
   const badge = course.badge ? BADGE_STYLES[course.bc] : null;
 
   return (
@@ -359,19 +360,25 @@ function CourseCard({ course, index }: { course: Course; index: number; locale: 
             className="flex-1 !rounded-lg"
           />
           <Link
-            href="#"
+            href={`/${locale}${course.href}`}
+            onMouseEnter={() => setDHover(true)}
+            onMouseLeave={() => setDHover(false)}
             style={{
               display: "inline-flex",
               alignItems: "center",
-              gap: 5,
-              fontWeight: 600,
-              fontSize: 12.5,
-              color: T.inkSoft,
+              justifyContent: "center",
+              gap: 6,
+              fontWeight: 700,
+              fontSize: 12,
+              color: dHover ? "#ffffff" : T.ink,
               textDecoration: "none",
               fontFamily: T.sans,
               whiteSpace: "nowrap",
-              borderBottom: `1px solid ${T.line}`,
-              paddingBottom: 1,
+              padding: "8px 18px",
+              borderRadius: 8,
+              border: `1.5px solid ${dHover ? T.ink : "rgba(11,28,61,0.22)"}`,
+              background: dHover ? T.ink : "transparent",
+              transition: "background .18s, color .18s, border-color .18s",
             }}
           >
             Details
@@ -401,7 +408,7 @@ export default function CoursesSection() {
         fontFamily: T.sans,
       }}
     >
-      <div style={{ width: "100%", maxWidth: 1240, margin: "0 auto", padding: "0 40px" }}>
+      <div className="px-5 sm:px-10" style={{ width: "100%", maxWidth: 1240, margin: "0 auto" }}>
 
         {/* Header */}
         <div
@@ -522,12 +529,8 @@ export default function CoursesSection() {
 
         {/* Grid */}
         <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(3, 1fr)",
-            gap: 22,
-            marginTop: 34,
-          }}
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3"
+          style={{ gap: 22, marginTop: 34 }}
         >
           {visible.map((course, i) => (
             <CourseCard key={course.href} course={course} index={i} locale={locale as string} />

@@ -87,8 +87,13 @@
   }
   body {
     @apply bg-background text-foreground;
+    /* Prevent stray horizontal scrolling on mobile (decorative blobs, wide
+       rows, etc.) site-wide. `clip` is used instead of `hidden` so it does
+       not break sticky/fixed positioning. */
+    overflow-x: clip;
   }
   html {
     @apply font-sans;
+    overflow-x: clip;
   }
 }
