@@ -3,7 +3,9 @@ import Razorpay from 'razorpay';
 import { createClient } from '@supabase/supabase-js';
 import { createServerClient } from '@/lib/supabase/server';
 
-const razorpay = new Razorpay({
+// Lazy — constructed per request (like anonDb/serviceDb below) so the build
+// doesn't instantiate the SDK at import time when keys aren't present.
+const razorpayClient = () => new Razorpay({
   key_id:     process.env.RAZORPAY_KEY_ID!,
   key_secret: process.env.RAZORPAY_KEY_SECRET!,
 });
@@ -70,7 +72,7 @@ export async function POST(request: NextRequest) {
 
     // ── Create Razorpay order ─────────────────────────────────────────────────
     const amountPaise = Math.round(Number(product.price_inr) * 100);
-    const rzpOrder = await razorpay.orders.create({
+    const rzpOrder = await razorpayClient().orders.create({
       amount:   amountPaise,
       currency: 'INR',
       notes:    { productId: product.id, studentId: user.id },
