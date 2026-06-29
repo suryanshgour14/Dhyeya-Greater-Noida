@@ -62,7 +62,7 @@ export default async function CourseDetailPage({ params }: Props) {
 
   return (
     <>
-      <CourseHero course={course} />
+      <CourseHero course={course} productId={product?.id} isEnrolled={isEnrolled} courseSlug={params.slug} />
 
       <div className="bg-white">
         <div className="container mx-auto px-4 py-14">
