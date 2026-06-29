@@ -3,6 +3,7 @@
 import { useRef } from "react";
 import { motion, useInView } from "framer-motion";
 import { Crown, Users2 } from "lucide-react";
+import Image from "next/image";
 import InterviewPanelSection from "./InterviewPanelSection";
 
 // ─── Shared helpers ───────────────────────────────────────────────────────────
@@ -242,14 +243,12 @@ function AdvisoryCard({
                 "0 0 0 3px #fff, 0 0 0 5px rgba(11,28,61,0.12), 0 8px 24px -4px rgba(11,28,61,0.18)",
             }}
           />
-          <img
+          <Image
             src={image}
             alt={name}
             width={96}
             height={96}
             className="h-full w-full rounded-full object-cover object-top"
-            style={{ imageRendering: "auto" }}
-            loading="lazy"
           />
           {/* Gold ring accent */}
           <div
@@ -381,11 +380,12 @@ function AdminCard({
       >
         {/* Photo — fixed height so all cards align */}
         <div className="relative h-80 w-full shrink-0 overflow-hidden bg-slate-100">
-          <img
+          <Image
             src={image}
             alt={name}
-            className="h-full w-full object-contain object-bottom transition-transform duration-500 hover:scale-[1.03]"
-            loading="lazy"
+            fill
+            sizes="(max-width: 768px) 100vw, 33vw"
+            className="object-contain object-bottom transition-transform duration-500 hover:scale-[1.03]"
           />
           {/* Role overlay at bottom */}
           <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent px-5 pb-4 pt-10">
@@ -460,14 +460,15 @@ function AdministrationSection() {
             {TEAM_PHOTOS.map((src, i) => (
               <div
                 key={i}
-                className="overflow-hidden rounded-2xl bg-slate-200 shadow-md"
+                className="relative overflow-hidden rounded-2xl bg-slate-200 shadow-md"
                 style={{ aspectRatio: "16/10" }}
               >
-                <img
+                <Image
                   src={src}
                   alt={`Dhyeya IAS Greater Noida team ${i + 1}`}
-                  className="h-full w-full object-cover object-center transition-transform duration-700 hover:scale-[1.03]"
-                  loading="lazy"
+                  fill
+                  sizes="(max-width: 768px) 100vw, 33vw"
+                  className="object-cover object-center transition-transform duration-700 hover:scale-[1.03]"
                 />
               </div>
             ))}

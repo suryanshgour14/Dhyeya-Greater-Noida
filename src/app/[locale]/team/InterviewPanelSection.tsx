@@ -3,6 +3,7 @@
 import { useRef } from "react";
 import { motion, useInView } from "framer-motion";
 import { ArrowRight } from "lucide-react";
+import Image from "next/image";
 
 const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
 
@@ -105,14 +106,12 @@ function PanelistCard({
                 "0 0 0 3px #fff, 0 0 0 5px rgba(11,28,61,0.10), 0 8px 20px -4px rgba(11,28,61,0.18)",
             }}
           />
-          <img
+          <Image
             src={image}
             alt={name}
             width={120}
             height={120}
             className="h-full w-full rounded-full object-cover object-top"
-            loading="lazy"
-            decoding="async"
           />
           <div
             aria-hidden
@@ -147,11 +146,12 @@ function FeaturedCard() {
       className="sm:col-span-2 lg:col-span-2 lg:row-span-2"
     >
       <div className="relative h-full min-h-[380px] overflow-hidden rounded-[20px] shadow-xl">
-        <img
+        <Image
           src={FEATURED_IMAGE}
+          fill
+          sizes="(max-width: 1024px) 100vw, 50vw"
           alt="UPSC Mock Interview session at Dhyeya IAS Greater Noida"
-          className="h-full w-full object-cover object-center"
-          loading="lazy"
+          className="object-cover object-center"
         />
 
         {/* Gradient: transparent top → dark bottom */}

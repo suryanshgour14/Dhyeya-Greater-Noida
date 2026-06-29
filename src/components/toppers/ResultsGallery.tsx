@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { motion } from "framer-motion";
 import { Trophy, Star } from "lucide-react";
 import { TOPPERS } from "@/lib/constants";
@@ -32,15 +33,11 @@ function TopperCard({ topper }: { topper: (typeof TOPPERS)[number] }) {
             }}
           />
         )}
-        {/* dhyeyaias.com host isn't whitelisted for next/image — use plain img */}
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
+        <Image
           src={topper.photo}
           alt={topper.name}
           width={84}
           height={84}
-          loading="lazy"
-          decoding="async"
           className="relative h-full w-full rounded-full object-cover object-top ring-2 ring-white"
         />
         {isFirst && (

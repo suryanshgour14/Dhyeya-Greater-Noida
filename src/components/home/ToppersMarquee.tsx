@@ -5,6 +5,7 @@ import { motion, useInView } from "framer-motion";
 import { useLocale } from "next-intl";
 import { Trophy, Star, ArrowRight } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 import { TOPPERS } from "@/lib/constants";
 
 const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
@@ -57,14 +58,12 @@ function TopperCard({ topper }: { topper: (typeof TOPPERS)[number] }) {
               : "0 0 0 2px #1e2d47,0 0 0 3.5px rgba(255,255,255,0.1),0 4px 14px -4px rgba(0,0,0,0.5)",
           }}
         />
-        <img
+        <Image
           src={topper.photo}
           alt={topper.name}
           width={78}
           height={78}
           className="relative h-full w-full rounded-full object-cover object-top"
-          loading="lazy"
-          decoding="async"
         />
         <div
           className="pointer-events-none absolute inset-0 rounded-full"

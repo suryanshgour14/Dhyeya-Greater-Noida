@@ -310,7 +310,7 @@ export default function Navbar() {
       <div className="container mx-auto flex h-14 items-center justify-between px-4">
         {/* Logo */}
         <Link href={`/${locale}`} className="flex items-center shrink-0">
-          <DhyeyaLogo background="light" heightClass="h-9" className="max-w-[160px]" />
+          <DhyeyaLogo background="light" heightClass="h-9" className="max-w-[160px]" priority />
         </Link>
 
         {/* Desktop nav */}

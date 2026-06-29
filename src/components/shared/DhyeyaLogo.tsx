@@ -19,12 +19,15 @@ interface DhyeyaLogoProps {
   /** CSS height class e.g. "h-9", "h-10", "h-12" - width scales automatically */
   heightClass?: string;
   className?: string;
+  /** Preload + eager-load. Use only for the above-the-fold (LCP) logo. */
+  priority?: boolean;
 }
 
 export default function DhyeyaLogo({
   background = "light",
   heightClass = "h-10",
   className = "",
+  priority = false,
 }: DhyeyaLogoProps) {
   const locale = useLocale();
   const lang = locale === "hi" ? "hi" : "en";
@@ -40,7 +43,7 @@ export default function DhyeyaLogo({
       alt={alt}
       width={240}
       height={70}
-      priority
+      priority={priority}
       className={`w-auto object-contain ${heightClass} ${className}`}
     />
   );
