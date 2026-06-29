@@ -7,7 +7,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import {
   Plus, Send, BookOpen, Loader2, CheckCircle2, XCircle,
   X, FileUp, Shield, Newspaper, FileText, Trash2, Star, Bell,
-  Pencil, ChevronDown, ChevronUp,
+  Pencil, ChevronDown, ChevronUp, BarChart2, Trophy, Clock, Users,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import ExcelUpload from "@/components/admin/ExcelUpload";
@@ -145,6 +145,7 @@ function TestsTab({ locale, showToast }: { locale: string; showToast: (m: string
   const [deleting, setDeleting] = useState<string | null>(null);
   const [showCreate, setShowCreate] = useState(false);
   const [editTest, setEditTest] = useState<TestRow | null>(null);
+  const [reportTest, setReportTest] = useState<TestRow | null>(null);
   const [step, setStep] = useState<"form" | "questions">("form");
   const [draftId, setDraftId] = useState<string | null>(null);
   const [parsedQs, setParsedQs] = useState<ParsedQuestion[]>([]);
@@ -244,6 +245,12 @@ function TestsTab({ locale, showToast }: { locale: string; showToast: (m: string
                     <Button variant="outline" size="sm" className="text-xs" onClick={() => setEditTest(t)}>
                       <Pencil className="h-3.5 w-3.5 mr-1" />Edit
                     </Button>
+                    {/* Reports */}
+                    {t.status === "published" && (
+                      <Button variant="outline" size="sm" className="text-xs border-purple-200 text-purple-600 hover:bg-purple-50" onClick={() => setReportTest(t)}>
+                        <BarChart2 className="h-3.5 w-3.5 mr-1" />Reports
+                      </Button>
+                    )}
                     {/* Publish / Unpublish */}
                     <Button size="sm"
                       variant={t.status === "published" ? "outline" : "default"}
@@ -328,6 +335,13 @@ function TestsTab({ locale, showToast }: { locale: string; showToast: (m: string
               </div>
             )}
           </Modal>
+        )}
+      </AnimatePresence>
+
+      {/* ── Reports modal ── */}
+      <AnimatePresence>
+        {reportTest && (
+          <ReportsModal test={reportTest} locale={locale} onClose={() => setReportTest(null)} />
         )}
       </AnimatePresence>
 
@@ -524,6 +538,180 @@ function EditTestModal({
 
         {/* Footer */}
         <div className="shrink-0 flex justify-end gap-2 border-t border-slate-200 bg-white px-7 py-4">
+          <Button variant="outline" onClick={onClose}>Close</Button>
+        </div>
+      </motion.div>
+    </motion.div>
+  );
+}
+
+// ── Reports Modal ─────────────────────────────────────────────
+interface AttemptReport {
+  rank: number; attemptId: string; studentId: string;
+  name: string; email: string;
+  score: number; pct: number;
+  total_correct: number; total_wrong: number; total_skipped: number;
+  time_taken_sec: number | null; submitted_at: string | null; status: string;
+}
+interface ReportData {
+  test: { id: string; title: string; marks_per_q: number; total_duration_min: number };
+  maxMarks: number; totalQ: number;
+  attempts: AttemptReport[];
+  stats: { total: number; avgScore: number; highest: number; lowest: number; passing: number; passingPct: number } | null;
+}
+
+function ReportsModal({ test, locale, onClose }: { test: TestRow; locale: string; onClose: () => void }) {
+  const [data, setData] = useState<ReportData | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    fetch(`/api/admin/tests/${test.id}/attempts`)
+      .then((r) => r.json())
+      .then((json) => { setData(json); setLoading(false); })
+      .catch(() => { setError("Failed to load report"); setLoading(false); });
+  }, [test.id]);
+
+  function fmtTime(sec: number | null) {
+    if (!sec) return "—";
+    const m = Math.floor(sec / 60);
+    const s = sec % 60;
+    return `${m}m ${s}s`;
+  }
+
+  function fmtDate(iso: string | null) {
+    if (!iso) return "—";
+    return new Date(iso).toLocaleDateString("en-IN", { day: "2-digit", month: "short", year: "numeric" });
+  }
+
+  return (
+    <motion.div
+      initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+      className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4"
+      onClick={onClose}>
+      <motion.div
+        initial={{ opacity: 0, scale: 0.96, y: 16 }} animate={{ opacity: 1, scale: 1, y: 0 }}
+        exit={{ opacity: 0, scale: 0.96, y: 16 }} transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
+        className="relative flex flex-col w-full max-w-5xl rounded-3xl shadow-2xl overflow-hidden"
+        style={{ maxHeight: "92vh" }}
+        onClick={(e) => e.stopPropagation()}>
+
+        {/* Header */}
+        <div className="shrink-0 bg-[#0B1C3D] px-7 py-5 flex items-center justify-between">
+          <div>
+            <p className="text-[10px] font-bold uppercase tracking-widest text-purple-300/80">Test Report</p>
+            <h2 className="text-lg font-bold text-white truncate max-w-xl">{test.title}</h2>
+            <p className="text-xs text-white/50 mt-0.5">{test.exam_type || "—"} · {test.total_duration_min} min</p>
+          </div>
+          <button onClick={onClose} className="flex h-9 w-9 items-center justify-center rounded-full text-white/50 hover:bg-white/10 hover:text-white">
+            <X className="h-5 w-5" />
+          </button>
+        </div>
+
+        {/* Body */}
+        <div className="flex-1 overflow-y-auto bg-white">
+          {loading && (
+            <div className="py-24 text-center"><Loader2 className="mx-auto h-7 w-7 animate-spin text-slate-300" /></div>
+          )}
+          {error && (
+            <div className="py-24 text-center text-red-500 text-sm">{error}</div>
+          )}
+          {!loading && !error && data && (
+            <div className="p-6">
+              {/* Summary Stats */}
+              {data.stats ? (
+                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 mb-6">
+                  {[
+                    { icon: Users, label: "Total Attempts", value: data.stats.total, color: "text-blue-600" },
+                    { icon: Trophy, label: "Highest Score", value: data.stats.highest, color: "text-amber-500" },
+                    { icon: BarChart2, label: "Avg Score", value: data.stats.avgScore, color: "text-purple-600" },
+                    { icon: BarChart2, label: "Lowest Score", value: data.stats.lowest, color: "text-red-500" },
+                    { icon: CheckCircle2, label: "Passing (≥33%)", value: data.stats.passing, color: "text-green-600" },
+                    { icon: Trophy, label: "Pass Rate", value: `${data.stats.passingPct}%`, color: "text-green-600" },
+                  ].map(({ icon: Icon, label, value, color }) => (
+                    <div key={label} className="rounded-2xl border border-slate-200 bg-slate-50 p-4 text-center">
+                      <Icon className={cn("mx-auto mb-1.5 h-5 w-5", color)} />
+                      <div className={cn("text-xl font-extrabold", color)}>{value}</div>
+                      <div className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider mt-0.5">{label}</div>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="mb-6 rounded-2xl border border-slate-200 bg-slate-50 py-12 text-center text-slate-400 text-sm">
+                  No attempts yet for this test.
+                </div>
+              )}
+
+              {/* Attempts Table */}
+              {data.attempts.length > 0 && (
+                <div className="overflow-x-auto rounded-2xl border border-slate-200">
+                  <table className="w-full text-sm">
+                    <thead>
+                      <tr className="bg-slate-50 border-b border-slate-200">
+                        <th className="px-4 py-3 text-left text-[11px] font-bold uppercase tracking-wider text-slate-500">Rank</th>
+                        <th className="px-4 py-3 text-left text-[11px] font-bold uppercase tracking-wider text-slate-500">Student</th>
+                        <th className="px-4 py-3 text-left text-[11px] font-bold uppercase tracking-wider text-slate-500">Email</th>
+                        <th className="px-4 py-3 text-right text-[11px] font-bold uppercase tracking-wider text-slate-500">Score</th>
+                        <th className="px-4 py-3 text-right text-[11px] font-bold uppercase tracking-wider text-slate-500">%</th>
+                        <th className="px-4 py-3 text-center text-[11px] font-bold uppercase tracking-wider text-slate-500">✓ / ✗ / —</th>
+                        <th className="px-4 py-3 text-right text-[11px] font-bold uppercase tracking-wider text-slate-500">Time</th>
+                        <th className="px-4 py-3 text-right text-[11px] font-bold uppercase tracking-wider text-slate-500">Date</th>
+                        <th className="px-4 py-3 text-center text-[11px] font-bold uppercase tracking-wider text-slate-500">Analysis</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {data.attempts.map((a, idx) => {
+                        const rowBg = idx % 2 === 0 ? "bg-white" : "bg-slate-50/50";
+                        const pctColor = a.pct >= 60 ? "text-green-600" : a.pct >= 33 ? "text-amber-600" : "text-red-500";
+                        const rankBadge = a.rank === 1 ? "🥇" : a.rank === 2 ? "🥈" : a.rank === 3 ? "🥉" : `#${a.rank}`;
+                        return (
+                          <tr key={a.attemptId} className={cn("border-b border-slate-100 hover:bg-blue-50/30 transition-colors", rowBg)}>
+                            <td className="px-4 py-3 font-bold text-slate-500 text-center">{rankBadge}</td>
+                            <td className="px-4 py-3">
+                              <span className="font-semibold text-slate-800">{a.name}</span>
+                            </td>
+                            <td className="px-4 py-3 text-xs text-slate-400 max-w-[160px] truncate">{a.email}</td>
+                            <td className="px-4 py-3 text-right font-bold text-slate-800">
+                              {a.score}<span className="text-[10px] text-slate-400 font-normal">/{data.maxMarks}</span>
+                            </td>
+                            <td className={cn("px-4 py-3 text-right font-bold", pctColor)}>{a.pct}%</td>
+                            <td className="px-4 py-3 text-center text-xs whitespace-nowrap">
+                              <span className="text-green-600 font-semibold">{a.total_correct}</span>
+                              <span className="text-slate-300 mx-0.5">/</span>
+                              <span className="text-red-500 font-semibold">{a.total_wrong}</span>
+                              <span className="text-slate-300 mx-0.5">/</span>
+                              <span className="text-slate-400">{a.total_skipped}</span>
+                            </td>
+                            <td className="px-4 py-3 text-right text-xs text-slate-500 whitespace-nowrap">
+                              <Clock className="inline h-3 w-3 mr-0.5 text-slate-300" />
+                              {fmtTime(a.time_taken_sec)}
+                            </td>
+                            <td className="px-4 py-3 text-right text-xs text-slate-400 whitespace-nowrap">{fmtDate(a.submitted_at)}</td>
+                            <td className="px-4 py-3 text-center">
+                              <a
+                                href={`/${locale}/tests/${test.id}/result/${a.attemptId}`}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="inline-flex items-center gap-1 rounded-lg bg-purple-100 px-2.5 py-1 text-[10px] font-bold text-purple-700 hover:bg-purple-200 transition-colors">
+                                View ↗
+                              </a>
+                            </td>
+                          </tr>
+                        );
+                      })}
+                    </tbody>
+                  </table>
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+
+        {/* Footer */}
+        <div className="shrink-0 flex justify-between items-center border-t border-slate-200 bg-white px-7 py-4">
+          <p className="text-xs text-slate-400">
+            {data?.attempts.length ? `${data.attempts.length} student${data.attempts.length !== 1 ? "s" : ""} attempted this test` : ""}
+          </p>
           <Button variant="outline" onClick={onClose}>Close</Button>
         </div>
       </motion.div>
