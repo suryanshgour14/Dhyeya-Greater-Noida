@@ -89,7 +89,7 @@ export default function WhyChooseUs() {
       fontFamily: T.sans,
       overflow: "hidden",
     }}>
-      <div style={{ maxWidth: 1240, margin: "0 auto", padding: "0 40px" }}>
+      <div className="px-5 sm:px-10" style={{ maxWidth: 1240, margin: "0 auto" }}>
         <div className="grid items-start gap-14 lg:grid-cols-[minmax(0,0.7fr)_minmax(0,1.3fr)]">
 
           {/* ── Left sticky column ── */}
@@ -152,9 +152,8 @@ export default function WhyChooseUs() {
             whileInView="visible"
             viewport={{ once: true, margin: "-60px" }}
             variants={gridVariants}
+            className="grid grid-cols-1 sm:grid-cols-2"
             style={{
-              display: "grid",
-              gridTemplateColumns: "1fr 1fr",
               gap: 1,
               background: T.line,
               border: `1px solid ${T.line}`,

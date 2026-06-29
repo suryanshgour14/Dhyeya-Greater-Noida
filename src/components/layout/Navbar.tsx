@@ -353,7 +353,7 @@ export default function Navbar() {
           </button>
 
           <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
-            <SheetContent side="left" showCloseButton={false} className="w-[300px] p-0">
+            <SheetContent side="left" showCloseButton={false} className="w-[300px] max-w-[85vw] p-0 bg-white text-slate-900">
               <div className="flex items-center justify-between border-b p-4">
                 <Link
                   href={`/${locale}`}
