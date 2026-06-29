@@ -94,7 +94,15 @@ export default function BuyButton({
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ productId }),
       });
-      const data = await res.json();
+
+      let data: Record<string, string> = {};
+      try {
+        data = await res.json();
+      } catch {
+        flash("Server error — check console for details", false);
+        setBusy(false);
+        return;
+      }
 
       if (!res.ok) {
         flash(data.error ?? "Could not create order", false);
@@ -134,7 +142,9 @@ export default function BuyButton({
           if (vRes.ok && vData.success) {
             setEnrolled(true);
             flash("Payment successful! You are now enrolled.", true);
-            setTimeout(() => router.push(`/${locale}${redirectTo}`), 1800);
+            setTimeout(() => router.push(
+              `/${locale}/payment/success?ref=${response.razorpay_payment_id}&product=${encodeURIComponent(productTitle)}`
+            ), 1800);
           } else {
             flash(vData.error ?? "Verification failed. Please contact support.", false);
           }

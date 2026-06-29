@@ -94,7 +94,7 @@ export default async function ResourcesPage({
           </div>
         ) : (
           <div className="space-y-10">
-            {[...byCategory.entries()].map(([category, items]) => (
+            {Array.from(byCategory.entries()).map(([category, items]) => (
               <div key={category}>
                 <h2 className="mb-4 flex items-center gap-2 text-lg font-bold text-brand-blue">
                   <span className="h-5 w-1 rounded-full bg-brand-gold" />
@@ -105,7 +105,7 @@ export default async function ResourcesPage({
                 </h2>
 
                 <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                  {items.map((r) => {
+                  {items.map((r: ResourceRow) => {
                     const url = signedMap.get(r.file_path);
                     const size = formatSize(r.file_size_kb);
                     return (
