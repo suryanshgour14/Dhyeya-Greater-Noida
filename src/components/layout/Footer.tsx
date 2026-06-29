@@ -1,12 +1,11 @@
 ﻿import { Link } from "@/i18n/navigation";
-import { Phone, Mail, MapPin, Clock, Send } from "lucide-react";
+import { Phone, Mail, MapPin, Clock } from "lucide-react";
 import { CONTACT_INFO, SOCIAL_LINKS, SITE_NAME } from "@/lib/constants";
 import DhyeyaLogo from "@/components/shared/DhyeyaLogo";
 import {
   FacebookIcon,
   InstagramIcon,
   YouTubeIcon,
-  TwitterXIcon,
 } from "@/components/shared/SocialIcons";
 
 const QUICK_LINKS = [
@@ -176,24 +175,6 @@ export default function Footer() {
                 className="flex h-8 w-8 items-center justify-center rounded-lg bg-white/10 text-slate-300 transition-colors hover:bg-red-600 hover:text-white"
               >
                 <YouTubeIcon size={16} />
-              </a>
-              <a
-                href={SOCIAL_LINKS.twitter}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="Twitter / X"
-                className="flex h-8 w-8 items-center justify-center rounded-lg bg-white/10 text-slate-300 transition-colors hover:bg-slate-700 hover:text-white"
-              >
-                <TwitterXIcon size={16} />
-              </a>
-              <a
-                href={SOCIAL_LINKS.telegram}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="Telegram"
-                className="flex h-8 w-8 items-center justify-center rounded-lg bg-white/10 text-slate-300 transition-colors hover:bg-sky-500 hover:text-white"
-              >
-                <Send size={16} />
               </a>
             </div>
           </div>

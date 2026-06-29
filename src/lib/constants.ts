@@ -26,9 +26,9 @@ export const CONTACT_INFO = {
 };
 
 export const SOCIAL_LINKS = {
-  facebook: 'https://facebook.com/dhyeyaiasgreaternoida',
-  instagram: 'https://instagram.com/dhyeyaiasgreaternoida',
-  youtube: 'https://youtube.com/@dhyeyaiasgreaternoida',
+  facebook: 'https://www.facebook.com/share/1EdHmVnrm9/',
+  instagram: 'https://www.instagram.com/dhyeyaiasgreaternoida/',
+  youtube: 'https://youtube.com/@dhyeyagrnoida?si=5mH8tgTqGYNnxsB2',
   twitter: 'https://twitter.com/dhyeyaias',
   telegram: 'https://t.me/dhyeyaiasgreaternoida',
 };
