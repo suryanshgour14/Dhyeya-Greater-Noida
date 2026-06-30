@@ -19,27 +19,39 @@ export default async function TestsPage({ params }: { params: { locale: string }
 
   if (!user) redirect(`/${locale}/login?next=/${locale}/tests`);
 
-  const { data: tests } = await supabase
-    .from("tests")
-    .select("*, test_sections(count), questions(count)")
-    .eq("status", "published")
-    .order("created_at", { ascending: false });
+  // Independent reads — fetch in parallel (was 4 sequential round-trips).
+  const [
+    { data: tests },
+    { data: inProgress },
+    { data: submitted },
+    { data: products },
+  ] = await Promise.all([
+    supabase
+      .from("tests")
+      .select("*, test_sections(count), questions(count)")
+      .eq("status", "published")
+      .order("created_at", { ascending: false }),
+    supabase
+      .from("attempts")
+      .select("test_id")
+      .eq("student_id", user.id)
+      .eq("status", "in_progress"),
+    supabase
+      .from("attempts")
+      .select("test_id, id")
+      .eq("student_id", user.id)
+      .in("status", ["submitted", "auto_submitted"])
+      .order("created_at", { ascending: false }),
+    supabase
+      .from("products")
+      .select("id, ref_id")
+      .eq("type", "test")
+      .eq("is_active", true),
+  ]);
 
-  const { data: inProgress } = await supabase
-    .from("attempts")
-    .select("test_id")
-    .eq("student_id", user.id)
-    .eq("status", "in_progress");
   const inProgressSet = new Set((inProgress ?? []).map((a) => a.test_id));
 
   // Track latest submitted attempt per test for "Result & Analysis" button
-  const { data: submitted } = await supabase
-    .from("attempts")
-    .select("test_id, id")
-    .eq("student_id", user.id)
-    .in("status", ["submitted", "auto_submitted"])
-    .order("created_at", { ascending: false });
-
   const submittedAttemptMap = new Map<string, string>();
   for (const a of (submitted ?? [])) {
     if (!submittedAttemptMap.has(a.test_id)) {
@@ -48,12 +60,6 @@ export default async function TestsPage({ params }: { params: { locale: string }
   }
 
   // Products + enrollments for access gating
-  const { data: products } = await supabase
-    .from("products")
-    .select("id, ref_id")
-    .eq("type", "test")
-    .eq("is_active", true);
-
   const productByTestId = new Map<string, string>(
     (products as ProductRow[] ?? []).map((p) => [p.ref_id, p.id])
   );

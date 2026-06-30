@@ -7,16 +7,21 @@ import { motion } from "framer-motion";
 import { Trophy, Clock, TrendingUp, ChevronRight, CheckCircle2, XCircle, MinusCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-// Lazy-load recharts to keep the initial bundle small
-const PieChart = lazy(() => import("recharts").then((m) => ({ default: m.PieChart })));
-const Pie = lazy(() => import("recharts").then((m) => ({ default: m.Pie })));
-const Cell = lazy(() => import("recharts").then((m) => ({ default: m.Cell })));
-const BarChart = lazy(() => import("recharts").then((m) => ({ default: m.BarChart })));
-const Bar = lazy(() => import("recharts").then((m) => ({ default: m.Bar })));
-const XAxis = lazy(() => import("recharts").then((m) => ({ default: m.XAxis })));
-const YAxis = lazy(() => import("recharts").then((m) => ({ default: m.YAxis })));
-const Tooltip = lazy(() => import("recharts").then((m) => ({ default: m.Tooltip })));
-const ResponsiveContainer = lazy(() => import("recharts").then((m) => ({ default: m.ResponsiveContainer })));
+/* eslint-disable @typescript-eslint/no-explicit-any */
+// Lazy-load recharts to keep the initial bundle small. recharts v2's per-export
+// types don't play well with React.lazy, so these chart components are loosely
+// typed (`any`) — purely a typing convenience, no runtime effect.
+const importRecharts = () => import("recharts") as Promise<any>;
+const PieChart: any = lazy(() => importRecharts().then((m) => ({ default: m.PieChart })));
+const Pie: any = lazy(() => importRecharts().then((m) => ({ default: m.Pie })));
+const Cell: any = lazy(() => importRecharts().then((m) => ({ default: m.Cell })));
+const BarChart: any = lazy(() => importRecharts().then((m) => ({ default: m.BarChart })));
+const Bar: any = lazy(() => importRecharts().then((m) => ({ default: m.Bar })));
+const XAxis: any = lazy(() => importRecharts().then((m) => ({ default: m.XAxis })));
+const YAxis: any = lazy(() => importRecharts().then((m) => ({ default: m.YAxis })));
+const Tooltip: any = lazy(() => importRecharts().then((m) => ({ default: m.Tooltip })));
+const ResponsiveContainer: any = lazy(() => importRecharts().then((m) => ({ default: m.ResponsiveContainer })));
+/* eslint-enable @typescript-eslint/no-explicit-any */
 
 interface SectionBreakdown {
   name: string;
@@ -177,7 +182,7 @@ export default function ResultClient({ attempt, test, sectionBreakdown, review, 
                       <Cell key={i} fill={DONUT_COLORS[i]} />
                     ))}
                   </Pie>
-                  <Tooltip formatter={(v, n) => [`${v}`, n as string]} />
+                  <Tooltip formatter={(v: number, n: string) => [`${v}`, n]} />
                 </PieChart>
               </ResponsiveContainer>
             </Suspense>
@@ -199,7 +204,7 @@ export default function ResultClient({ attempt, test, sectionBreakdown, review, 
                 <BarChart data={barData} margin={{ top: 4, right: 8, left: -20, bottom: 0 }}>
                   <XAxis dataKey="name" tick={{ fontSize: 10 }} />
                   <YAxis domain={[0, 100]} tick={{ fontSize: 10 }} />
-                  <Tooltip formatter={(v) => [`${v}%`, "Accuracy"]} />
+                  <Tooltip formatter={(v: number) => [`${v}%`, "Accuracy"]} />
                   <Bar dataKey="Accuracy" fill="#3b82f6" radius={[4, 4, 0, 0]} />
                 </BarChart>
               </ResponsiveContainer>

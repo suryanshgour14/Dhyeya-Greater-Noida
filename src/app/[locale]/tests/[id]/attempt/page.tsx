@@ -13,13 +13,44 @@ export default async function AttemptPage({
 
   if (!user) redirect(`/${locale}/login?next=/${locale}/tests/${id}/attempt`);
 
-  // Load test (must be published)
-  const { data: test } = await supabase
-    .from("tests")
-    .select("*")
-    .eq("id", id)
-    .eq("status", "published")
-    .single();
+  // These reads are independent of each other — fetch them in parallel
+  // (was 3 sequential round-trips: test -> existing attempt -> sections+questions).
+  // `correct` is excluded from questions — never sent to the client.
+  const [
+    { data: test },
+    { data: existing },
+    { data: sections },
+    { data: questions },
+  ] = await Promise.all([
+    supabase
+      .from("tests")
+      .select("*")
+      .eq("id", id)
+      .eq("status", "published")
+      .single(),
+    supabase
+      .from("attempts")
+      .select("*")
+      .eq("student_id", user.id)
+      .eq("test_id", id)
+      .eq("status", "in_progress")
+      .order("created_at", { ascending: false })
+      .limit(1)
+      .maybeSingle(),
+    supabase
+      .from("test_sections")
+      .select("*")
+      .eq("test_id", id)
+      .order("order_index"),
+    supabase
+      .from("questions")
+      .select(
+        "id, test_id, section_id, order_index, question_en, question_hi, option_a_en, option_b_en, option_c_en, option_d_en, option_a_hi, option_b_hi, option_c_hi, option_d_hi, created_at"
+      )
+      .eq("test_id", id)
+      .order("section_id")
+      .order("order_index"),
+  ]);
 
   if (!test) redirect(`/${locale}/tests`);
 
@@ -50,16 +81,6 @@ export default async function AttemptPage({
   }
 
   // Resume or create attempt
-  const { data: existing } = await supabase
-    .from("attempts")
-    .select("*")
-    .eq("student_id", user.id)
-    .eq("test_id", id)
-    .eq("status", "in_progress")
-    .order("created_at", { ascending: false })
-    .limit(1)
-    .maybeSingle();
-
   let attempt = existing;
 
   if (!attempt) {
@@ -85,23 +106,6 @@ export default async function AttemptPage({
       redirect(`/${locale}/tests/${id}/result/${attempt.id}`);
     }
   }
-
-  // Load sections + questions (correct field excluded — never sent to client)
-  const [{ data: sections }, { data: questions }] = await Promise.all([
-    supabase
-      .from("test_sections")
-      .select("*")
-      .eq("test_id", id)
-      .order("order_index"),
-    supabase
-      .from("questions")
-      .select(
-        "id, test_id, section_id, order_index, question_en, question_hi, option_a_en, option_b_en, option_c_en, option_d_en, option_a_hi, option_b_hi, option_c_hi, option_d_hi, created_at"
-      )
-      .eq("test_id", id)
-      .order("section_id")
-      .order("order_index"),
-  ]);
 
   const startedAt       = new Date(attempt.started_at).getTime();
   const overallDeadline = new Date(
