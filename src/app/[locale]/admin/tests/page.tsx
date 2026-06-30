@@ -5,8 +5,9 @@ import Link from "next/link";
 import { useLocale } from "next-intl";
 import { motion, AnimatePresence } from "framer-motion";
 import {
-  Plus, Eye, Send, BookOpen, Loader2, CheckCircle2, XCircle,
-  X, FileUp, Shield, Newspaper, FileText, Trash2, Star, Calendar, Bell,
+  Plus, Send, BookOpen, Loader2, CheckCircle2, XCircle,
+  X, FileUp, Shield, Newspaper, FileText, Trash2, Star, Bell,
+  Pencil, ChevronDown, ChevronUp, BarChart2, Trophy, Clock, Users,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import ExcelUpload from "@/components/admin/ExcelUpload";
@@ -20,6 +21,16 @@ interface TestRow {
   total_duration_min: number; marks_per_q: number; negative_marks: number;
   sectional_timing: boolean; is_free: boolean; created_at: string;
   test_sections: { count: number }[]; questions: { count: number }[];
+}
+
+interface QuestionRow {
+  id: string;
+  order_index: number;
+  question_en: string;
+  question_hi: string | null;
+  option_a_en: string; option_b_en: string; option_c_en: string; option_d_en: string;
+  correct: string;
+  test_sections: { name: string } | null;
 }
 
 interface CARow {
@@ -79,7 +90,6 @@ export default function AdminPage() {
             <h1 className="text-lg font-bold text-slate-800">Content Management</h1>
           </div>
         </div>
-        {/* Tab bar */}
         <div className="flex flex-wrap gap-1">
           {([
             { key: "tests", icon: FileText, label: "Test Series" },
@@ -91,18 +101,14 @@ export default function AdminPage() {
               onClick={() => setTab(key)}
               className={cn(
                 "flex items-center gap-2 rounded-xl px-4 py-2 text-sm font-semibold transition-all",
-                tab === key
-                  ? "bg-brand-blue text-white shadow-sm"
-                  : "text-slate-500 hover:bg-slate-100"
+                tab === key ? "bg-brand-blue text-white shadow-sm" : "text-slate-500 hover:bg-slate-100"
               )}
             >
               <Icon className="h-4 w-4" /> {label}
             </button>
           ))}
-          <Link
-            href={`/${locale}/admin/notifications`}
-            className="flex items-center gap-2 rounded-xl px-4 py-2 text-sm font-semibold text-slate-500 hover:bg-slate-100 transition-all"
-          >
+          <Link href={`/${locale}/admin/notifications`}
+            className="flex items-center gap-2 rounded-xl px-4 py-2 text-sm font-semibold text-slate-500 hover:bg-slate-100 transition-all">
             <Bell className="h-4 w-4" /> Notifications
           </Link>
         </div>
@@ -114,8 +120,7 @@ export default function AdminPage() {
           <motion.div
             initial={{ opacity: 0, y: -16 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -16 }}
             className={cn("fixed right-5 top-5 z-[9999] flex items-center gap-2.5 rounded-2xl px-5 py-3.5 text-sm font-semibold shadow-xl",
-              toast.ok ? "bg-green-600 text-white" : "bg-red-600 text-white")}
-          >
+              toast.ok ? "bg-green-600 text-white" : "bg-red-600 text-white")}>
             {toast.ok ? <CheckCircle2 className="h-4 w-4" /> : <XCircle className="h-4 w-4" />}
             {toast.msg}
           </motion.div>
@@ -137,7 +142,10 @@ function TestsTab({ locale, showToast }: { locale: string; showToast: (m: string
   const [loading, setLoading] = useState(true);
   const [creating, setCreating] = useState(false);
   const [publishing, setPublishing] = useState<string | null>(null);
+  const [deleting, setDeleting] = useState<string | null>(null);
   const [showCreate, setShowCreate] = useState(false);
+  const [editTest, setEditTest] = useState<TestRow | null>(null);
+  const [reportTest, setReportTest] = useState<TestRow | null>(null);
   const [step, setStep] = useState<"form" | "questions">("form");
   const [draftId, setDraftId] = useState<string | null>(null);
   const [parsedQs, setParsedQs] = useState<ParsedQuestion[]>([]);
@@ -167,14 +175,16 @@ function TestsTab({ locale, showToast }: { locale: string; showToast: (m: string
     setDraftId(json.test.id); setStep("questions");
   }
 
-  async function handleUpload() {
-    if (!draftId || !parsedQs.length) return;
+  async function handleUpload(targetId?: string) {
+    const id = targetId ?? draftId;
+    if (!id || !parsedQs.length) return;
     if (parsedQs.some((q) => q.errors.length > 0)) { showToast("Fix all errors first", false); return; }
     setUploading(true);
-    const res = await fetch(`/api/admin/tests/${draftId}/questions`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ questions: parsedQs }) });
+    const res = await fetch(`/api/admin/tests/${id}/questions`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ questions: parsedQs }) });
     const json = await res.json(); setUploading(false);
     if (!res.ok) { showToast(json.error, false); return; }
     showToast(`${json.inserted} questions uploaded!`, true);
+    loadTests();
   }
 
   async function handlePublish(id: string, unpublish = false) {
@@ -185,61 +195,119 @@ function TestsTab({ locale, showToast }: { locale: string; showToast: (m: string
     showToast(unpublish ? "Unpublished" : "Published!", true); loadTests();
   }
 
+  async function handleDelete(id: string) {
+    if (!confirm("Delete this test? All questions and attempts will be permanently removed.")) return;
+    setDeleting(id);
+    const res = await fetch(`/api/admin/tests/${id}`, { method: "DELETE" });
+    setDeleting(null);
+    if (res.ok) { showToast("Test deleted", true); loadTests(); }
+    else { const j = await res.json(); showToast(j.error ?? "Delete failed", false); }
+  }
+
   return (
     <div>
       <div className="bg-white border-b px-6 py-3 flex items-center justify-between">
         <h2 className="text-sm font-bold text-slate-700">All Tests ({tests.length})</h2>
         <div className="flex gap-2">
-          <a href="/api/admin/tests/template" download><Button variant="outline" size="sm" className="text-xs">Template</Button></a>
+          <a href="/api/admin/tests/template" download>
+            <Button variant="outline" size="sm" className="text-xs">Template</Button>
+          </a>
           <Button onClick={() => setShowCreate(true)} size="sm" className="bg-brand-blue text-white hover:bg-brand-blue/90 text-xs">
             <Plus className="h-4 w-4 mr-1" /> New Test
           </Button>
         </div>
       </div>
+
       <div className="container mx-auto px-4 py-6 max-w-5xl">
-        {loading ? <div className="py-20 text-center"><Loader2 className="mx-auto h-6 w-6 animate-spin text-slate-300" /></div>
-          : tests.length === 0 ? <EmptyState icon={FileText} text="No tests yet. Create your first test." />
-          : <div className="space-y-3">{tests.map((t, i) => (
-            <motion.div key={t.id} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.04 }}
-              className="flex flex-wrap items-center gap-4 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-              <div className="flex-1 min-w-0">
-                <div className="flex flex-wrap items-center gap-2 mb-1">
-                  <h3 className="font-bold text-slate-800 truncate">{t.title}</h3>
-                  <span className={cn("rounded-full px-2.5 py-0.5 text-[10px] font-bold uppercase", t.status === "published" ? "bg-green-100 text-green-700" : "bg-amber-100 text-amber-700")}>{t.status}</span>
-                  {t.is_free && <span className="rounded-full bg-blue-100 px-2 py-0.5 text-[10px] font-bold text-blue-700">FREE</span>}
-                </div>
-                <p className="text-xs text-slate-400">{t.exam_type || "—"} · {t.total_duration_min}min · {t.marks_per_q}m/Q · {t.questions?.[0]?.count ?? 0}Q</p>
-              </div>
-              <div className="flex gap-2">
-                <Link href={`/${locale}/tests/${t.id}`}><Button variant="outline" size="sm" className="text-xs"><Eye className="h-3.5 w-3.5 mr-1" />View</Button></Link>
-                <Button size="sm" variant={t.status === "published" ? "outline" : "default"} disabled={publishing === t.id}
-                  onClick={() => handlePublish(t.id, t.status === "published")}
-                  className={cn("text-xs", t.status !== "published" && "bg-brand-blue text-white hover:bg-brand-blue/90")}>
-                  {publishing === t.id ? <Loader2 className="h-3.5 w-3.5 mr-1 animate-spin" /> : <Send className="h-3.5 w-3.5 mr-1" />}
-                  {t.status === "published" ? "Unpublish" : "Publish"}
-                </Button>
-              </div>
-            </motion.div>
-          ))}</div>}
+        {loading
+          ? <div className="py-20 text-center"><Loader2 className="mx-auto h-6 w-6 animate-spin text-slate-300" /></div>
+          : tests.length === 0
+            ? <EmptyState icon={FileText} text="No tests yet. Create your first test." />
+            : <div className="space-y-3">
+              {tests.map((t, i) => (
+                <motion.div key={t.id} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.04 }}
+                  className="flex flex-wrap items-center gap-4 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+                  <div className="flex-1 min-w-0">
+                    <div className="flex flex-wrap items-center gap-2 mb-1">
+                      <h3 className="font-bold text-slate-800 truncate">{t.title}</h3>
+                      <span className={cn("rounded-full px-2.5 py-0.5 text-[10px] font-bold uppercase",
+                        t.status === "published" ? "bg-green-100 text-green-700" : "bg-amber-100 text-amber-700")}>
+                        {t.status}
+                      </span>
+                      {t.is_free && <span className="rounded-full bg-blue-100 px-2 py-0.5 text-[10px] font-bold text-blue-700">FREE</span>}
+                    </div>
+                    <p className="text-xs text-slate-400">
+                      {t.exam_type || "—"} · {t.total_duration_min}min · {t.marks_per_q}m/Q · {t.questions?.[0]?.count ?? 0}Q
+                    </p>
+                  </div>
+                  <div className="flex gap-2 flex-wrap">
+                    {/* Edit */}
+                    <Button variant="outline" size="sm" className="text-xs" onClick={() => setEditTest(t)}>
+                      <Pencil className="h-3.5 w-3.5 mr-1" />Edit
+                    </Button>
+                    {/* Reports */}
+                    {t.status === "published" && (
+                      <Button variant="outline" size="sm" className="text-xs border-purple-200 text-purple-600 hover:bg-purple-50" onClick={() => setReportTest(t)}>
+                        <BarChart2 className="h-3.5 w-3.5 mr-1" />Reports
+                      </Button>
+                    )}
+                    {/* Publish / Unpublish */}
+                    <Button size="sm"
+                      variant={t.status === "published" ? "outline" : "default"}
+                      disabled={publishing === t.id}
+                      onClick={() => handlePublish(t.id, t.status === "published")}
+                      className={cn("text-xs", t.status !== "published" && "bg-brand-blue text-white hover:bg-brand-blue/90")}>
+                      {publishing === t.id
+                        ? <Loader2 className="h-3.5 w-3.5 mr-1 animate-spin" />
+                        : <Send className="h-3.5 w-3.5 mr-1" />}
+                      {t.status === "published" ? "Unpublish" : "Publish"}
+                    </Button>
+                    {/* Delete */}
+                    <Button size="sm" variant="outline" disabled={deleting === t.id}
+                      onClick={() => handleDelete(t.id)}
+                      className="text-xs border-red-200 text-red-500 hover:bg-red-50 hover:border-red-300">
+                      {deleting === t.id
+                        ? <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                        : <Trash2 className="h-3.5 w-3.5" />}
+                    </Button>
+                  </div>
+                </motion.div>
+              ))}
+            </div>}
       </div>
 
-      {/* Create modal */}
+      {/* ── Create modal ── */}
       <AnimatePresence>
         {showCreate && (
-          <Modal onClose={resetAndClose} title={step === "form" ? "Create New Test" : `Upload Questions`} step={step === "form" ? 1 : 2}>
+          <Modal onClose={resetAndClose} title={step === "form" ? "Create New Test" : "Upload Questions"} step={step === "form" ? 1 : 2}>
             {step === "form" ? (
               <form onSubmit={handleCreate} className="p-7 space-y-5">
-                <Field label="Test Title (English) *"><input required className={inputCls} placeholder="e.g. UPSC Prelims Mock Test 1" value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} /></Field>
-                <Field label="Title (Hindi) — optional"><input className={inputCls} placeholder="हिंदी में शीर्षक" value={form.title_hi} onChange={(e) => setForm({ ...form, title_hi: e.target.value })} /></Field>
+                <Field label="Test Title (English) *">
+                  <input required className={inputCls} placeholder="e.g. UPSC Prelims Mock Test 1" value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} />
+                </Field>
+                <Field label="Title (Hindi) — optional">
+                  <input className={inputCls} placeholder="हिंदी में शीर्षक" value={form.title_hi} onChange={(e) => setForm({ ...form, title_hi: e.target.value })} />
+                </Field>
                 <div className="grid grid-cols-2 gap-4">
-                  <Field label="Exam Type"><select className={selectCls} value={form.exam_type} onChange={(e) => setForm({ ...form, exam_type: e.target.value })}><option value="">Select...</option>{EXAM_TYPES.map((t) => <option key={t}>{t}</option>)}</select></Field>
-                  <Field label="Duration (minutes) *"><input type="number" required min="1" className={inputCls} value={form.total_duration_min} onChange={(e) => setForm({ ...form, total_duration_min: e.target.value })} /></Field>
-                  <Field label="Marks per Question"><input type="number" step="0.1" className={inputCls} value={form.marks_per_q} onChange={(e) => setForm({ ...form, marks_per_q: e.target.value })} /></Field>
-                  <Field label="Negative Marks"><input type="number" step="0.01" className={inputCls} value={form.negative_marks} onChange={(e) => setForm({ ...form, negative_marks: e.target.value })} /></Field>
+                  <Field label="Exam Type">
+                    <select className={selectCls} value={form.exam_type} onChange={(e) => setForm({ ...form, exam_type: e.target.value })}>
+                      <option value="">Select...</option>{EXAM_TYPES.map((t) => <option key={t}>{t}</option>)}
+                    </select>
+                  </Field>
+                  <Field label="Duration (minutes) *">
+                    <input type="number" required min="1" className={inputCls} value={form.total_duration_min} onChange={(e) => setForm({ ...form, total_duration_min: e.target.value })} />
+                  </Field>
+                  <Field label="Marks per Question">
+                    <input type="number" step="0.1" className={inputCls} value={form.marks_per_q} onChange={(e) => setForm({ ...form, marks_per_q: e.target.value })} />
+                  </Field>
+                  <Field label="Negative Marks">
+                    <input type="number" step="0.01" className={inputCls} value={form.negative_marks} onChange={(e) => setForm({ ...form, negative_marks: e.target.value })} />
+                  </Field>
                 </div>
                 <div className="grid grid-cols-2 gap-3">
                   {([["sectional", "Sectional Timing", "sectional_timing"], ["isfree", "Free Test", "is_free"]] as const).map(([id, label, key]) => (
-                    <label key={id} htmlFor={id} className={cn("flex cursor-pointer items-center gap-3 rounded-xl border px-4 py-3 transition-all", form[key] ? "border-brand-gold/50 bg-brand-gold/10 text-brand-gold" : "border-white/10 bg-white/5 text-white/60 hover:border-white/20")}>
+                    <label key={id} htmlFor={id} className={cn("flex cursor-pointer items-center gap-3 rounded-xl border px-4 py-3 transition-all",
+                      form[key] ? "border-brand-gold/50 bg-brand-gold/10 text-brand-gold" : "border-white/10 bg-white/5 text-white/60 hover:border-white/20")}>
                       <input type="checkbox" id={id} checked={form[key] as boolean} onChange={(e) => setForm({ ...form, [key]: e.target.checked })} className="h-4 w-4 accent-amber-400" />
                       <span className="text-sm font-medium">{label}</span>
                     </label>
@@ -248,12 +316,19 @@ function TestsTab({ locale, showToast }: { locale: string; showToast: (m: string
                 <ModalFooter onCancel={resetAndClose} submitLabel="Next: Upload Questions →" loading={creating} />
               </form>
             ) : (
-              <div className="bg-slate-50 p-7 space-y-5">
-                <ExcelUpload onParsed={setParsedQs} />
-                <div className="flex justify-end gap-3 pt-2 border-t border-slate-200">
+              /* ── Questions upload step — scrollable content, sticky buttons ── */
+              <div className="flex flex-col bg-slate-50" style={{ maxHeight: "65vh" }}>
+                <div className="flex-1 overflow-y-auto p-7">
+                  <ExcelUpload onParsed={setParsedQs} />
+                </div>
+                <div className="shrink-0 flex justify-end gap-3 border-t border-slate-200 bg-white px-7 py-4">
                   <Button variant="outline" onClick={resetAndClose}>Done / Close</Button>
-                  <Button onClick={handleUpload} disabled={uploading || !parsedQs.length || parsedQs.some((q) => q.errors.length > 0)} className="bg-brand-blue text-white">
-                    {uploading && <Loader2 className="h-4 w-4 mr-1 animate-spin" />}<FileUp className="h-4 w-4 mr-1" />
+                  <Button
+                    onClick={() => handleUpload()}
+                    disabled={uploading || !parsedQs.length || parsedQs.some((q) => q.errors.length > 0)}
+                    className="bg-brand-blue text-white">
+                    {uploading && <Loader2 className="h-4 w-4 mr-1 animate-spin" />}
+                    <FileUp className="h-4 w-4 mr-1" />
                     Upload {parsedQs.length > 0 ? `(${parsedQs.length} Qs)` : ""}
                   </Button>
                 </div>
@@ -262,7 +337,385 @@ function TestsTab({ locale, showToast }: { locale: string; showToast: (m: string
           </Modal>
         )}
       </AnimatePresence>
+
+      {/* ── Reports modal ── */}
+      <AnimatePresence>
+        {reportTest && (
+          <ReportsModal test={reportTest} locale={locale} onClose={() => setReportTest(null)} />
+        )}
+      </AnimatePresence>
+
+      {/* ── Edit modal ── */}
+      <AnimatePresence>
+        {editTest && (
+          <EditTestModal
+            test={editTest}
+            onClose={() => { setEditTest(null); setParsedQs([]); loadTests(); }}
+            showToast={showToast}
+            parsedQs={parsedQs}
+            setParsedQs={setParsedQs}
+            onUpload={() => handleUpload(editTest.id)}
+            uploading={uploading}
+          />
+        )}
+      </AnimatePresence>
     </div>
+  );
+}
+
+// ── Edit Test Modal ────────────────────────────────────────────
+function EditTestModal({
+  test, onClose, showToast, parsedQs, setParsedQs, onUpload, uploading,
+}: {
+  test: TestRow;
+  onClose: () => void;
+  showToast: (m: string, ok: boolean) => void;
+  parsedQs: ParsedQuestion[];
+  setParsedQs: (q: ParsedQuestion[]) => void;
+  onUpload: () => void;
+  uploading: boolean;
+}) {
+  const [questions, setQuestions] = useState<QuestionRow[]>([]);
+  const [loadingQs, setLoadingQs] = useState(true);
+  const [expandedQ, setExpandedQ] = useState<string | null>(null);
+  const [showReupload, setShowReupload] = useState(false);
+  const [deletingQ, setDeletingQ] = useState<string | null>(null);
+
+  useEffect(() => {
+    fetch(`/api/admin/tests/${test.id}/questions`)
+      .then((r) => r.json())
+      .then(({ questions }) => { setQuestions(questions ?? []); setLoadingQs(false); });
+  }, [test.id]);
+
+  async function handleDeleteQuestion(qId: string) {
+    if (!confirm("Delete this question?")) return;
+    setDeletingQ(qId);
+    const res = await fetch(`/api/admin/tests/${test.id}/questions`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ questionId: qId, _delete: true }),
+    });
+    setDeletingQ(null);
+    if (res.ok) {
+      setQuestions((prev) => prev.filter((q) => q.id !== qId));
+      showToast("Question deleted", true);
+    } else {
+      showToast("Delete failed", false);
+    }
+  }
+
+  // Group by section
+  const bySection: Record<string, QuestionRow[]> = {};
+  for (const q of questions) {
+    const sec = q.test_sections?.name ?? "Unknown";
+    if (!bySection[sec]) bySection[sec] = [];
+    bySection[sec].push(q);
+  }
+
+  return (
+    <motion.div
+      initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+      className="fixed inset-0 z-[9998] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4"
+      onClick={onClose}>
+      <motion.div
+        initial={{ opacity: 0, scale: 0.96, y: 16 }} animate={{ opacity: 1, scale: 1, y: 0 }}
+        exit={{ opacity: 0, scale: 0.96, y: 16 }} transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
+        className="relative flex flex-col w-full max-w-4xl rounded-3xl shadow-2xl overflow-hidden"
+        style={{ maxHeight: "90vh" }}
+        onClick={(e) => e.stopPropagation()}>
+
+        {/* Header */}
+        <div className="shrink-0 bg-[#0B1C3D] px-7 py-5 flex items-center justify-between">
+          <div>
+            <p className="text-[10px] font-bold uppercase tracking-widest text-brand-gold/80">Edit Test</p>
+            <h2 className="text-lg font-bold text-white truncate max-w-md">{test.title}</h2>
+            <p className="text-xs text-white/50 mt-0.5">
+              {test.exam_type || "—"} · {test.total_duration_min}min · {questions.length} questions
+            </p>
+          </div>
+          <button onClick={onClose} className="flex h-9 w-9 items-center justify-center rounded-full text-white/50 hover:bg-white/10 hover:text-white">
+            <X className="h-5 w-5" />
+          </button>
+        </div>
+
+        {/* Re-upload section toggle */}
+        <div className="shrink-0 bg-[#0d2057] border-b border-white/10">
+          <button
+            onClick={() => setShowReupload((s) => !s)}
+            className="flex w-full items-center justify-between px-7 py-3 text-sm font-semibold text-white/80 hover:bg-white/5 transition-colors">
+            <span className="flex items-center gap-2">
+              <FileUp className="h-4 w-4 text-brand-gold" />
+              Re-upload Questions (replaces all existing)
+            </span>
+            {showReupload ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
+          </button>
+
+          <AnimatePresence>
+            {showReupload && (
+              <motion.div
+                initial={{ height: 0, opacity: 0 }} animate={{ height: "auto", opacity: 1 }}
+                exit={{ height: 0, opacity: 0 }} className="overflow-hidden">
+                <div className="bg-slate-50 px-7 py-5 max-h-72 overflow-y-auto">
+                  <ExcelUpload onParsed={setParsedQs} />
+                </div>
+                <div className="flex justify-end gap-3 border-t border-slate-200 bg-white px-7 py-4">
+                  <Button variant="outline" size="sm" onClick={() => { setShowReupload(false); setParsedQs([]); }}>Cancel</Button>
+                  <Button size="sm"
+                    onClick={() => { onUpload(); setShowReupload(false); setParsedQs([]); }}
+                    disabled={uploading || !parsedQs.length || parsedQs.some((q) => q.errors.length > 0)}
+                    className="bg-brand-blue text-white text-xs">
+                    {uploading && <Loader2 className="h-3.5 w-3.5 mr-1 animate-spin" />}
+                    <FileUp className="h-3.5 w-3.5 mr-1" />
+                    Upload {parsedQs.length > 0 ? `(${parsedQs.length} Qs)` : ""}
+                  </Button>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+
+        {/* Questions list */}
+        <div className="flex-1 overflow-y-auto bg-white">
+          {loadingQs ? (
+            <div className="py-16 text-center"><Loader2 className="mx-auto h-6 w-6 animate-spin text-slate-300" /></div>
+          ) : questions.length === 0 ? (
+            <div className="py-16 text-center text-slate-400 text-sm">No questions yet. Use Re-upload above to add questions.</div>
+          ) : (
+            <div>
+              {Object.entries(bySection).map(([secName, qs]) => (
+                <div key={secName}>
+                  <div className="sticky top-0 bg-slate-50 border-y border-slate-200 px-6 py-2 z-10">
+                    <span className="text-[10px] font-bold uppercase tracking-widest text-slate-500">{secName}</span>
+                    <span className="ml-2 text-[10px] text-slate-400">({qs.length} questions)</span>
+                  </div>
+                  {qs.map((q, idx) => (
+                    <div key={q.id} className="border-b border-slate-100 px-6 py-3 hover:bg-slate-50/60">
+                      <div className="flex items-start gap-3">
+                        <span className="shrink-0 text-[10px] font-mono text-slate-400 pt-0.5 w-6">{idx + 1}</span>
+                        <div className="flex-1 min-w-0">
+                          <p className="text-sm text-slate-800 leading-snug truncate">{q.question_en}</p>
+                          <div className="mt-1 flex flex-wrap gap-1.5">
+                            {(["a","b","c","d"] as const).map((opt) => {
+                              const text = q[`option_${opt}_en` as keyof QuestionRow] as string;
+                              const isCorrect = q.correct === opt;
+                              return (
+                                <span key={opt} className={cn(
+                                  "rounded-full px-2 py-0.5 text-[10px] font-semibold",
+                                  isCorrect ? "bg-green-100 text-green-700 ring-1 ring-green-300" : "bg-slate-100 text-slate-500"
+                                )}>
+                                  ({opt.toUpperCase()}) {text?.slice(0, 30)}{text?.length > 30 ? "…" : ""}
+                                </span>
+                              );
+                            })}
+                          </div>
+                          {q.question_hi && expandedQ === q.id && (
+                            <p className="mt-1.5 text-xs text-slate-500 italic">{q.question_hi}</p>
+                          )}
+                        </div>
+                        <div className="shrink-0 flex gap-1">
+                          <button
+                            onClick={() => setExpandedQ(expandedQ === q.id ? null : q.id)}
+                            className="rounded-lg p-1.5 text-slate-300 hover:bg-slate-100 hover:text-slate-600 transition-colors"
+                            title="Toggle Hindi">
+                            {expandedQ === q.id ? <ChevronUp className="h-3.5 w-3.5" /> : <ChevronDown className="h-3.5 w-3.5" />}
+                          </button>
+                          <button
+                            onClick={() => handleDeleteQuestion(q.id)}
+                            disabled={deletingQ === q.id}
+                            className="rounded-lg p-1.5 text-slate-300 hover:bg-red-50 hover:text-red-500 transition-colors"
+                            title="Delete question">
+                            {deletingQ === q.id ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Trash2 className="h-3.5 w-3.5" />}
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+
+        {/* Footer */}
+        <div className="shrink-0 flex justify-end gap-2 border-t border-slate-200 bg-white px-7 py-4">
+          <Button variant="outline" onClick={onClose}>Close</Button>
+        </div>
+      </motion.div>
+    </motion.div>
+  );
+}
+
+// ── Reports Modal ─────────────────────────────────────────────
+interface AttemptReport {
+  rank: number; attemptId: string; studentId: string;
+  name: string; email: string;
+  score: number; pct: number;
+  total_correct: number; total_wrong: number; total_skipped: number;
+  time_taken_sec: number | null; submitted_at: string | null; status: string;
+}
+interface ReportData {
+  test: { id: string; title: string; marks_per_q: number; total_duration_min: number };
+  maxMarks: number; totalQ: number;
+  attempts: AttemptReport[];
+  stats: { total: number; avgScore: number; highest: number; lowest: number; passing: number; passingPct: number } | null;
+}
+
+function ReportsModal({ test, locale, onClose }: { test: TestRow; locale: string; onClose: () => void }) {
+  const [data, setData] = useState<ReportData | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    fetch(`/api/admin/tests/${test.id}/attempts`)
+      .then((r) => r.json())
+      .then((json) => { setData(json); setLoading(false); })
+      .catch(() => { setError("Failed to load report"); setLoading(false); });
+  }, [test.id]);
+
+  function fmtTime(sec: number | null) {
+    if (!sec) return "—";
+    const m = Math.floor(sec / 60);
+    const s = sec % 60;
+    return `${m}m ${s}s`;
+  }
+
+  function fmtDate(iso: string | null) {
+    if (!iso) return "—";
+    return new Date(iso).toLocaleDateString("en-IN", { day: "2-digit", month: "short", year: "numeric" });
+  }
+
+  return (
+    <motion.div
+      initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+      className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4"
+      onClick={onClose}>
+      <motion.div
+        initial={{ opacity: 0, scale: 0.96, y: 16 }} animate={{ opacity: 1, scale: 1, y: 0 }}
+        exit={{ opacity: 0, scale: 0.96, y: 16 }} transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
+        className="relative flex flex-col w-full max-w-5xl rounded-3xl shadow-2xl overflow-hidden"
+        style={{ maxHeight: "92vh" }}
+        onClick={(e) => e.stopPropagation()}>
+
+        {/* Header */}
+        <div className="shrink-0 bg-[#0B1C3D] px-7 py-5 flex items-center justify-between">
+          <div>
+            <p className="text-[10px] font-bold uppercase tracking-widest text-purple-300/80">Test Report</p>
+            <h2 className="text-lg font-bold text-white truncate max-w-xl">{test.title}</h2>
+            <p className="text-xs text-white/50 mt-0.5">{test.exam_type || "—"} · {test.total_duration_min} min</p>
+          </div>
+          <button onClick={onClose} className="flex h-9 w-9 items-center justify-center rounded-full text-white/50 hover:bg-white/10 hover:text-white">
+            <X className="h-5 w-5" />
+          </button>
+        </div>
+
+        {/* Body */}
+        <div className="flex-1 overflow-y-auto bg-white">
+          {loading && (
+            <div className="py-24 text-center"><Loader2 className="mx-auto h-7 w-7 animate-spin text-slate-300" /></div>
+          )}
+          {error && (
+            <div className="py-24 text-center text-red-500 text-sm">{error}</div>
+          )}
+          {!loading && !error && data && (
+            <div className="p-6">
+              {/* Summary Stats */}
+              {data.stats ? (
+                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 mb-6">
+                  {[
+                    { icon: Users, label: "Total Attempts", value: data.stats.total, color: "text-blue-600" },
+                    { icon: Trophy, label: "Highest Score", value: data.stats.highest, color: "text-amber-500" },
+                    { icon: BarChart2, label: "Avg Score", value: data.stats.avgScore, color: "text-purple-600" },
+                    { icon: BarChart2, label: "Lowest Score", value: data.stats.lowest, color: "text-red-500" },
+                    { icon: CheckCircle2, label: "Passing (≥33%)", value: data.stats.passing, color: "text-green-600" },
+                    { icon: Trophy, label: "Pass Rate", value: `${data.stats.passingPct}%`, color: "text-green-600" },
+                  ].map(({ icon: Icon, label, value, color }) => (
+                    <div key={label} className="rounded-2xl border border-slate-200 bg-slate-50 p-4 text-center">
+                      <Icon className={cn("mx-auto mb-1.5 h-5 w-5", color)} />
+                      <div className={cn("text-xl font-extrabold", color)}>{value}</div>
+                      <div className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider mt-0.5">{label}</div>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="mb-6 rounded-2xl border border-slate-200 bg-slate-50 py-12 text-center text-slate-400 text-sm">
+                  No attempts yet for this test.
+                </div>
+              )}
+
+              {/* Attempts Table */}
+              {data.attempts.length > 0 && (
+                <div className="overflow-x-auto rounded-2xl border border-slate-200">
+                  <table className="w-full text-sm">
+                    <thead>
+                      <tr className="bg-slate-50 border-b border-slate-200">
+                        <th className="px-4 py-3 text-left text-[11px] font-bold uppercase tracking-wider text-slate-500">Rank</th>
+                        <th className="px-4 py-3 text-left text-[11px] font-bold uppercase tracking-wider text-slate-500">Student</th>
+                        <th className="px-4 py-3 text-left text-[11px] font-bold uppercase tracking-wider text-slate-500">Email</th>
+                        <th className="px-4 py-3 text-right text-[11px] font-bold uppercase tracking-wider text-slate-500">Score</th>
+                        <th className="px-4 py-3 text-right text-[11px] font-bold uppercase tracking-wider text-slate-500">%</th>
+                        <th className="px-4 py-3 text-center text-[11px] font-bold uppercase tracking-wider text-slate-500">✓ / ✗ / —</th>
+                        <th className="px-4 py-3 text-right text-[11px] font-bold uppercase tracking-wider text-slate-500">Time</th>
+                        <th className="px-4 py-3 text-right text-[11px] font-bold uppercase tracking-wider text-slate-500">Date</th>
+                        <th className="px-4 py-3 text-center text-[11px] font-bold uppercase tracking-wider text-slate-500">Analysis</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {data.attempts.map((a, idx) => {
+                        const rowBg = idx % 2 === 0 ? "bg-white" : "bg-slate-50/50";
+                        const pctColor = a.pct >= 60 ? "text-green-600" : a.pct >= 33 ? "text-amber-600" : "text-red-500";
+                        const rankBadge = a.rank === 1 ? "🥇" : a.rank === 2 ? "🥈" : a.rank === 3 ? "🥉" : `#${a.rank}`;
+                        return (
+                          <tr key={a.attemptId} className={cn("border-b border-slate-100 hover:bg-blue-50/30 transition-colors", rowBg)}>
+                            <td className="px-4 py-3 font-bold text-slate-500 text-center">{rankBadge}</td>
+                            <td className="px-4 py-3">
+                              <span className="font-semibold text-slate-800">{a.name}</span>
+                            </td>
+                            <td className="px-4 py-3 text-xs text-slate-400 max-w-[160px] truncate">{a.email}</td>
+                            <td className="px-4 py-3 text-right font-bold text-slate-800">
+                              {a.score}<span className="text-[10px] text-slate-400 font-normal">/{data.maxMarks}</span>
+                            </td>
+                            <td className={cn("px-4 py-3 text-right font-bold", pctColor)}>{a.pct}%</td>
+                            <td className="px-4 py-3 text-center text-xs whitespace-nowrap">
+                              <span className="text-green-600 font-semibold">{a.total_correct}</span>
+                              <span className="text-slate-300 mx-0.5">/</span>
+                              <span className="text-red-500 font-semibold">{a.total_wrong}</span>
+                              <span className="text-slate-300 mx-0.5">/</span>
+                              <span className="text-slate-400">{a.total_skipped}</span>
+                            </td>
+                            <td className="px-4 py-3 text-right text-xs text-slate-500 whitespace-nowrap">
+                              <Clock className="inline h-3 w-3 mr-0.5 text-slate-300" />
+                              {fmtTime(a.time_taken_sec)}
+                            </td>
+                            <td className="px-4 py-3 text-right text-xs text-slate-400 whitespace-nowrap">{fmtDate(a.submitted_at)}</td>
+                            <td className="px-4 py-3 text-center">
+                              <a
+                                href={`/${locale}/tests/${test.id}/result/${a.attemptId}`}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="inline-flex items-center gap-1 rounded-lg bg-purple-100 px-2.5 py-1 text-[10px] font-bold text-purple-700 hover:bg-purple-200 transition-colors">
+                                View ↗
+                              </a>
+                            </td>
+                          </tr>
+                        );
+                      })}
+                    </tbody>
+                  </table>
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+
+        {/* Footer */}
+        <div className="shrink-0 flex justify-between items-center border-t border-slate-200 bg-white px-7 py-4">
+          <p className="text-xs text-slate-400">
+            {data?.attempts.length ? `${data.attempts.length} student${data.attempts.length !== 1 ? "s" : ""} attempted this test` : ""}
+          </p>
+          <Button variant="outline" onClick={onClose}>Close</Button>
+        </div>
+      </motion.div>
+    </motion.div>
   );
 }
 
@@ -349,7 +802,6 @@ function CurrentAffairsTab({ showToast }: { showToast: (m: string, ok: boolean) 
           ))}</div>}
       </div>
 
-      {/* Add Article Modal */}
       <AnimatePresence>
         {showCreate && (
           <Modal onClose={resetForm} title="Add Current Affairs Article" step={1} totalSteps={1}>
@@ -374,13 +826,13 @@ function CurrentAffairsTab({ showToast }: { showToast: (m: string, ok: boolean) 
                 </Field>
               </div>
               <Field label="Excerpt / Summary (English) *">
-                <textarea required rows={2} className={inputCls} placeholder="Brief summary of the article..." value={form.excerpt} onChange={(e) => setForm({ ...form, excerpt: e.target.value })} />
+                <textarea required rows={2} className={inputCls} placeholder="Brief summary..." value={form.excerpt} onChange={(e) => setForm({ ...form, excerpt: e.target.value })} />
               </Field>
               <Field label="Excerpt (Hindi) — optional">
                 <textarea rows={2} className={inputCls} placeholder="हिंदी में सारांश..." value={form.excerpt_hi} onChange={(e) => setForm({ ...form, excerpt_hi: e.target.value })} />
               </Field>
               <Field label="Full Article Body (English)">
-                <textarea rows={6} className={inputCls} placeholder="Write the full article here. Press Enter for new paragraphs." value={form.body} onChange={(e) => setForm({ ...form, body: e.target.value })} />
+                <textarea rows={6} className={inputCls} placeholder="Write the full article here..." value={form.body} onChange={(e) => setForm({ ...form, body: e.target.value })} />
               </Field>
               <Field label="Full Article (Hindi) — optional">
                 <textarea rows={4} className={inputCls} placeholder="हिंदी में पूरा लेख..." value={form.body_hi} onChange={(e) => setForm({ ...form, body_hi: e.target.value })} />
@@ -400,13 +852,15 @@ function CurrentAffairsTab({ showToast }: { showToast: (m: string, ok: boolean) 
                 <div className="flex flex-wrap gap-2 mt-1">
                   {GS_OPTIONS.map((gs) => (
                     <button type="button" key={gs} onClick={() => toggleGS(gs)}
-                      className={cn("rounded-full border px-3 py-1 text-xs font-bold transition-all", form.gs_relevance.includes(gs) ? "bg-brand-gold border-brand-gold text-brand-blue" : "border-white/20 text-white/60 hover:border-white/40")}>
+                      className={cn("rounded-full border px-3 py-1 text-xs font-bold transition-all",
+                        form.gs_relevance.includes(gs) ? "bg-brand-gold border-brand-gold text-brand-blue" : "border-white/20 text-white/60 hover:border-white/40")}>
                       {gs}
                     </button>
                   ))}
                 </div>
               </Field>
-              <label className={cn("flex cursor-pointer items-center gap-3 rounded-xl border px-4 py-3 transition-all", form.is_important ? "border-amber-500/50 bg-amber-500/10 text-amber-400" : "border-white/10 bg-white/5 text-white/60")}>
+              <label className={cn("flex cursor-pointer items-center gap-3 rounded-xl border px-4 py-3 transition-all",
+                form.is_important ? "border-amber-500/50 bg-amber-500/10 text-amber-400" : "border-white/10 bg-white/5 text-white/60")}>
                 <input type="checkbox" checked={form.is_important} onChange={(e) => setForm({ ...form, is_important: e.target.checked })} className="h-4 w-4 accent-amber-400" />
                 <Star className="h-4 w-4" />
                 <span className="text-sm font-medium">Mark as Important</span>
@@ -499,7 +953,6 @@ function MagazineTab({ showToast }: { showToast: (m: string, ok: boolean) => voi
           ))}</div>}
       </div>
 
-      {/* Upload Modal */}
       <AnimatePresence>
         {showCreate && (
           <Modal onClose={resetForm} title="Upload Magazine Issue" step={1} totalSteps={1}>
@@ -521,7 +974,7 @@ function MagazineTab({ showToast }: { showToast: (m: string, ok: boolean) => voi
                 <input required className={inputCls} placeholder="https://drive.google.com/..." value={form.pdf_url} onChange={(e) => setForm({ ...form, pdf_url: e.target.value })} />
               </Field>
               <Field label="Cover Image URL — optional">
-                <input className={inputCls} placeholder="https://... (upload image and paste link)" value={form.cover_image_url} onChange={(e) => setForm({ ...form, cover_image_url: e.target.value })} />
+                <input className={inputCls} placeholder="https://..." value={form.cover_image_url} onChange={(e) => setForm({ ...form, cover_image_url: e.target.value })} />
               </Field>
               <Field label="Description — optional">
                 <textarea rows={2} className={inputCls} placeholder="Brief description of this issue..." value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} />
@@ -534,7 +987,8 @@ function MagazineTab({ showToast }: { showToast: (m: string, ok: boolean) => voi
                   <input type="number" className={inputCls} placeholder="120" value={form.page_count} onChange={(e) => setForm({ ...form, page_count: e.target.value })} />
                 </Field>
               </div>
-              <label className={cn("flex cursor-pointer items-center gap-3 rounded-xl border px-4 py-3 transition-all", form.is_free ? "border-green-500/50 bg-green-500/10 text-green-400" : "border-white/10 bg-white/5 text-white/60")}>
+              <label className={cn("flex cursor-pointer items-center gap-3 rounded-xl border px-4 py-3 transition-all",
+                form.is_free ? "border-green-500/50 bg-green-500/10 text-green-400" : "border-white/10 bg-white/5 text-white/60")}>
                 <input type="checkbox" checked={form.is_free} onChange={(e) => setForm({ ...form, is_free: e.target.checked })} className="h-4 w-4 accent-green-400" />
                 <span className="text-sm font-medium">Free Download (anyone can download)</span>
               </label>
@@ -548,49 +1002,47 @@ function MagazineTab({ showToast }: { showToast: (m: string, ok: boolean) => voi
 }
 
 // ══════════════════════════════════════════════════════════════
-// Shared UI Components
+// Shared UI
 // ══════════════════════════════════════════════════════════════
 function Modal({ children, onClose, title, step, totalSteps = 2 }: {
   children: React.ReactNode; onClose: () => void;
   title: string; step: number; totalSteps?: number;
 }) {
   return (
-    <>
-      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.2 }}
-        className="fixed inset-0 z-[9998] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4"
-        onClick={onClose}>
-        <motion.div initial={{ opacity: 0, scale: 0.96, y: 16 }} animate={{ opacity: 1, scale: 1, y: 0 }}
-          exit={{ opacity: 0, scale: 0.96, y: 16 }} transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
-          className="relative w-full max-w-2xl overflow-hidden rounded-3xl shadow-2xl"
-          onClick={(e) => e.stopPropagation()}>
-          <div className="bg-[#0B1C3D] px-7 py-5 flex items-center justify-between">
-            <div>
-              <div className="flex items-center gap-2 mb-0.5">
-                <span className="h-1.5 w-1.5 rounded-full bg-brand-gold" />
-                <span className="text-[10px] font-bold uppercase tracking-widest text-brand-gold/80">
-                  {totalSteps > 1 ? `Step ${step} of ${totalSteps}` : "Admin Panel"}
-                </span>
-              </div>
-              <h2 className="text-lg font-bold text-white">{title}</h2>
+    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.2 }}
+      className="fixed inset-0 z-[9998] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4"
+      onClick={onClose}>
+      <motion.div initial={{ opacity: 0, scale: 0.96, y: 16 }} animate={{ opacity: 1, scale: 1, y: 0 }}
+        exit={{ opacity: 0, scale: 0.96, y: 16 }} transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
+        className="relative w-full max-w-2xl overflow-hidden rounded-3xl shadow-2xl"
+        onClick={(e) => e.stopPropagation()}>
+        <div className="bg-[#0B1C3D] px-7 py-5 flex items-center justify-between">
+          <div>
+            <div className="flex items-center gap-2 mb-0.5">
+              <span className="h-1.5 w-1.5 rounded-full bg-brand-gold" />
+              <span className="text-[10px] font-bold uppercase tracking-widest text-brand-gold/80">
+                {totalSteps > 1 ? `Step ${step} of ${totalSteps}` : "Admin Panel"}
+              </span>
             </div>
-            <button onClick={onClose} className="flex h-9 w-9 items-center justify-center rounded-full text-white/50 hover:bg-white/10 hover:text-white">
-              <X className="h-5 w-5" />
-            </button>
+            <h2 className="text-lg font-bold text-white">{title}</h2>
           </div>
-          {totalSteps > 1 && (
-            <div className="flex bg-[#0d2050]">
-              {["Test Details", "Upload Questions"].map((label, idx) => (
-                <div key={label} className={cn("flex-1 py-2.5 text-center text-[11px] font-bold uppercase tracking-wider transition-colors",
-                  idx + 1 === step ? "border-b-2 border-brand-gold text-brand-gold" : "text-slate-500")}>
-                  {label}
-                </div>
-              ))}
-            </div>
-          )}
-          <div className="bg-[#0f2257]">{children}</div>
-        </motion.div>
+          <button onClick={onClose} className="flex h-9 w-9 items-center justify-center rounded-full text-white/50 hover:bg-white/10 hover:text-white">
+            <X className="h-5 w-5" />
+          </button>
+        </div>
+        {totalSteps > 1 && (
+          <div className="flex bg-[#0d2050]">
+            {["Test Details", "Upload Questions"].map((label, idx) => (
+              <div key={label} className={cn("flex-1 py-2.5 text-center text-[11px] font-bold uppercase tracking-wider transition-colors",
+                idx + 1 === step ? "border-b-2 border-brand-gold text-brand-gold" : "text-slate-500")}>
+                {label}
+              </div>
+            ))}
+          </div>
+        )}
+        <div className="bg-[#0f2257]">{children}</div>
       </motion.div>
-    </>
+    </motion.div>
   );
 }
 

@@ -139,9 +139,19 @@ export async function PATCH(request: NextRequest, { params }: { params: { id: st
   if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
   const body = await request.json();
-  const { questionId, ...updates } = body;
+  const { questionId, _delete, ...updates } = body;
 
   if (!questionId) return NextResponse.json({ error: 'questionId required' }, { status: 400 });
+
+  if (_delete) {
+    const { error } = await supabase
+      .from('questions')
+      .delete()
+      .eq('id', questionId)
+      .eq('test_id', params.id);
+    if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+    return NextResponse.json({ ok: true });
+  }
 
   const { error } = await supabase
     .from('questions')

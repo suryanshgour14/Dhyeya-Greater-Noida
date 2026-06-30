@@ -6,6 +6,7 @@ import { motion } from "framer-motion";
 import { Clock, Users, ChevronRight, Home, Calendar } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { Course } from "@/lib/constants";
+import BuyButton from "@/components/payments/BuyButton";
 
 const unified = {
   section:       "bg-gradient-to-br from-white via-slate-50/60 to-blue-50/25",
@@ -40,7 +41,14 @@ const themes = {
   orange: unified,
 };
 
-export default function CourseHero({ course }: { course: Course }) {
+interface CourseHeroProps {
+  course: Course;
+  productId?: string;
+  isEnrolled?: boolean;
+  courseSlug?: string;
+}
+
+export default function CourseHero({ course, productId, isEnrolled = false, courseSlug }: CourseHeroProps) {
   const locale = useLocale();
   const t = themes[course.accentColor];
 
@@ -130,9 +138,22 @@ export default function CourseHero({ course }: { course: Course }) {
 
             {/* Mobile CTA */}
             <div className="mt-7 flex gap-3 lg:hidden">
-              <a href="#enroll" className={cn("flex-1 rounded-xl px-5 py-3 text-center text-sm font-bold transition-colors", t.mobEnroll)}>
-                Enroll Now
-              </a>
+              {productId ? (
+                <BuyButton
+                  productId={productId}
+                  isEnrolled={isEnrolled}
+                  redirectTo="/courses"
+                  label="Enroll Now"
+                  enrolledLabel="Go to Courses"
+                  size="lg"
+                  variant="navy"
+                  className="flex-1 justify-center"
+                />
+              ) : (
+                <a href="#enquiry" className={cn("flex-1 rounded-xl px-5 py-3 text-center text-sm font-bold transition-colors", t.mobEnroll)}>
+                  Enquire Now
+                </a>
+              )}
               <a href="#overview" className={cn("flex-1 rounded-xl px-5 py-3 text-center text-sm font-semibold transition-colors", t.mobLearn)}>
                 Learn More
               </a>
@@ -172,12 +193,25 @@ export default function CourseHero({ course }: { course: Course }) {
 
             {/* CTA buttons */}
             <div className="space-y-2.5 px-4 pb-5">
-              <a
-                href="#enroll"
-                className={cn("flex w-full items-center justify-center rounded-xl py-3 text-sm font-bold transition-all duration-200", t.btnEnroll)}
-              >
-                Enroll Now
-              </a>
+              {productId ? (
+                <BuyButton
+                  productId={productId}
+                  isEnrolled={isEnrolled}
+                  redirectTo="/courses"
+                  label="Enroll Now"
+                  enrolledLabel="Go to Courses"
+                  size="lg"
+                  variant="navy"
+                  className="w-full justify-center"
+                />
+              ) : (
+                <a
+                  href="#enquiry"
+                  className={cn("flex w-full items-center justify-center rounded-xl py-3 text-sm font-bold transition-all duration-200", t.btnEnroll)}
+                >
+                  Enroll Now
+                </a>
+              )}
               <a
                 href="#enquiry"
                 className={cn("flex w-full items-center justify-center rounded-xl border py-3 text-sm font-semibold transition-colors", t.btnEnquire)}
