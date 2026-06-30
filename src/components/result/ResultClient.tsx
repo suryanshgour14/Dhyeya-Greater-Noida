@@ -6,10 +6,19 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { Trophy, Clock, TrendingUp, ChevronRight, CheckCircle2, XCircle, MinusCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
+import dynamic from "next/dynamic";
 
-import {
-  PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer,
-} from "recharts";
+const ChartFallback = <div className="h-[220px] animate-pulse rounded-xl bg-slate-100" />;
+
+const DonutChart = dynamic(
+  () => import("./ResultCharts").then((m) => ({ default: m.DonutChartInner })),
+  { ssr: false, loading: () => ChartFallback }
+);
+
+const AccuracyBar = dynamic(
+  () => import("./ResultCharts").then((m) => ({ default: m.AccuracyBarInner })),
+  { ssr: false, loading: () => ChartFallback }
+);
 
 interface SectionBreakdown {
   name: string;
@@ -162,16 +171,7 @@ export default function ResultClient({ attempt, test, sectionBreakdown, review, 
           {/* Donut */}
           <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
             <p className="mb-3 text-sm font-bold text-slate-700">Score Breakdown</p>
-            <ResponsiveContainer width="100%" height={220}>
-              <PieChart>
-                <Pie data={donutData} cx="50%" cy="50%" innerRadius={55} outerRadius={85} dataKey="value" paddingAngle={3}>
-                  {donutData.map((_, i) => (
-                    <Cell key={i} fill={DONUT_COLORS[i]} />
-                  ))}
-                </Pie>
-                <Tooltip formatter={(v, n) => [`${v}`, n as string]} />
-              </PieChart>
-            </ResponsiveContainer>
+            <DonutChart data={donutData} />
             <div className="mt-2 flex justify-center gap-4 text-xs">
               {donutData.map((d, i) => (
                 <span key={d.name} className="flex items-center gap-1">
@@ -185,14 +185,7 @@ export default function ResultClient({ attempt, test, sectionBreakdown, review, 
           {/* Section-wise bar */}
           <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
             <p className="mb-3 text-sm font-bold text-slate-700">Section-wise Accuracy (%)</p>
-            <ResponsiveContainer width="100%" height={220}>
-              <BarChart data={barData} margin={{ top: 4, right: 8, left: -20, bottom: 0 }}>
-                <XAxis dataKey="name" tick={{ fontSize: 10 }} />
-                <YAxis domain={[0, 100]} tick={{ fontSize: 10 }} />
-                <Tooltip formatter={(v) => [`${v}%`, "Accuracy"]} />
-                <Bar dataKey="Accuracy" fill="#3b82f6" radius={[4, 4, 0, 0]} />
-              </BarChart>
-            </ResponsiveContainer>
+            <AccuracyBar data={barData} />
           </div>
         </div>
 
