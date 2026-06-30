@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { createPortal } from "react-dom";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useLocale } from "next-intl";
@@ -45,6 +46,9 @@ export default function ProfileSidebar({ user }: Props) {
   const [isAdmin, setIsAdmin] = useState(false);
   const supabase = createClient();
 
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => { setMounted(true); }, []);
+
   const name = (user.user_metadata?.name as string) || user.email?.split("@")[0] || "Aspirant";
   const firstName = name.split(" ")[0];
   const initial = firstName.charAt(0).toUpperCase();
@@ -85,15 +89,15 @@ export default function ProfileSidebar({ user }: Props) {
       </button>
 
       <AnimatePresence>
-        {open && (
+        {open && mounted && createPortal(
           <>
-            {/* Backdrop */}
+            {/* Backdrop — portalled to body so it's above the ticker's stacking context */}
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.2 }}
-              className="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm"
+              className="fixed inset-0 z-[9998] bg-black/40 backdrop-blur-sm"
               onClick={() => setOpen(false)}
             />
 
@@ -103,7 +107,7 @@ export default function ProfileSidebar({ user }: Props) {
               animate={{ x: 0 }}
               exit={{ x: "100%" }}
               transition={{ duration: 0.35, ease: EASE }}
-              className="fixed right-0 top-0 z-50 flex h-full w-[320px] flex-col bg-white shadow-2xl"
+              className="fixed right-0 top-0 z-[9999] flex h-screen w-[320px] flex-col bg-white shadow-2xl"
             >
               {/* Header */}
               <div className="flex items-center justify-between border-b bg-brand-blue px-5 py-4">
@@ -247,7 +251,8 @@ export default function ProfileSidebar({ user }: Props) {
                 </button>
               </div>
             </motion.div>
-          </>
+          </>,
+          document.body
         )}
       </AnimatePresence>
     </>
