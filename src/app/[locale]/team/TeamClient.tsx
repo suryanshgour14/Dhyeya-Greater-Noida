@@ -330,15 +330,6 @@ const ADMIN_TEAM = [
     quote:
       "Success in UPSC is built on consistency, the right environment, and knowing that someone genuinely believes in you. I am here to make sure you never feel alone in this pursuit.",
   },
-  {
-    name: "Arif Ghauri Sir",
-    role: "Mentor",
-    tag: "Ex-IRS",
-    image:
-      "https://res.cloudinary.com/dl9t48lyt/image/upload/v1782416653/WhatsApp_Image_2026-04-19_at_20.43.16_gmfgu8.jpg",
-    quote:
-      "The civil services path is demanding by design — it selects those with resilience, character, and true purpose. I have walked this road. I am here to illuminate yours.",
-  },
 ];
 
 const TEAM_PHOTOS = [
