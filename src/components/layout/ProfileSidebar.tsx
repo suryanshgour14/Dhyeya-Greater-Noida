@@ -88,10 +88,11 @@ export default function ProfileSidebar({ user }: Props) {
         <span className="hidden text-xs font-semibold text-brand-blue sm:block">{firstName}</span>
       </button>
 
-      <AnimatePresence>
-        {open && mounted && createPortal(
+      {mounted && createPortal(
+        <AnimatePresence>
+          {open && (
           <>
-            {/* Backdrop — portalled to body so it's above the ticker's stacking context */}
+            {/* Backdrop */}
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -251,10 +252,11 @@ export default function ProfileSidebar({ user }: Props) {
                 </button>
               </div>
             </motion.div>
-          </>,
-          document.body
-        )}
-      </AnimatePresence>
+          </>
+          )}
+        </AnimatePresence>,
+        document.body
+      )}
     </>
   );
 }
