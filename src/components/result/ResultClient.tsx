@@ -1,27 +1,53 @@
 "use client";
 
 import { useLocale } from "next-intl";
-import { useState, lazy, Suspense } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { Trophy, Clock, TrendingUp, ChevronRight, CheckCircle2, XCircle, MinusCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
+import dynamic from "next/dynamic";
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
-// Lazy-load recharts to keep the initial bundle small. recharts v2's per-export
-// types don't play well with React.lazy, so these chart components are loosely
-// typed (`any`) — purely a typing convenience, no runtime effect.
-const importRecharts = () => import("recharts") as Promise<any>;
-const PieChart: any = lazy(() => importRecharts().then((m) => ({ default: m.PieChart })));
-const Pie: any = lazy(() => importRecharts().then((m) => ({ default: m.Pie })));
-const Cell: any = lazy(() => importRecharts().then((m) => ({ default: m.Cell })));
-const BarChart: any = lazy(() => importRecharts().then((m) => ({ default: m.BarChart })));
-const Bar: any = lazy(() => importRecharts().then((m) => ({ default: m.Bar })));
-const XAxis: any = lazy(() => importRecharts().then((m) => ({ default: m.XAxis })));
-const YAxis: any = lazy(() => importRecharts().then((m) => ({ default: m.YAxis })));
-const Tooltip: any = lazy(() => importRecharts().then((m) => ({ default: m.Tooltip })));
-const ResponsiveContainer: any = lazy(() => importRecharts().then((m) => ({ default: m.ResponsiveContainer })));
-/* eslint-enable @typescript-eslint/no-explicit-any */
+const DONUT_COLORS_CONST = ["#22c55e", "#ef4444", "#94a3b8"];
+
+// Each chart is one dynamic import so Recharts context is never split across lazy boundaries.
+const DonutChart = dynamic(
+  () => import("recharts").then((rc) => {
+    function Chart({ data }: { data: Array<{ name: string; value: number }> }) {
+      return (
+        <rc.ResponsiveContainer width="100%" height={220}>
+          <rc.PieChart>
+            <rc.Pie data={data} cx="50%" cy="50%" innerRadius={55} outerRadius={85} dataKey="value" paddingAngle={3}>
+              {data.map((_: unknown, i: number) => <rc.Cell key={i} fill={DONUT_COLORS_CONST[i]} />)}
+            </rc.Pie>
+            <rc.Tooltip formatter={(v: unknown, n: unknown) => [`${v}`, `${n}`]} />
+          </rc.PieChart>
+        </rc.ResponsiveContainer>
+      );
+    }
+    return { default: Chart };
+  }),
+  { ssr: false, loading: () => <div className="h-[220px] animate-pulse rounded-xl bg-slate-100" /> }
+);
+
+const AccuracyBar = dynamic(
+  () => import("recharts").then((rc) => {
+    function Chart({ data }: { data: Array<{ name: string; Accuracy: number }> }) {
+      return (
+        <rc.ResponsiveContainer width="100%" height={220}>
+          <rc.BarChart data={data} margin={{ top: 4, right: 8, left: -20, bottom: 0 }}>
+            <rc.XAxis dataKey="name" tick={{ fontSize: 10 }} />
+            <rc.YAxis domain={[0, 100]} tick={{ fontSize: 10 }} />
+            <rc.Tooltip formatter={(v: unknown) => [`${v}%`, "Accuracy"]} />
+            <rc.Bar dataKey="Accuracy" fill="#3b82f6" radius={[4, 4, 0, 0]} />
+          </rc.BarChart>
+        </rc.ResponsiveContainer>
+      );
+    }
+    return { default: Chart };
+  }),
+  { ssr: false, loading: () => <div className="h-[220px] animate-pulse rounded-xl bg-slate-100" /> }
+);
 
 interface SectionBreakdown {
   name: string;
@@ -81,7 +107,7 @@ function fmtTime(sec: number) {
   return `${m}m ${s}s`;
 }
 
-const DONUT_COLORS = ["#22c55e", "#ef4444", "#94a3b8"];
+const DONUT_COLORS = DONUT_COLORS_CONST;
 
 export default function ResultClient({ attempt, test, sectionBreakdown, review, rank, percentile, totalTakers }: Props) {
   const locale = useLocale();
@@ -174,18 +200,7 @@ export default function ResultClient({ attempt, test, sectionBreakdown, review, 
           {/* Donut */}
           <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
             <p className="mb-3 text-sm font-bold text-slate-700">Score Breakdown</p>
-            <Suspense fallback={<div className="h-[200px] animate-pulse rounded-xl bg-slate-100" />}>
-              <ResponsiveContainer width="100%" height={220}>
-                <PieChart>
-                  <Pie data={donutData} cx="50%" cy="50%" innerRadius={55} outerRadius={85} dataKey="value" paddingAngle={3}>
-                    {donutData.map((_, i) => (
-                      <Cell key={i} fill={DONUT_COLORS[i]} />
-                    ))}
-                  </Pie>
-                  <Tooltip formatter={(v: number, n: string) => [`${v}`, n]} />
-                </PieChart>
-              </ResponsiveContainer>
-            </Suspense>
+            <DonutChart data={donutData} />
             <div className="mt-2 flex justify-center gap-4 text-xs">
               {donutData.map((d, i) => (
                 <span key={d.name} className="flex items-center gap-1">
@@ -199,16 +214,7 @@ export default function ResultClient({ attempt, test, sectionBreakdown, review, 
           {/* Section-wise bar */}
           <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
             <p className="mb-3 text-sm font-bold text-slate-700">Section-wise Accuracy (%)</p>
-            <Suspense fallback={<div className="h-[200px] animate-pulse rounded-xl bg-slate-100" />}>
-              <ResponsiveContainer width="100%" height={220}>
-                <BarChart data={barData} margin={{ top: 4, right: 8, left: -20, bottom: 0 }}>
-                  <XAxis dataKey="name" tick={{ fontSize: 10 }} />
-                  <YAxis domain={[0, 100]} tick={{ fontSize: 10 }} />
-                  <Tooltip formatter={(v: number) => [`${v}%`, "Accuracy"]} />
-                  <Bar dataKey="Accuracy" fill="#3b82f6" radius={[4, 4, 0, 0]} />
-                </BarChart>
-              </ResponsiveContainer>
-            </Suspense>
+            <AccuracyBar data={barData} />
           </div>
         </div>
 
