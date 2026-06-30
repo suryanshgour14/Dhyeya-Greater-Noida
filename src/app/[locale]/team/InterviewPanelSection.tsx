@@ -34,6 +34,11 @@ const PANELISTS = [
     image: "https://www.dhyeyaias.com/storage/media/8_team.jpg",
   },
   {
+    name: "Mr. Vikram Singh",
+    designation: "Retd. IPS – Ex. DGP (UP)",
+    image: "https://www.dhyeyaias.com/storage/media/9_team.jpg",
+  },
+  {
     name: "Mr. A. H. K. Ghauri",
     designation: "Retd. IRS – Ex. Governance Advisor, British High Commission",
     image: "https://www.dhyeyaias.com/storage/media/10_team.jpg",
