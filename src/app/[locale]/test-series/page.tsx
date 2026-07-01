@@ -11,8 +11,8 @@ export const metadata: Metadata = {
 
 const themes = {
   blue:   { bar: "bg-gradient-to-r from-brand-blue to-blue-400", btn: "bg-brand-blue hover:bg-brand-blue/90 text-white", badge: "bg-blue-50 text-brand-blue" },
-  gold:   { bar: "bg-gradient-to-r from-amber-500 to-yellow-400", btn: "bg-amber-600 hover:bg-amber-700 text-white",    badge: "bg-amber-50 text-amber-700" },
-  orange: { bar: "bg-gradient-to-r from-brand-orange to-orange-400", btn: "bg-brand-orange hover:bg-brand-orange/90 text-white", badge: "bg-orange-50 text-orange-700" },
+  gold:   { bar: "bg-gradient-to-r from-brand-blue to-blue-400", btn: "bg-brand-blue hover:bg-brand-blue/90 text-white", badge: "bg-blue-50 text-brand-blue" },
+  orange: { bar: "bg-gradient-to-r from-brand-blue to-blue-400", btn: "bg-brand-blue hover:bg-brand-blue/90 text-white", badge: "bg-blue-50 text-brand-blue" },
 };
 
 interface Props {

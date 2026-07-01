@@ -20,28 +20,28 @@ const themes = {
     dot: "bg-brand-blue",
   },
   gold: {
-    sectionHeader: "bg-amber-50 border-amber-200/50 text-amber-700",
+    sectionHeader: "bg-brand-blue/5 border-brand-blue/15 text-brand-blue",
     badge: (type: string) => {
-      if (type.includes("Full Length") || type.includes("FLT")) return "bg-amber-600 text-white";
-      if (type.includes("CSAT")) return "bg-amber-100 text-amber-700";
-      if (type.includes("UK Special") || type.includes("UP Special")) return "bg-orange-100 text-orange-700";
+      if (type.includes("Full Length") || type.includes("FLT")) return "bg-brand-blue text-white";
+      if (type.includes("CSAT")) return "bg-blue-100 text-blue-700";
+      if (type.includes("UK Special") || type.includes("UP Special")) return "bg-sky-100 text-sky-700";
       if (type.includes("Strategy")) return "bg-slate-100 text-slate-500";
-      return "bg-amber-50 text-amber-700 border border-amber-200";
+      return "bg-blue-50 text-brand-blue border border-blue-100";
     },
-    rowHover: "hover:bg-amber-50/40",
-    dot: "bg-amber-600",
+    rowHover: "hover:bg-blue-50/40",
+    dot: "bg-brand-blue",
   },
   orange: {
-    sectionHeader: "bg-orange-50 border-orange-200/50 text-orange-700",
+    sectionHeader: "bg-brand-blue/5 border-brand-blue/15 text-brand-blue",
     badge: (type: string) => {
-      if (type.includes("Full Length") || type.includes("FLT")) return "bg-brand-orange text-white";
-      if (type.includes("CSAT")) return "bg-orange-100 text-orange-700";
-      if (type.includes("UK Special") || type.includes("UP Special")) return "bg-amber-100 text-amber-700";
+      if (type.includes("Full Length") || type.includes("FLT")) return "bg-brand-blue text-white";
+      if (type.includes("CSAT")) return "bg-blue-100 text-blue-700";
+      if (type.includes("UK Special") || type.includes("UP Special")) return "bg-sky-100 text-sky-700";
       if (type.includes("Strategy")) return "bg-slate-100 text-slate-500";
-      return "bg-orange-50 text-orange-700 border border-orange-200";
+      return "bg-blue-50 text-brand-blue border border-blue-100";
     },
-    rowHover: "hover:bg-orange-50/40",
-    dot: "bg-brand-orange",
+    rowHover: "hover:bg-blue-50/40",
+    dot: "bg-brand-blue",
   },
 };
 

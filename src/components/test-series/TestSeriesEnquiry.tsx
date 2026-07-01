@@ -7,8 +7,8 @@ import type { TestSeries } from "@/lib/test-series";
 
 const themes = {
   blue:   { btn: "bg-brand-blue hover:bg-brand-blue/90 text-white", border: "border-brand-blue/20" },
-  gold:   { btn: "bg-amber-600 hover:bg-amber-700 text-white",       border: "border-amber-200/50" },
-  orange: { btn: "bg-brand-orange hover:bg-brand-orange/90 text-white", border: "border-orange-200/50" },
+  gold:   { btn: "bg-brand-blue hover:bg-brand-blue/90 text-white", border: "border-brand-blue/20" },
+  orange: { btn: "bg-brand-blue hover:bg-brand-blue/90 text-white", border: "border-brand-blue/20" },
 };
 
 interface Props {
