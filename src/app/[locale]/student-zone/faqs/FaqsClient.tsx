@@ -42,7 +42,7 @@ const FAQ_DATA: Category[] = [
     faqs: [
       {
         q: "How do I register on the UPSC portal?",
-        a: "Visit the official UPSC Online Application Portal (https://upsconline.nic.in). Go on the Home page and scroll down to "Account Creation" for new Candidates and Register and Verify your e-mail ID and Mobile number. Fill in the required personal details such as email ID, and mobile number. Create a password and submit. Candidates are required to read the Instructions on home page carefully before filling up the form.",
+        a: "Visit the official UPSC Online Application Portal (https://upsconline.nic.in). Go on the Home page and scroll down to 'Account Creation' for new Candidates and Register and Verify your e-mail ID and Mobile number. Fill in the required personal details such as email ID, and mobile number. Create a password and submit. Candidates are required to read the Instructions on home page carefully before filling up the form.",
       },
       {
         q: "How can I log in after completing the account creation process?",
