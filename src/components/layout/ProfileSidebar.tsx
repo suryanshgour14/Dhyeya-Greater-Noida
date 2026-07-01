@@ -8,8 +8,8 @@ import { useLocale } from "next-intl";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   X, LogOut, BookOpen, ClipboardList, Bell,
-  Download, Trophy, FileText, HelpCircle, GraduationCap,
-  ShoppingBag, Award, ChevronRight, Loader2, Settings, Shield,
+  Trophy, FileText, HelpCircle, GraduationCap,
+  ShoppingBag, ChevronRight, Loader2, Settings, Shield,
 } from "lucide-react";
 import type { User as SupabaseUser } from "@supabase/supabase-js";
 import { createClient } from "@/lib/supabase/client";
@@ -17,14 +17,11 @@ import { createClient } from "@/lib/supabase/client";
 const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
 
 const STUDENT_ZONE = [
-  { icon: BookOpen,      label: "Study Material",    href: "/student-zone/resources" },
-  { icon: ClipboardList, label: "Test Series",        href: "/test-series" },
-  { icon: Bell,          label: "Notifications",      href: "/student-zone/notifications" },
-  { icon: FileText,      label: "Live Test",           href: "/tests" },
-  { icon: Download,      label: "Books & Notes",      href: "/student-zone/books" },
-  { icon: HelpCircle,    label: "UPSC FAQs",          href: "/student-zone/faqs" },
-  { icon: Award,         label: "IAS Olympiad",       href: "/student-zone/olympiad" },
-  { icon: Download,      label: "Brochure",           href: "/student-zone/brochure" },
+  { icon: BookOpen,      label: "Study Material",  href: "/student-zone/resources" },
+  { icon: ClipboardList, label: "Test Series",      href: "/test-series" },
+  { icon: Bell,          label: "Notifications",    href: "/student-zone/notifications" },
+  { icon: FileText,      label: "Live Test",        href: "/tests" },
+  { icon: HelpCircle,    label: "UPSC FAQs",        href: "/student-zone/faqs" },
 ];
 
 const MY_ACCOUNT = [
@@ -201,36 +198,12 @@ export default function ProfileSidebar({ user }: Props) {
                   </div>
                 </div>
 
-                {/* Quick links */}
-                <div className="mx-4 my-2 h-px bg-border" />
-                <div className="px-4 pb-4">
-                  <p className="mb-2 text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
-                    Quick Links
-                  </p>
-                  <div className="grid grid-cols-2 gap-2">
-                    {[
-                      { label: "Current Affairs", href: "/current-affairs" },
-                      { label: "Test Series",     href: "/test-series" },
-                      { label: "Courses",         href: "/courses" },
-                      { label: "Results",         href: "/results" },
-                    ].map(({ label, href }) => (
-                      <Link
-                        key={href}
-                        href={`/${locale}${href}`}
-                        onClick={() => setOpen(false)}
-                        className="rounded-xl border border-border bg-slate-50 px-3 py-2 text-center text-xs font-medium text-foreground transition-colors hover:border-brand-blue/30 hover:bg-brand-blue/5 hover:text-brand-blue"
-                      >
-                        {label}
-                      </Link>
-                    ))}
-                  </div>
-                </div>
               </div>
 
               {/* Footer - logout */}
               <div className="border-t bg-white px-4 py-4">
                 <div className="mb-3 rounded-xl bg-brand-gold/10 border border-brand-gold/20 px-4 py-3 text-center">
-                  <p className="text-xs font-semibold text-amber-700">Admissions Open - 2025 Batch</p>
+                  <p className="text-xs font-semibold text-amber-700">Admissions Open – 2026 Batches</p>
                   <Link
                     href={`/${locale}/contact`}
                     onClick={() => setOpen(false)}
