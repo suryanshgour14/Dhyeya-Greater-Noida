@@ -25,10 +25,10 @@ const STUDENT_ZONE = [
 ];
 
 const MY_ACCOUNT = [
-  { icon: GraduationCap, label: "My Courses",         href: "/dashboard" },
-  { icon: ShoppingBag,   label: "My Purchases",       href: "/dashboard/purchases" },
-  { icon: Trophy,        label: "My Results",         href: "/dashboard/results" },
-  { icon: Settings,      label: "Account Settings",   href: "/dashboard/profile" },
+  { icon: GraduationCap, label: "My Courses",         href: "/dashboard?tab=courses" },
+  { icon: ShoppingBag,   label: "My Purchases",       href: "/dashboard?tab=purchases" },
+  { icon: Trophy,        label: "My Results",         href: "/dashboard?tab=results" },
+  { icon: Settings,      label: "Account Settings",   href: "/dashboard?tab=settings" },
 ];
 
 interface Props {

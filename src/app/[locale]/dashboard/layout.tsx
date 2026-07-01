@@ -10,16 +10,13 @@ export default async function DashboardLayout({
 }) {
   const supabase = createServerClient();
   const {
-    data: { session },
-  } = await supabase.auth.getSession();
+    data: { user },
+  } = await supabase.auth.getUser();
 
-  if (!session) {
+  if (!user) {
     redirect(`/${params.locale}/login`);
   }
 
-  return (
-    <div className="min-h-screen bg-muted/30">
-      <div className="container mx-auto px-4 py-8">{children}</div>
-    </div>
-  );
+  // The dashboard page renders its own full-page layout.
+  return <>{children}</>;
 }
