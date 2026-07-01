@@ -318,7 +318,7 @@ function TestsTab({ locale, showToast }: { locale: string; showToast: (m: string
             ) : (
               /* ── Questions upload step — scrollable content, sticky buttons ── */
               <div className="flex flex-col bg-slate-50" style={{ maxHeight: "65vh" }}>
-                <div className="flex-1 overflow-y-auto p-7">
+                <div className="flex-1 overflow-y-auto p-7" data-lenis-prevent>
                   <ExcelUpload onParsed={setParsedQs} />
                 </div>
                 <div className="shrink-0 flex justify-end gap-3 border-t border-slate-200 bg-white px-7 py-4">
@@ -455,7 +455,7 @@ function EditTestModal({
               <motion.div
                 initial={{ height: 0, opacity: 0 }} animate={{ height: "auto", opacity: 1 }}
                 exit={{ height: 0, opacity: 0 }} className="overflow-hidden">
-                <div className="bg-slate-50 px-7 py-5 max-h-72 overflow-y-auto">
+                <div className="bg-slate-50 px-7 py-5 max-h-72 overflow-y-auto" data-lenis-prevent>
                   <ExcelUpload onParsed={setParsedQs} />
                 </div>
                 <div className="flex justify-end gap-3 border-t border-slate-200 bg-white px-7 py-4">
@@ -475,7 +475,7 @@ function EditTestModal({
         </div>
 
         {/* Questions list */}
-        <div className="flex-1 overflow-y-auto bg-white">
+        <div className="flex-1 overflow-y-auto bg-white" data-lenis-prevent>
           {loadingQs ? (
             <div className="py-16 text-center"><Loader2 className="mx-auto h-6 w-6 animate-spin text-slate-300" /></div>
           ) : questions.length === 0 ? (
@@ -609,7 +609,7 @@ function ReportsModal({ test, locale, onClose }: { test: TestRow; locale: string
         </div>
 
         {/* Body */}
-        <div className="flex-1 overflow-y-auto bg-white">
+        <div className="flex-1 overflow-y-auto bg-white" data-lenis-prevent>
           {loading && (
             <div className="py-24 text-center"><Loader2 className="mx-auto h-7 w-7 animate-spin text-slate-300" /></div>
           )}
@@ -805,7 +805,7 @@ function CurrentAffairsTab({ showToast }: { showToast: (m: string, ok: boolean) 
       <AnimatePresence>
         {showCreate && (
           <Modal onClose={resetForm} title="Add Current Affairs Article" step={1} totalSteps={1}>
-            <form onSubmit={handleSave} className="p-7 space-y-5 max-h-[65vh] overflow-y-auto">
+            <form onSubmit={handleSave} className="p-7 space-y-5 max-h-[65vh] overflow-y-auto" data-lenis-prevent>
               <div className="grid grid-cols-2 gap-4">
                 <Field label="Title (English) *">
                   <input required className={inputCls} placeholder="e.g. RBI raises repo rate..." value={form.title}
@@ -956,7 +956,7 @@ function MagazineTab({ showToast }: { showToast: (m: string, ok: boolean) => voi
       <AnimatePresence>
         {showCreate && (
           <Modal onClose={resetForm} title="Upload Magazine Issue" step={1} totalSteps={1}>
-            <form onSubmit={handleSave} className="p-7 space-y-5 max-h-[65vh] overflow-y-auto">
+            <form onSubmit={handleSave} className="p-7 space-y-5 max-h-[65vh] overflow-y-auto" data-lenis-prevent>
               <Field label="Issue Title *">
                 <input required className={inputCls} placeholder="e.g. Dhyeya IAS Monthly Magazine - June 2026" value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} />
               </Field>

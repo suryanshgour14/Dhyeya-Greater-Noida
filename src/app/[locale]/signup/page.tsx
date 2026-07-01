@@ -82,7 +82,7 @@ export default function SignupPage() {
       </div>
 
       {/* ── Right panel - form ── */}
-      <div className="flex flex-1 flex-col items-center justify-center bg-slate-50 px-6 py-12 overflow-y-auto">
+      <div className="flex flex-1 flex-col items-center justify-center bg-slate-50 px-6 py-12 overflow-y-auto" data-lenis-prevent>
         {/* Mobile logo */}
         <div className="mb-8 lg:hidden">
           <Image

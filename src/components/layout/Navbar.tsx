@@ -371,7 +371,7 @@ export default function Navbar() {
                 </button>
               </div>
 
-              <div className="overflow-y-auto px-4 pb-6 pt-2">
+              <div className="overflow-y-auto px-4 pb-6 pt-2" data-lenis-prevent>
                 {NAV_ITEMS.map((item) => (
                   <MobileNavItem
                     key={item.href}

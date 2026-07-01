@@ -316,7 +316,7 @@ export default function TestAttemptClient({
       {/* ── Main area ── */}
       <div className="flex flex-1 min-h-0">
         {/* Question area */}
-        <div className="flex flex-1 flex-col min-w-0 overflow-y-auto p-4 md:p-6">
+        <div className="flex flex-1 flex-col min-w-0 overflow-y-auto p-4 md:p-6" data-lenis-prevent>
           <AnimatePresence mode="wait">
             <motion.div
               key={currentIdx}
@@ -461,7 +461,7 @@ export default function TestAttemptClient({
           </div>
 
           {/* Grid per section */}
-          <div className="flex-1 overflow-y-auto px-3 py-3 space-y-4">
+          <div className="flex-1 overflow-y-auto px-3 py-3 space-y-4" data-lenis-prevent>
             {sections.map((sec) => {
               const secQs = questions.filter((q) => q.section_id === sec.id);
               const locked = lockedSections.current.has(sec.id);
