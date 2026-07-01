@@ -298,8 +298,8 @@ export default function Navbar() {
             {user ? (
               <ProfileSidebar user={user} />
             ) : (
-              <Button asChild size="sm" className="h-6 rounded-full bg-brand-orange px-3 text-xs hover:bg-brand-orange/90">
-                <Link href={`/${locale}/login`}>Student Login</Link>
+              <Button asChild size="sm" className="h-7 rounded-none border border-white/30 bg-brand-blue px-4 text-xs font-bold uppercase tracking-widest text-white hover:bg-blue-800">
+                <Link href={`/${locale}/login`}>Enroll Now</Link>
               </Button>
             )}
           </div>
@@ -390,13 +390,13 @@ export default function Navbar() {
                 ) : (
                   <Button
                     asChild
-                    className="w-full bg-brand-blue hover:bg-brand-blue/90"
+                    className="w-full rounded-none border border-brand-blue/30 bg-brand-blue font-bold uppercase tracking-widest hover:bg-blue-800"
                   >
                     <Link
                       href={`/${locale}/login`}
                       onClick={() => setMobileOpen(false)}
                     >
-                      Student Login
+                      Enroll Now
                     </Link>
                   </Button>
                 )}
