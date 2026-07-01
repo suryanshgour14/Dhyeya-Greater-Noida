@@ -134,7 +134,7 @@ export default function ProfileSidebar({ user }: Props) {
               </div>
 
               {/* Scrollable content */}
-              <div className="flex-1 overflow-y-auto">
+              <div className="flex-1 overflow-y-auto" data-lenis-prevent>
                 {/* Admin Panel — only for admin/faculty */}
                 {isAdmin && (
                   <>
