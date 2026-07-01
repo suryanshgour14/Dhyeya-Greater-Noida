@@ -88,7 +88,7 @@ export async function POST(request: NextRequest) {
   }
 
   // Determine where to send the student next
-  let redirectUrl = '/purchases';
+  let redirectUrl = '/dashboard?tab=purchases';
   if (product?.type === 'course' && product.ref_slug) redirectUrl = `/courses/${product.ref_slug}`;
   else if (product?.type === 'test' && product.ref_id) redirectUrl = `/tests/${product.ref_id}`;
 
