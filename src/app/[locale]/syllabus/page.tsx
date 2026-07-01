@@ -28,9 +28,9 @@ const EXAMS = [
     merit: "2025 Marks",
     icon: GraduationCap,
     color: {
-      hero: "from-blue-600 to-blue-800",
+      hero: "from-blue-500 to-blue-700",
       badge: "bg-blue-100 text-blue-700",
-      cta: "bg-blue-600 hover:bg-blue-700",
+      cta: "bg-blue-500 hover:bg-blue-600",
     },
     stats: [
       { label: "Prelims Marks", value: "400" },
@@ -48,9 +48,9 @@ const EXAMS = [
     merit: "1600 Marks",
     icon: FileText,
     color: {
-      hero: "from-amber-600 to-amber-800",
-      badge: "bg-amber-100 text-amber-800",
-      cta: "bg-amber-600 hover:bg-amber-700",
+      hero: "from-blue-500 to-blue-700",
+      badge: "bg-blue-100 text-blue-700",
+      cta: "bg-blue-500 hover:bg-blue-600",
     },
     stats: [
       { label: "Prelims Marks", value: "400" },
@@ -68,9 +68,9 @@ const EXAMS = [
     merit: "1650 Marks",
     icon: Layers,
     color: {
-      hero: "from-orange-600 to-orange-800",
-      badge: "bg-orange-100 text-orange-800",
-      cta: "bg-orange-600 hover:bg-orange-700",
+      hero: "from-blue-500 to-blue-700",
+      badge: "bg-blue-100 text-blue-700",
+      cta: "bg-blue-500 hover:bg-blue-600",
     },
     stats: [
       { label: "Prelims Marks", value: "300" },
@@ -88,9 +88,9 @@ const EXAMS = [
     merit: "1020 Marks",
     icon: BookOpen,
     color: {
-      hero: "from-green-600 to-green-800",
-      badge: "bg-green-100 text-green-800",
-      cta: "bg-green-600 hover:bg-green-700",
+      hero: "from-blue-500 to-blue-700",
+      badge: "bg-blue-100 text-blue-700",
+      cta: "bg-blue-500 hover:bg-blue-600",
     },
     stats: [
       { label: "Prelims Marks", value: "150" },
