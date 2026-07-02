@@ -185,10 +185,11 @@ export default function Footer() {
       <div className="border-t border-white/10">
         <div className="container mx-auto flex flex-col items-center justify-between gap-2 px-4 py-4 text-xs text-slate-500 sm:flex-row">
           <span>© {new Date().getFullYear()} {SITE_NAME}. All rights reserved.</span>
-          <div className="flex gap-4">
+          <div className="flex flex-wrap justify-center gap-x-4 gap-y-1">
             <Link href="/privacy-policy" className="hover:text-slate-300 transition-colors">Privacy Policy</Link>
-            <Link href="/terms" className="hover:text-slate-300 transition-colors">Terms of Use</Link>
-            <Link href="/sitemap" className="hover:text-slate-300 transition-colors">Sitemap</Link>
+            <Link href="/terms" className="hover:text-slate-300 transition-colors">Terms &amp; Conditions</Link>
+            <Link href="/refund-policy" className="hover:text-slate-300 transition-colors">Refund Policy</Link>
+            <Link href="/contact" className="hover:text-slate-300 transition-colors">Contact</Link>
           </div>
         </div>
       </div>
