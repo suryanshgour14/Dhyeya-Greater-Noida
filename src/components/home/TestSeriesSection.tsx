@@ -280,6 +280,8 @@ export default function TestSeriesSection() {
                     size="sm"
                     variant="navy"
                     className="!rounded-lg !text-[11px]"
+                    productTitle={s.title}
+                    priceLabel={s.price}
                   />
                 </div>
               </div>

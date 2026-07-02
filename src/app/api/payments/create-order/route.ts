@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import Razorpay from 'razorpay';
 import { createClient } from '@supabase/supabase-js';
 import { createServerClient } from '@/lib/supabase/server';
+import { PaymentDetailsSchema } from '@/lib/payment-details';
 
 // Lazy — constructed per request (like anonDb/serviceDb below) so the build
 // doesn't instantiate the SDK at import time when keys aren't present.
@@ -37,6 +38,16 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const { productId } = body as { productId?: string };
     if (!productId) return NextResponse.json({ error: 'productId is required' }, { status: 400 });
+
+    // ── Validate the applicant details form (server-side backstop) ───────────
+    const parsed = PaymentDetailsSchema.safeParse(body.details);
+    if (!parsed.success) {
+      return NextResponse.json(
+        { error: 'Please fill all required fields correctly.', fieldErrors: parsed.error.flatten().fieldErrors },
+        { status: 400 },
+      );
+    }
+    const details = parsed.data;
 
     const anon = anonDb();
 
@@ -97,12 +108,38 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Failed to create order record' }, { status: 500 });
     }
 
-    // ── Profile prefill (best-effort) ─────────────────────────────────────────
-    const { data: profile } = await supabase
-      .from('profiles')
-      .select('name, phone')
-      .eq('id', user.id)
-      .maybeSingle();
+    // ── Store the applicant details snapshot tied to this order ──────────────
+    // Done BEFORE payment so nothing is lost if the browser dies mid-checkout;
+    // the owner email (sent from the webhook) reads this.
+    const { error: detailsErr } = await service.from('order_details').insert({
+      order_id:    order.id,
+      full_name:   details.fullName,
+      father_name: details.fatherName,
+      mother_name: details.motherName,
+      mobile:      details.mobile,
+      email:       details.email,
+      state:       details.state,
+      city:        details.city,
+      address:     details.address,
+      pincode:     details.pincode,
+    });
+    if (detailsErr) {
+      console.error('order_details insert error:', detailsErr);
+      return NextResponse.json({ error: 'Failed to save your details. Please try again.' }, { status: 500 });
+    }
+
+    // ── Save reusable fields to the profile so next purchase prefills ────────
+    // Best-effort — never blocks checkout (RLS: profiles_own allows own update).
+    await supabase.from('profiles').update({
+      full_name:   details.fullName,
+      father_name: details.fatherName,
+      mother_name: details.motherName,
+      phone:       details.mobile,
+      state:       details.state,
+      city:        details.city,
+      address:     details.address,
+      pincode:     details.pincode,
+    }).eq('id', user.id);
 
     return NextResponse.json({
       razorpayOrderId: rzpOrder.id,
@@ -112,9 +149,9 @@ export async function POST(request: NextRequest) {
       orderId:         order.id,
       productTitle:    product.title,
       prefill: {
-        name:    profile?.name    ?? '',
-        email:   user.email       ?? '',
-        contact: profile?.phone   ?? '',
+        name:    details.fullName,
+        email:   details.email,
+        contact: details.mobile,
       },
     });
   } catch (err) {

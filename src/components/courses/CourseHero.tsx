@@ -148,6 +148,8 @@ export default function CourseHero({ course, productId, isEnrolled = false, cour
                   size="lg"
                   variant="navy"
                   className="flex-1 justify-center"
+                  productTitle={course.title}
+                  priceLabel={`₹${course.fee.toLocaleString("en-IN")}`}
                 />
               ) : (
                 <a href="#enquiry" className={cn("flex-1 rounded-xl px-5 py-3 text-center text-sm font-bold transition-colors", t.mobEnroll)}>
@@ -203,6 +205,8 @@ export default function CourseHero({ course, productId, isEnrolled = false, cour
                   size="lg"
                   variant="navy"
                   className="w-full justify-center"
+                  productTitle={course.title}
+                  priceLabel={`₹${course.fee.toLocaleString("en-IN")}`}
                 />
               ) : (
                 <a

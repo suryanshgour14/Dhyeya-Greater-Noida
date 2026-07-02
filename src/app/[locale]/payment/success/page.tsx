@@ -6,6 +6,7 @@ import { useLocale } from "next-intl";
 import { motion } from "framer-motion";
 import { CheckCircle2, BookOpen, ArrowRight, Download } from "lucide-react";
 import { Suspense } from "react";
+import { CONTACT_INFO } from "@/lib/constants";
 
 const serif = `var(--font-newsreader, "Newsreader"), Georgia, serif`;
 const sans  = `var(--font-plus-jakarta, "Plus Jakarta Sans"), system-ui, sans-serif`;
@@ -91,8 +92,8 @@ function SuccessContent() {
             letterSpacing: "-0.01em",
           }}
         >
-          Enrollment{" "}
-          <em style={{ color: "#C9A13B", fontStyle: "italic" }}>Confirmed!</em>
+          Payment{" "}
+          <em style={{ color: "#C9A13B", fontStyle: "italic" }}>Successful!</em>
         </motion.h1>
 
         <motion.p
@@ -101,9 +102,10 @@ function SuccessContent() {
           transition={{ delay: 0.4 }}
           style={{ fontSize: 15, color: "rgba(255,255,255,0.65)", margin: "0 0 32px", lineHeight: 1.6 }}
         >
-          You are now enrolled in{" "}
+          Congratulations! You have been successfully enrolled in{" "}
           <span style={{ color: "#fff", fontWeight: 600 }}>{decodeURIComponent(product)}</span>.
-          Our team will contact you shortly with batch details.
+          You can now access the content on both the <span style={{ color: "#fff", fontWeight: 600 }}>website</span> and the{" "}
+          <span style={{ color: "#fff", fontWeight: 600 }}>mobile app</span>.
         </motion.p>
 
         {/* Reference box */}
@@ -135,7 +137,7 @@ function SuccessContent() {
           style={{ display: "flex", flexDirection: "column", gap: 12 }}
         >
           <Link
-            href={`/${locale}/student-zone`}
+            href={`/${locale}/dashboard?tab=courses`}
             style={{
               display: "inline-flex", alignItems: "center", justifyContent: "center", gap: 8,
               background: "#C9A13B",
@@ -147,7 +149,7 @@ function SuccessContent() {
             }}
           >
             <BookOpen size={16} />
-            Go to Student Zone
+            Go to My Courses
             <ArrowRight size={15} />
           </Link>
 
@@ -175,7 +177,7 @@ function SuccessContent() {
           transition={{ delay: 0.6 }}
           style={{ marginTop: 32, fontSize: 12, color: "rgba(255,255,255,0.3)", lineHeight: 1.6 }}
         >
-          Need help? Call us at <span style={{ color: "rgba(255,255,255,0.55)" }}>+91-XXXXXXXXXX</span>{" "}
+          Need help? Call us at <span style={{ color: "rgba(255,255,255,0.55)" }}>{CONTACT_INFO.phone}</span>{" "}
           or save your reference number above for support queries.
         </motion.p>
       </motion.div>
