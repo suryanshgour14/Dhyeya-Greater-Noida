@@ -1,17 +1,21 @@
+import dynamic from "next/dynamic";
 import { createClient } from "@supabase/supabase-js";
 import HeroSection from "@/components/home/HeroSection";
 import WelcomeSection from "@/components/home/WelcomeSection";
 import StatsCounter from "@/components/home/StatsCounter";
-import ToppersMarquee from "@/components/home/ToppersMarquee";
 import UdaanPromo from "@/components/home/UdaanPromo";
 import CoursesSection from "@/components/home/CoursesSection";
 import Notifications from "@/components/home/Notifications";
-import TestSeriesSection from "@/components/home/TestSeriesSection";
-import WhyChooseUs from "@/components/home/WhyChooseUs";
-import StudentZone from "@/components/home/StudentZone";
-import DownloadApp from "@/components/home/DownloadApp";
-import Testimonials from "@/components/home/Testimonials";
-import CTASection from "@/components/home/CTASection";
+
+// Below-fold sections: split into separate JS chunks so the initial bundle
+// only contains above-the-fold code. Hydration JS loads lazily on scroll.
+const ToppersMarquee    = dynamic(() => import("@/components/home/ToppersMarquee"));
+const TestSeriesSection = dynamic(() => import("@/components/home/TestSeriesSection"));
+const WhyChooseUs       = dynamic(() => import("@/components/home/WhyChooseUs"));
+const StudentZone       = dynamic(() => import("@/components/home/StudentZone"));
+const DownloadApp       = dynamic(() => import("@/components/home/DownloadApp"));
+const Testimonials      = dynamic(() => import("@/components/home/Testimonials"));
+const CTASection        = dynamic(() => import("@/components/home/CTASection"));
 
 async function getNotifications() {
   try {

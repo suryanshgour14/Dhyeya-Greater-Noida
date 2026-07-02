@@ -1,4 +1,4 @@
-﻿import type { Metadata } from 'next';
+﻿import type { Metadata, Viewport } from 'next';
 import { Plus_Jakarta_Sans, Inter, Newsreader } from 'next/font/google';
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages } from 'next-intl/server';
@@ -50,6 +50,23 @@ export const metadata: Metadata = {
   metadataBase: new URL(
     process.env.NEXT_PUBLIC_SITE_URL || 'https://dhyeyagreaternoida.com'
   ),
+  icons: {
+    icon: [
+      { url: '/favicon.ico', sizes: 'any' },
+      { url: '/icons/favicon-16x16.png', sizes: '16x16', type: 'image/png' },
+      { url: '/icons/favicon-32x32.png', sizes: '32x32', type: 'image/png' },
+      { url: '/icons/favicon-48x48.png', sizes: '48x48', type: 'image/png' },
+      { url: '/icons/favicon-64x64.png', sizes: '64x64', type: 'image/png' },
+      { url: '/icons/favicon-128x128.png', sizes: '128x128', type: 'image/png' },
+    ],
+    apple: [{ url: '/icons/apple-touch-icon.png', sizes: '180x180', type: 'image/png' }],
+    shortcut: '/favicon.ico',
+  },
+  manifest: '/manifest.webmanifest',
+};
+
+export const viewport: Viewport = {
+  themeColor: '#0B1C3D',
 };
 
 export function generateStaticParams() {
@@ -92,6 +109,11 @@ export default async function LocaleLayout({
 
   return (
     <html lang={locale} suppressHydrationWarning>
+      <head>
+        {/* Preconnect to Cloudinary (hero carousel images) and Supabase (auth/data) */}
+        <link rel="preconnect" href="https://res.cloudinary.com" />
+        <link rel="preconnect" href={process.env.NEXT_PUBLIC_SUPABASE_URL} />
+      </head>
       <body
         className={`${plusJakartaSans.variable} ${inter.variable} ${newsreader.variable} font-sans antialiased`}
       >

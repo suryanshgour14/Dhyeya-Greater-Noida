@@ -102,7 +102,7 @@ export default function WhyChooseUs() {
           >
             {/* Number tag + rule */}
             <div style={{ display: "flex", alignItems: "center", gap: 14, marginBottom: 18 }}>
-              <span style={{ fontFamily: T.serif, fontSize: 15, color: T.gold, letterSpacing: "0.04em", whiteSpace: "nowrap" }}>
+              <span style={{ fontFamily: T.serif, fontSize: 15, color: T.ink, letterSpacing: "0.04em", whiteSpace: "nowrap" }}>
                 04 —
               </span>
               <div style={{ flex: 1, height: 1, background: T.line }} />
@@ -188,7 +188,7 @@ function WhyCard({ item, index }: { item: WhyItem; index: number }) {
         cursor: "default",
       }}
     >
-      <span style={{ fontFamily: T.serif, fontSize: 14, color: T.gold, display: "block", marginBottom: 14 }}>
+      <span style={{ fontFamily: T.serif, fontSize: 14, color: T.ink, display: "block", marginBottom: 14 }}>
         {String(index + 1).padStart(2, "0")}
       </span>
 

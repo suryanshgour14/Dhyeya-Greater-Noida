@@ -47,6 +47,13 @@
     "xlsx": "^0.18.5",
     "zod": "^4.3.6"
   },
+  "browserslist": [
+    "Chrome >= 87",
+    "Firefox >= 78",
+    "Safari >= 14",
+    "Edge >= 88",
+    "not IE 11"
+  ],
   "devDependencies": {
     "@next/bundle-analyzer": "^14.2.35",
     "@types/node": "^20",

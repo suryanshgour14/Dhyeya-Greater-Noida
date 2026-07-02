@@ -117,13 +117,13 @@ const SERIES = [
   },
 ];
 
-// Triple for seamless loop
-const TRACK = [...SERIES, ...SERIES, ...SERIES];
+// Double for seamless loop — translateX(-50%) snaps back to start
+const TRACK = [...SERIES, ...SERIES];
 
 const marqueeKeyframes = `
 @keyframes ts-scroll {
   from { transform: translateX(0); }
-  to   { transform: translateX(-33.3333%); }
+  to   { transform: translateX(-50%); }
 }
 `;
 
@@ -159,7 +159,7 @@ export default function TestSeriesSection() {
           <em style={{ fontStyle: "italic", color: "#C9A13B" }}>2026</em>{" "}
           Test Series
         </h2>
-        <p style={{ fontSize: 15, color: "#64748b", margin: 0, maxWidth: 480, marginInline: "auto" }}>
+        <p style={{ fontSize: 15, color: "#475569", margin: 0, maxWidth: 480, marginInline: "auto" }}>
           All India ranking · Expert evaluation · Deep performance analytics
         </p>
       </motion.div>
@@ -212,7 +212,7 @@ export default function TestSeriesSection() {
                     {s.exam}
                   </span>
                   <span style={{
-                    background: "#f8fafc", color: "#64748b",
+                    background: "#f1f5f9", color: "#334155",
                     borderRadius: 999, fontSize: 10.5, fontWeight: 600,
                     padding: "3px 9px",
                   }}>
@@ -237,7 +237,7 @@ export default function TestSeriesSection() {
                 }}>
                   {s.title}
                 </p>
-                <p style={{ fontSize: 12, color: "#94a3b8", margin: "0 0 12px", lineHeight: 1.5 }}>
+                <p style={{ fontSize: 12, color: "#475569", margin: "0 0 12px", lineHeight: 1.5 }}>
                   {s.short}
                 </p>
 
@@ -265,11 +265,11 @@ export default function TestSeriesSection() {
                   justifyContent: "space-between",
                 }}>
                   <div>
-                    <div style={{ fontSize: 10, color: "#94a3b8", fontWeight: 500 }}>Starting from</div>
+                    <div style={{ fontSize: 10, color: "#475569", fontWeight: 500 }}>Starting from</div>
                     <div style={{ display: "flex", alignItems: "baseline", gap: 6 }}>
                       <span style={{ fontSize: 18, fontWeight: 800, color: "#0B1C3D", lineHeight: 1.2 }}>{s.price}</span>
                       {s.originalPrice && (
-                        <span style={{ fontSize: 12, color: "#94a3b8", textDecoration: "line-through" }}>{s.originalPrice}</span>
+                        <span style={{ fontSize: 12, color: "#475569", textDecoration: "line-through" }}>{s.originalPrice}</span>
                       )}
                     </div>
                   </div>

@@ -98,7 +98,9 @@ export default function HeroSection() {
           </motion.div>
 
           <motion.h1
-            {...fadeUp(0.08)}
+            initial={{ y: 16 }}
+            animate={{ y: 0 }}
+            transition={{ duration: 0.45, ease: EASE }}
             className="mb-5 text-4xl font-bold leading-[1.12] tracking-tight text-white sm:text-5xl lg:text-[3.4rem]"
           >
             {t("hero.title")}

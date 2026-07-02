@@ -12,7 +12,7 @@ const T = {
   cardHov:  "#ffffff",          // white on hover
   ink:      "#0B1C3D",
   inkSoft:  "#41506b",
-  inkFaint: "#8896a8",
+  inkFaint: "#596d85",
   gold:     "#B6862C",
   saffron:  "#E0651A",
   line:     "#e4d9c4",
@@ -427,7 +427,7 @@ export default function CoursesSection() {
             style={{
               fontFamily: T.serif,
               fontSize: 15,
-              color: T.gold,
+              color: T.ink,
               letterSpacing: "0.04em",
               whiteSpace: "nowrap",
               paddingTop: 6,
@@ -540,7 +540,7 @@ export default function CoursesSection() {
           ))}
         </div>
         {/* Swipe hint (phones only) */}
-        <p className="mt-3 text-center text-xs text-slate-400 sm:hidden">← swipe to see more →</p>
+        <p className="mt-3 text-center text-xs text-slate-600 sm:hidden">← swipe to see more →</p>
 
         {/* CTA */}
         <div style={{ marginTop: 34, display: "flex", justifyContent: "center" }}>

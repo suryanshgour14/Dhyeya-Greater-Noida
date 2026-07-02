@@ -94,12 +94,12 @@ export default function Footer() {
             <h3 className="mb-4 text-sm font-semibold uppercase tracking-wider text-white">
               Quick Links
             </h3>
-            <ul className="space-y-2.5">
+            <ul className="space-y-1">
               {QUICK_LINKS.map((link) => (
                 <li key={link.href}>
                   <Link
                     href={link.href}
-                    className="text-sm text-slate-400 transition-colors hover:text-brand-gold"
+                    className="block py-1.5 text-sm text-slate-400 transition-colors hover:text-brand-gold"
                   >
                     {link.label}
                   </Link>
@@ -113,12 +113,12 @@ export default function Footer() {
             <h3 className="mb-4 text-sm font-semibold uppercase tracking-wider text-white">
               Courses
             </h3>
-            <ul className="space-y-2.5">
+            <ul className="space-y-1">
               {COURSES_LINKS.map((link) => (
                 <li key={link.href}>
                   <Link
                     href={link.href}
-                    className="text-sm text-slate-400 transition-colors hover:text-brand-gold"
+                    className="block py-1.5 text-sm text-slate-400 transition-colors hover:text-brand-gold"
                   >
                     {link.label}
                   </Link>
@@ -132,12 +132,12 @@ export default function Footer() {
             <h3 className="mb-4 text-sm font-semibold uppercase tracking-wider text-white">
               Student Zone
             </h3>
-            <ul className="mb-6 space-y-2.5">
+            <ul className="mb-6 space-y-1">
               {STUDENT_LINKS.map((link) => (
                 <li key={link.href}>
                   <Link
                     href={link.href}
-                    className="text-sm text-slate-400 transition-colors hover:text-brand-gold"
+                    className="block py-1.5 text-sm text-slate-400 transition-colors hover:text-brand-gold"
                   >
                     {link.label}
                   </Link>
@@ -186,10 +186,10 @@ export default function Footer() {
         <div className="container mx-auto flex flex-col items-center justify-between gap-2 px-4 py-4 text-xs text-slate-500 sm:flex-row">
           <span>© {new Date().getFullYear()} {SITE_NAME}. All rights reserved.</span>
           <div className="flex flex-wrap justify-center gap-x-4 gap-y-1">
-            <Link href="/privacy-policy" className="hover:text-slate-300 transition-colors">Privacy Policy</Link>
-            <Link href="/terms" className="hover:text-slate-300 transition-colors">Terms &amp; Conditions</Link>
-            <Link href="/refund-policy" className="hover:text-slate-300 transition-colors">Refund Policy</Link>
-            <Link href="/contact" className="hover:text-slate-300 transition-colors">Contact</Link>
+            <Link href="/privacy-policy" className="py-2 px-1 hover:text-slate-300 transition-colors">Privacy Policy</Link>
+            <Link href="/terms" className="py-2 px-1 hover:text-slate-300 transition-colors">Terms &amp; Conditions</Link>
+            <Link href="/refund-policy" className="py-2 px-1 hover:text-slate-300 transition-colors">Refund Policy</Link>
+            <Link href="/contact" className="py-2 px-1 hover:text-slate-300 transition-colors">Contact</Link>
           </div>
         </div>
       </div>

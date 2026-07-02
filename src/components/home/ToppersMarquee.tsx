@@ -89,7 +89,7 @@ function TopperCard({ topper }: { topper: (typeof TOPPERS)[number] }) {
       <div className={`my-2 h-px w-8 ${isTopRank ? "bg-brand-gold/50" : "bg-white/[0.08]"}`} />
 
       <p className="text-center text-[12px] font-bold leading-snug text-white">{topper.name}</p>
-      <p className="mt-1 text-[10px] font-semibold uppercase tracking-widest text-slate-500">{topper.exam}</p>
+      <p className="mt-1 text-[10px] font-semibold uppercase tracking-widest text-slate-300">{topper.exam}</p>
     </motion.div>
   );
 }
@@ -105,16 +105,11 @@ function MarqueeRow({
   direction: "left" | "right";
   duration: number;
 }) {
-  // Triple the items so the loop is invisible at any viewport width
-  const items = [...toppers, ...toppers, ...toppers];
+  // Double the items — translateX(-50%) loops back seamlessly
+  const items = [...toppers, ...toppers];
 
   return (
     <div className="relative overflow-hidden">
-      {/*
-        CSS animation approach — truly gapless because:
-        - translateX(-33.33%) moves exactly one copy's width
-        - animation: linear infinite with no delay = no pause
-      */}
       <div
         className="flex gap-4 px-4"
         style={{
@@ -128,10 +123,9 @@ function MarqueeRow({
         ))}
       </div>
 
-      {/* Keyframes injected inline — avoids needing a global CSS file */}
       <style>{`
-        @keyframes marquee-left  { from { transform: translateX(0); } to { transform: translateX(-33.3333%); } }
-        @keyframes marquee-right { from { transform: translateX(-33.3333%); } to { transform: translateX(0); } }
+        @keyframes marquee-left  { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+        @keyframes marquee-right { from { transform: translateX(-50%); } to { transform: translateX(0); } }
       `}</style>
     </div>
   );
@@ -179,7 +173,7 @@ function SectionHeader() {
         ].map(({ value, label }) => (
           <div key={label} className="text-center">
             <p className="text-xl font-extrabold text-brand-blue">{value}</p>
-            <p className="text-[11px] font-medium text-slate-400">{label}</p>
+            <p className="text-[11px] font-medium text-slate-600">{label}</p>
           </div>
         ))}
       </div>
