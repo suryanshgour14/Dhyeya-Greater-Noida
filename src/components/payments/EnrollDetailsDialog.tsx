@@ -68,6 +68,7 @@ export default function EnrollDetailsDialog({
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           onClick={() => !submitting && onClose()}
+          data-lenis-prevent
         >
           <motion.div
             className="relative my-8 w-full max-w-lg rounded-2xl bg-white shadow-2xl"
@@ -98,7 +99,7 @@ export default function EnrollDetailsDialog({
             </div>
 
             {/* Form */}
-            <form onSubmit={handleSubmit(onSubmit)} className="max-h-[70vh] overflow-y-auto px-6 py-5">
+            <form onSubmit={handleSubmit(onSubmit)} className="max-h-[70vh] overflow-y-auto px-6 py-5" data-lenis-prevent>
               <p className="mb-4 text-xs text-slate-500">
                 All fields are required. These details are shared with the institute to enrol you and grant access on the app.
               </p>
