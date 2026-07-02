@@ -39,6 +39,7 @@ const themes = {
 interface Props {
   series: TestSeries;
   productId?: string;
+  isEnrolled?: boolean;
 }
 
 function FeeBlock({ fee }: { fee: TestSeries["fee"] }) {
@@ -66,7 +67,7 @@ function FeeBlock({ fee }: { fee: TestSeries["fee"] }) {
   );
 }
 
-export default function TestSeriesHero({ series, productId }: Props) {
+export default function TestSeriesHero({ series, productId, isEnrolled = false }: Props) {
   const t = themes[series.accentColor];
 
   return (
@@ -121,8 +122,10 @@ export default function TestSeriesHero({ series, productId }: Props) {
             <div className="mt-7">
               <BuyButton
                 productId={productId}
+                isEnrolled={isEnrolled}
                 redirectTo="/tests"
                 label="Enroll Now"
+                enrolledLabel="Access Now"
                 size="lg"
                 variant="gold"
                 productTitle={series.title}

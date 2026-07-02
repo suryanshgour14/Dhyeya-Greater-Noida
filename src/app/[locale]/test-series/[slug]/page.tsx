@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { TEST_SERIES } from "@/lib/test-series";
+import { createServerClient } from "@/lib/supabase/server";
 import TestSeriesHero from "@/components/test-series/TestSeriesHero";
 import TestSeriesSchedule from "@/components/test-series/TestSeriesSchedule";
 import TestSeriesEnquiry from "@/components/test-series/TestSeriesEnquiry";
@@ -37,13 +38,33 @@ const PRODUCT_IDS: Record<string, string> = {
   "ukpcs-mains": "dd000001-0000-0000-0000-000000000006",
 };
 
-export default function TestSeriesDetailPage({ params }: Props) {
+export default async function TestSeriesDetailPage({ params }: Props) {
   const series = TEST_SERIES.find((s) => s.slug === params.slug);
   if (!series) notFound();
 
+  const productId = PRODUCT_IDS[series.slug];
+
+  // Pre-check enrollment so the CTA renders as "Access Now" (not "Enroll Now")
+  // on first paint for students who already bought this series.
+  let isEnrolled = false;
+  if (productId) {
+    const supabase = createServerClient();
+    const { data: { user } } = await supabase.auth.getUser();
+    if (user) {
+      const { data: enrollment } = await supabase
+        .from("enrollments")
+        .select("id, expires_at")
+        .eq("student_id", user.id)
+        .eq("product_id", productId)
+        .maybeSingle();
+      isEnrolled = !!enrollment &&
+        (enrollment.expires_at === null || new Date(enrollment.expires_at) > new Date());
+    }
+  }
+
   return (
     <>
-      <TestSeriesHero series={series} productId={PRODUCT_IDS[series.slug]} />
+      <TestSeriesHero series={series} productId={productId} isEnrolled={isEnrolled} />
       <TestSeriesSchedule series={series} />
       <TestSeriesEnquiry series={series} />
     </>
