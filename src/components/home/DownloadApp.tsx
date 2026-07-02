@@ -62,7 +62,10 @@ export default function DownloadApp() {
             {/* Store buttons */}
             <div className="flex flex-wrap gap-3">
               <a
-                href="#"
+                href="https://dhyeyalive.akamai.net.in/"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Access live classes on the Dhyeya web portal"
                 className="inline-flex items-center gap-3 rounded-xl border border-white/20 bg-white/10 px-5 py-3 text-white backdrop-blur-sm transition-colors hover:bg-white/20"
               >
                 {/* Google Play icon */}
@@ -76,7 +79,10 @@ export default function DownloadApp() {
               </a>
 
               <a
-                href="#"
+                href="https://apps.apple.com/in/app/my-appx/id1662307591"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Download the Dhyeya app on the Apple App Store"
                 className="inline-flex items-center gap-3 rounded-xl border border-white/20 bg-white/10 px-5 py-3 text-white backdrop-blur-sm transition-colors hover:bg-white/20"
               >
                 {/* Apple icon */}
