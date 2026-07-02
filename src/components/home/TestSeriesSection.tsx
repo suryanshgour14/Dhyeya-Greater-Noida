@@ -69,8 +69,8 @@ const SERIES = [
   {
     id: "ukpsc-prelims",
     category: "Prelims",
-    exam: "UKPSC",
-    title: "UKPSC Prelims Test Series 2026",
+    exam: "UKPCS",
+    title: "UKPCS Prelims Test Series 2026",
     short: "Uttarakhand prelims series",
     features: ["20 Full Mocks", "UK GK Coverage"],
     price: "₹1,499",
@@ -83,8 +83,8 @@ const SERIES = [
   {
     id: "ukpsc-mains",
     category: "Mains",
-    exam: "UKPSC",
-    title: "UKPSC Mains Test Series 2026",
+    exam: "UKPCS",
+    title: "UKPCS Mains Test Series 2026",
     short: "Uttarakhand mains series",
     features: ["12 Tests", "UK Special Papers"],
     price: "₹2,999",
