@@ -309,7 +309,7 @@ export const TEST_SERIES: TestSeries[] = [
     description:
       'उत्तराखंड लोक सेवा आयोग (UKPSC) के नवीनतम पाठ्यक्रम और परीक्षा पद्धति पर पूर्णतः आधारित। Fully based on the latest syllabus and exam pattern of the Uttarakhand Public Service Commission (UKPSC). The test series provides 10 dedicated sectional tests focusing specifically on Uttarakhand Special (UK Special) - उत्तराखंड विशेष पर विशेष ध्यान - comprehensive coverage of Current Affairs keeping in mind the trends of previous years (विगत वर्षों के रुझानों को ध्यान में रखकर), and detailed evaluation with authentic explanatory answer keys (विस्तृत मूल्यांकन एवं प्रामाणिक व्याख्यात्मक उत्तर पत्रक) for each question paper.',
     accentColor: 'orange',
-    fee: { original: 1999, discounted: 1499 },
+    fee: { original: 1999, discounted: 1 }, // TEMP: ₹1 for payment testing — revert to 1499
     totalTests: 22,
     startDate: '15 June 2026',
     duration: 'Jun–Oct 2026',
