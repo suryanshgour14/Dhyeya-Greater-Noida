@@ -25,6 +25,7 @@ export default async function TestsPage({ params }: { params: { locale: string }
     { data: inProgress },
     { data: submitted },
     { data: products },
+    { data: seriesLinks },
   ] = await Promise.all([
     supabase
       .from("tests")
@@ -47,6 +48,9 @@ export default async function TestsPage({ params }: { params: { locale: string }
       .select("id, ref_id")
       .eq("type", "test")
       .eq("is_active", true),
+    supabase
+      .from("test_series_links")
+      .select("test_id, series_product_id"),
   ]);
 
   const inProgressSet = new Set((inProgress ?? []).map((a) => a.test_id));
@@ -63,6 +67,14 @@ export default async function TestsPage({ params }: { params: { locale: string }
   const productByTestId = new Map<string, string>(
     (products as ProductRow[] ?? []).map((p) => [p.ref_id, p.id])
   );
+
+  // Series a test belongs to → candidate products that unlock it
+  const seriesByTestId = new Map<string, Set<string>>();
+  for (const l of (seriesLinks as { test_id: string; series_product_id: string }[] ?? [])) {
+    const set = seriesByTestId.get(l.test_id) ?? new Set<string>();
+    set.add(l.series_product_id);
+    seriesByTestId.set(l.test_id, set);
+  }
 
   let enrolledProductIds = new Set<string>();
   if (products && products.length > 0) {
@@ -117,8 +129,13 @@ export default async function TestsPage({ params }: { params: { locale: string }
               const isSubmitted      = !!submittedAttemptId;
               const qCount           = test.questions?.[0]?.count ?? 0;
               const sCount    = test.test_sections?.[0]?.count ?? 0;
-              const productId = productByTestId.get(test.id);
-              const enrolled  = productId ? enrolledProductIds.has(productId) : false;
+              // Candidate products that unlock this test: its series + a legacy per-test product
+              const directProductId = productByTestId.get(test.id);
+              const candidateIds = new Set<string>(seriesByTestId.get(test.id) ?? []);
+              if (directProductId) candidateIds.add(directProductId);
+              const enrolled  = Array.from(candidateIds).some((id) => enrolledProductIds.has(id));
+              // Legacy single-product buy button still works; series-locked tests point to /test-series
+              const productId = directProductId;
               const canStart  = test.is_free || enrolled;
 
               return (
@@ -215,6 +232,13 @@ export default async function TestsPage({ params }: { params: { locale: string }
                           variant="gold"
                           productTitle={test.title}
                         />
+                      ) : candidateIds.size > 0 ? (
+                        <Link
+                          href={`/${locale}/test-series`}
+                          className="flex items-center gap-1 rounded-xl bg-brand-gold px-4 py-2 text-sm font-bold text-brand-blue hover:opacity-90 transition-opacity"
+                        >
+                          <Lock className="h-3.5 w-3.5" /> Enrol via Series
+                        </Link>
                       ) : (
                         <span className="flex items-center gap-1 rounded-xl bg-slate-100 px-4 py-2 text-sm font-semibold text-slate-400">
                           <Lock className="h-3.5 w-3.5" /> Paid

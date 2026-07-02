@@ -18,32 +18,49 @@ export async function POST(request: NextRequest, { params }: { params: { id: str
 
   if (!test) return NextResponse.json({ error: 'Test not found' }, { status: 404 });
 
-  // Enrollment gate: paid tests require an active enrollment
+  // Enrollment gate: a paid test is accessible if the student is enrolled in
+  // ANY series it belongs to (test_series_links) — or, for backward compat, a
+  // per-test product (products.ref_id = test.id).
   if (!test.is_free) {
-    const { data: product } = await supabase
+    // Series this test belongs to
+    const { data: links } = await supabase
+      .from('test_series_links')
+      .select('series_product_id')
+      .eq('test_id', testId);
+    const candidateIds = new Set<string>((links ?? []).map((l) => l.series_product_id));
+
+    // Legacy per-test product
+    const { data: directProduct } = await supabase
       .from('products')
       .select('id')
       .eq('type', 'test')
       .eq('ref_id', testId)
       .eq('is_active', true)
       .maybeSingle();
+    if (directProduct) candidateIds.add(directProduct.id);
 
-    if (product) {
-      const { data: enrollment } = await supabase
-        .from('enrollments')
-        .select('id, expires_at')
-        .eq('student_id', user.id)
-        .eq('product_id', product.id)
-        .maybeSingle();
+    // A test with no series and no product is admin-misconfigured → keep it locked.
+    if (candidateIds.size === 0) {
+      return NextResponse.json(
+        { error: 'This test is not available for purchase yet. Please contact the institute.', requiresPurchase: true },
+        { status: 403 },
+      );
+    }
 
-      const active = enrollment &&
-        (enrollment.expires_at === null || new Date(enrollment.expires_at) > new Date());
-      if (!active) {
-        return NextResponse.json(
-          { error: 'Purchase required', requiresPurchase: true, productId: product.id },
-          { status: 403 },
-        );
-      }
+    const { data: enrollments } = await supabase
+      .from('enrollments')
+      .select('product_id, expires_at')
+      .eq('student_id', user.id)
+      .in('product_id', Array.from(candidateIds));
+
+    const hasAccess = (enrollments ?? []).some(
+      (e) => e.expires_at === null || new Date(e.expires_at) > new Date(),
+    );
+    if (!hasAccess) {
+      return NextResponse.json(
+        { error: 'Purchase required', requiresPurchase: true, productIds: Array.from(candidateIds) },
+        { status: 403 },
+      );
     }
   }
 

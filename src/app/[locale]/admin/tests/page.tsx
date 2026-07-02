@@ -20,8 +20,11 @@ interface TestRow {
   id: string; title: string; exam_type: string | null; status: string;
   total_duration_min: number; marks_per_q: number; negative_marks: number;
   sectional_timing: boolean; is_free: boolean; created_at: string;
+  series_ids?: string[];
   test_sections: { count: number }[]; questions: { count: number }[];
 }
+
+interface SeriesOption { id: string; title: string; price_inr: number }
 
 interface QuestionRow {
   id: string;
@@ -58,6 +61,51 @@ function Field({ label, children }: { label: string; children: React.ReactNode }
     <div>
       <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-slate-400">{label}</label>
       {children}
+    </div>
+  );
+}
+
+// Checkbox list of test series a test belongs to. `dark` matches the create
+// modal's dark theme; the edit modal passes dark={false} for its light panel.
+function SeriesPicker({
+  seriesList, selected, onToggle, disabled = false, dark = true,
+}: {
+  seriesList: SeriesOption[];
+  selected: string[];
+  onToggle: (id: string) => void;
+  disabled?: boolean;
+  dark?: boolean;
+}) {
+  return (
+    <div>
+      <p className={cn("mb-1.5 text-xs font-semibold uppercase tracking-wider", dark ? "text-slate-400" : "text-slate-500")}>
+        Accessible in Test Series {disabled && <span className="normal-case font-normal opacity-70">— (free test: open to all)</span>}
+      </p>
+      {seriesList.length === 0 ? (
+        <p className={cn("text-xs", dark ? "text-white/40" : "text-slate-400")}>No test series found. Seed products first.</p>
+      ) : (
+        <div className={cn("grid grid-cols-1 gap-2 sm:grid-cols-2", disabled && "pointer-events-none opacity-40")}>
+          {seriesList.map((s) => {
+            const on = selected.includes(s.id);
+            return (
+              <label
+                key={s.id}
+                className={cn(
+                  "flex cursor-pointer items-center gap-2.5 rounded-xl border px-3 py-2.5 text-sm transition-all",
+                  on
+                    ? "border-brand-gold/50 bg-brand-gold/10 " + (dark ? "text-brand-gold" : "text-amber-700")
+                    : dark
+                      ? "border-white/10 bg-white/5 text-white/60 hover:border-white/20"
+                      : "border-slate-200 bg-slate-50 text-slate-600 hover:border-slate-300",
+                )}
+              >
+                <input type="checkbox" checked={on} onChange={() => onToggle(s.id)} className="h-4 w-4 accent-amber-400" />
+                <span className="font-medium leading-tight">{s.title}</span>
+              </label>
+            );
+          })}
+        </div>
+      )}
     </div>
   );
 }
@@ -150,7 +198,15 @@ function TestsTab({ locale, showToast }: { locale: string; showToast: (m: string
   const [draftId, setDraftId] = useState<string | null>(null);
   const [parsedQs, setParsedQs] = useState<ParsedQuestion[]>([]);
   const [uploading, setUploading] = useState(false);
-  const [form, setForm] = useState({ title: "", title_hi: "", exam_type: "", total_duration_min: "90", marks_per_q: "2", negative_marks: "0.66", sectional_timing: false, is_free: false });
+  const [form, setForm] = useState({ title: "", title_hi: "", exam_type: "", total_duration_min: "90", marks_per_q: "2", negative_marks: "0.66", sectional_timing: false, is_free: false, series_ids: [] as string[] });
+  const [seriesList, setSeriesList] = useState<SeriesOption[]>([]);
+
+  useEffect(() => {
+    fetch("/api/admin/series")
+      .then((r) => (r.ok ? r.json() : { series: [] }))
+      .then((d) => setSeriesList(d.series ?? []))
+      .catch(() => setSeriesList([]));
+  }, []);
 
   const loadTests = useCallback(async () => {
     setLoading(true);
@@ -163,7 +219,7 @@ function TestsTab({ locale, showToast }: { locale: string; showToast: (m: string
 
   function resetAndClose() {
     setShowCreate(false); setStep("form"); setDraftId(null); setParsedQs([]);
-    setForm({ title: "", title_hi: "", exam_type: "", total_duration_min: "90", marks_per_q: "2", negative_marks: "0.66", sectional_timing: false, is_free: false });
+    setForm({ title: "", title_hi: "", exam_type: "", total_duration_min: "90", marks_per_q: "2", negative_marks: "0.66", sectional_timing: false, is_free: false, series_ids: [] });
     loadTests();
   }
 
@@ -313,6 +369,20 @@ function TestsTab({ locale, showToast }: { locale: string; showToast: (m: string
                     </label>
                   ))}
                 </div>
+
+                {/* Which test series can access this test (ignored for free tests) */}
+                <SeriesPicker
+                  seriesList={seriesList}
+                  selected={form.series_ids}
+                  disabled={form.is_free}
+                  onToggle={(id) => setForm((f) => ({
+                    ...f,
+                    series_ids: f.series_ids.includes(id)
+                      ? f.series_ids.filter((s) => s !== id)
+                      : [...f.series_ids, id],
+                  }))}
+                />
+
                 <ModalFooter onCancel={resetAndClose} submitLabel="Next: Upload Questions →" loading={creating} />
               </form>
             ) : (
@@ -350,6 +420,7 @@ function TestsTab({ locale, showToast }: { locale: string; showToast: (m: string
         {editTest && (
           <EditTestModal
             test={editTest}
+            seriesList={seriesList}
             onClose={() => { setEditTest(null); setParsedQs([]); loadTests(); }}
             showToast={showToast}
             parsedQs={parsedQs}
@@ -365,9 +436,10 @@ function TestsTab({ locale, showToast }: { locale: string; showToast: (m: string
 
 // ── Edit Test Modal ────────────────────────────────────────────
 function EditTestModal({
-  test, onClose, showToast, parsedQs, setParsedQs, onUpload, uploading,
+  test, seriesList, onClose, showToast, parsedQs, setParsedQs, onUpload, uploading,
 }: {
   test: TestRow;
+  seriesList: SeriesOption[];
   onClose: () => void;
   showToast: (m: string, ok: boolean) => void;
   parsedQs: ParsedQuestion[];
@@ -380,6 +452,22 @@ function EditTestModal({
   const [expandedQ, setExpandedQ] = useState<string | null>(null);
   const [showReupload, setShowReupload] = useState(false);
   const [deletingQ, setDeletingQ] = useState<string | null>(null);
+
+  // Access / series editing
+  const [isFree, setIsFree] = useState(test.is_free);
+  const [seriesIds, setSeriesIds] = useState<string[]>(test.series_ids ?? []);
+  const [savingAccess, setSavingAccess] = useState(false);
+
+  async function saveAccess() {
+    setSavingAccess(true);
+    const res = await fetch(`/api/admin/tests/${test.id}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ is_free: isFree, series_ids: isFree ? [] : seriesIds }),
+    });
+    setSavingAccess(false);
+    showToast(res.ok ? "Access settings saved" : "Failed to save access", res.ok);
+  }
 
   useEffect(() => {
     fetch(`/api/admin/tests/${test.id}/questions`)
@@ -472,6 +560,30 @@ function EditTestModal({
               </motion.div>
             )}
           </AnimatePresence>
+        </div>
+
+        {/* Access & Series */}
+        <div className="shrink-0 border-b border-slate-200 bg-slate-50 px-7 py-4">
+          <div className="mb-3 flex items-center justify-between gap-3">
+            <span className="text-xs font-bold uppercase tracking-widest text-slate-500">Access & Series</span>
+            <div className="flex items-center gap-3">
+              <label className="flex cursor-pointer items-center gap-2 text-xs font-semibold text-slate-600">
+                <input type="checkbox" checked={isFree} onChange={(e) => setIsFree(e.target.checked)} className="h-4 w-4 accent-brand-blue" />
+                Free (open to all)
+              </label>
+              <Button size="sm" onClick={saveAccess} disabled={savingAccess} className="bg-brand-blue text-white text-xs">
+                {savingAccess && <Loader2 className="h-3.5 w-3.5 mr-1 animate-spin" />}
+                Save Access
+              </Button>
+            </div>
+          </div>
+          <SeriesPicker
+            seriesList={seriesList}
+            selected={seriesIds}
+            disabled={isFree}
+            dark={false}
+            onToggle={(id) => setSeriesIds((prev) => prev.includes(id) ? prev.filter((s) => s !== id) : [...prev, id])}
+          />
         </div>
 
         {/* Questions list */}
