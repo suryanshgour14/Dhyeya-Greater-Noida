@@ -20,6 +20,7 @@ interface TestRow {
   id: string; title: string; exam_type: string | null; status: string;
   total_duration_min: number; marks_per_q: number; negative_marks: number;
   sectional_timing: boolean; is_free: boolean; created_at: string;
+  max_attempts: number | null;
   series_ids?: string[];
   test_sections: { count: number }[]; questions: { count: number }[];
 }
@@ -198,7 +199,7 @@ function TestsTab({ locale, showToast }: { locale: string; showToast: (m: string
   const [draftId, setDraftId] = useState<string | null>(null);
   const [parsedQs, setParsedQs] = useState<ParsedQuestion[]>([]);
   const [uploading, setUploading] = useState(false);
-  const [form, setForm] = useState({ title: "", title_hi: "", exam_type: "", total_duration_min: "90", marks_per_q: "2", negative_marks: "0.66", sectional_timing: false, is_free: false, series_ids: [] as string[] });
+  const [form, setForm] = useState({ title: "", title_hi: "", exam_type: "", total_duration_min: "90", marks_per_q: "2", negative_marks: "0.66", max_attempts: "", sectional_timing: false, is_free: false, series_ids: [] as string[] });
   const [seriesList, setSeriesList] = useState<SeriesOption[]>([]);
 
   useEffect(() => {
@@ -219,7 +220,7 @@ function TestsTab({ locale, showToast }: { locale: string; showToast: (m: string
 
   function resetAndClose() {
     setShowCreate(false); setStep("form"); setDraftId(null); setParsedQs([]);
-    setForm({ title: "", title_hi: "", exam_type: "", total_duration_min: "90", marks_per_q: "2", negative_marks: "0.66", sectional_timing: false, is_free: false, series_ids: [] });
+    setForm({ title: "", title_hi: "", exam_type: "", total_duration_min: "90", marks_per_q: "2", negative_marks: "0.66", max_attempts: "", sectional_timing: false, is_free: false, series_ids: [] });
     loadTests();
   }
 
@@ -359,6 +360,9 @@ function TestsTab({ locale, showToast }: { locale: string; showToast: (m: string
                   <Field label="Negative Marks">
                     <input type="number" step="0.01" className={inputCls} value={form.negative_marks} onChange={(e) => setForm({ ...form, negative_marks: e.target.value })} />
                   </Field>
+                  <Field label="Max Attempts (blank = unlimited)">
+                    <input type="number" min="1" placeholder="Unlimited" className={inputCls} value={form.max_attempts} onChange={(e) => setForm({ ...form, max_attempts: e.target.value })} />
+                  </Field>
                 </div>
                 <div className="grid grid-cols-2 gap-3">
                   {([["sectional", "Sectional Timing", "sectional_timing"], ["isfree", "Free Test", "is_free"]] as const).map(([id, label, key]) => (
@@ -456,6 +460,7 @@ function EditTestModal({
   // Access / series editing
   const [isFree, setIsFree] = useState(test.is_free);
   const [seriesIds, setSeriesIds] = useState<string[]>(test.series_ids ?? []);
+  const [maxAttempts, setMaxAttempts] = useState<string>(test.max_attempts != null ? String(test.max_attempts) : "");
   const [savingAccess, setSavingAccess] = useState(false);
 
   async function saveAccess() {
@@ -463,7 +468,11 @@ function EditTestModal({
     const res = await fetch(`/api/admin/tests/${test.id}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ is_free: isFree, series_ids: isFree ? [] : seriesIds }),
+      body: JSON.stringify({
+        is_free: isFree,
+        series_ids: isFree ? [] : seriesIds,
+        max_attempts: maxAttempts === "" ? null : Number(maxAttempts),
+      }),
     });
     setSavingAccess(false);
     showToast(res.ok ? "Access settings saved" : "Failed to save access", res.ok);
@@ -567,6 +576,15 @@ function EditTestModal({
           <div className="mb-3 flex items-center justify-between gap-3">
             <span className="text-xs font-bold uppercase tracking-widest text-slate-500">Access & Series</span>
             <div className="flex items-center gap-3">
+              <label className="flex items-center gap-1.5 text-xs font-semibold text-slate-600">
+                Max attempts
+                <input
+                  type="number" min="1" placeholder="∞"
+                  value={maxAttempts}
+                  onChange={(e) => setMaxAttempts(e.target.value)}
+                  className="w-16 rounded-lg border border-slate-200 bg-white px-2 py-1 text-xs text-slate-800 outline-none focus:border-brand-blue/50 focus:ring-2 focus:ring-brand-blue/15"
+                />
+              </label>
               <label className="flex cursor-pointer items-center gap-2 text-xs font-semibold text-slate-600">
                 <input type="checkbox" checked={isFree} onChange={(e) => setIsFree(e.target.checked)} className="h-4 w-4 accent-brand-blue" />
                 Free (open to all)

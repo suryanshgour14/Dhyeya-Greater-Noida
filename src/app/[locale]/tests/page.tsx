@@ -3,6 +3,7 @@ import Link from "next/link";
 import { createServerClient } from "@/lib/supabase/server";
 import { Clock, Layers, Lock, ChevronRight, GraduationCap, CheckCircle2 } from "lucide-react";
 import type { DBTest } from "@/lib/test-types";
+import { cn } from "@/lib/utils";
 import BuyButton from "@/components/payments/BuyButton";
 
 interface TestWithCounts extends DBTest {
@@ -55,12 +56,15 @@ export default async function TestsPage({ params }: { params: { locale: string }
 
   const inProgressSet = new Set((inProgress ?? []).map((a) => a.test_id));
 
-  // Track latest submitted attempt per test for "Result & Analysis" button
+  // Track latest submitted attempt per test for "Result & Analysis" button,
+  // and count completed attempts per test for the attempt-limit gate.
   const submittedAttemptMap = new Map<string, string>();
+  const attemptCountMap = new Map<string, number>();
   for (const a of (submitted ?? [])) {
     if (!submittedAttemptMap.has(a.test_id)) {
       submittedAttemptMap.set(a.test_id, a.id);
     }
+    attemptCountMap.set(a.test_id, (attemptCountMap.get(a.test_id) ?? 0) + 1);
   }
 
   // Products + enrollments for access gating
@@ -138,6 +142,13 @@ export default async function TestsPage({ params }: { params: { locale: string }
               const productId = directProductId;
               const canStart  = test.is_free || enrolled;
 
+              // Attempt-limit gate
+              const attemptsUsed = attemptCountMap.get(test.id) ?? 0;
+              const maxAttempts  = test.max_attempts;
+              const limited      = maxAttempts != null && maxAttempts > 0;
+              const exhausted    = limited && attemptsUsed >= (maxAttempts as number);
+              const attemptsLeft = limited ? Math.max(0, (maxAttempts as number) - attemptsUsed) : null;
+
               return (
                 <div key={test.id} className="flex flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md">
                   <div className={`bg-gradient-to-r ${gradient} p-5 text-white`}>
@@ -188,6 +199,14 @@ export default async function TestsPage({ params }: { params: { locale: string }
                       <span className="flex items-center gap-1 rounded-full bg-slate-100 px-2.5 py-0.5 text-[10px] font-semibold text-slate-600">
                         <Layers className="h-3 w-3" />{sCount} sections
                       </span>
+                      {limited && (
+                        <span className={cn(
+                          "flex items-center gap-1 rounded-full px-2.5 py-0.5 text-[10px] font-bold",
+                          exhausted ? "bg-red-100 text-red-600" : "bg-amber-100 text-amber-700"
+                        )}>
+                          {exhausted ? "No attempts left" : `${attemptsLeft} of ${maxAttempts} left`}
+                        </span>
+                      )}
                     </div>
 
                     <div className="flex items-center justify-end gap-2 flex-wrap">
@@ -206,7 +225,7 @@ export default async function TestsPage({ params }: { params: { locale: string }
                           >
                             Result &amp; Analysis<ChevronRight className="h-4 w-4" />
                           </Link>
-                          {canStart && (
+                          {canStart && !exhausted && (
                             <Link
                               href={`/${locale}/tests/${test.id}/attempt`}
                               className="flex items-center gap-1 rounded-xl border border-brand-blue px-4 py-2 text-sm font-bold text-brand-blue hover:bg-blue-50 transition-colors"

@@ -10,6 +10,7 @@ export interface DBTest {
   negative_marks: number;
   sectional_timing: boolean;
   is_free: boolean;
+  max_attempts: number | null;
   status: 'draft' | 'published';
   created_by: string | null;
   created_at: string;

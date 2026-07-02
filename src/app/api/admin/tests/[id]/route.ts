@@ -34,6 +34,12 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
   // series_ids is not a column on tests — pull it out and sync the join table.
   const { series_ids, ...testFields } = body as { series_ids?: string[] } & Record<string, unknown>;
 
+  // Normalise max_attempts: empty / 0 / negative → null (unlimited)
+  if ('max_attempts' in testFields) {
+    const n = Number(testFields.max_attempts);
+    testFields.max_attempts = testFields.max_attempts != null && n > 0 ? n : null;
+  }
+
   if (Object.keys(testFields).length) {
     const { error } = await supabase.from('tests').update(testFields).eq('id', params.id);
     if (error) return NextResponse.json({ error: error.message }, { status: 500 });

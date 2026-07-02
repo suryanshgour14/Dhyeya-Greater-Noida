@@ -43,11 +43,13 @@ export async function POST(request: NextRequest) {
   if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
   const body = await request.json();
-  const { title, title_hi, exam_type, total_duration_min, marks_per_q, negative_marks, sectional_timing, is_free, series_ids } = body;
+  const { title, title_hi, exam_type, total_duration_min, marks_per_q, negative_marks, sectional_timing, is_free, series_ids, max_attempts } = body;
 
   if (!title || !total_duration_min) {
     return NextResponse.json({ error: 'Title and duration required' }, { status: 400 });
   }
+
+  const maxAttempts = max_attempts != null && Number(max_attempts) > 0 ? Number(max_attempts) : null;
 
   const { data, error } = await supabase
     .from('tests')
@@ -60,6 +62,7 @@ export async function POST(request: NextRequest) {
       negative_marks: Number(negative_marks ?? 0.66),
       sectional_timing: Boolean(sectional_timing),
       is_free: Boolean(is_free),
+      max_attempts: maxAttempts,
       status: 'draft',
       created_by: user.id,
     })

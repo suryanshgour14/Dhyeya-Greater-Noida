@@ -78,6 +78,24 @@ export async function POST(request: NextRequest, { params }: { params: { id: str
   let attempt = existing;
 
   if (!attempt) {
+    // Attempt-limit gate: block a NEW attempt once completed attempts hit the cap.
+    // (An in-progress attempt above would resume, not consume a new one.)
+    const maxAttempts = test.max_attempts;
+    if (maxAttempts != null && maxAttempts > 0) {
+      const { count } = await supabase
+        .from('attempts')
+        .select('id', { count: 'exact', head: true })
+        .eq('student_id', user.id)
+        .eq('test_id', testId)
+        .in('status', ['submitted', 'auto_submitted']);
+      if ((count ?? 0) >= maxAttempts) {
+        return NextResponse.json(
+          { error: `You have used all ${maxAttempts} attempt${maxAttempts > 1 ? 's' : ''} for this test.`, attemptsExhausted: true },
+          { status: 403 },
+        );
+      }
+    }
+
     // Create new attempt
     const { data: newAttempt, error } = await supabase
       .from('attempts')
