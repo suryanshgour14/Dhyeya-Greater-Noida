@@ -67,27 +67,39 @@ export default function TestSeriesPage({ params }: Props) {
 
                   {/* Fee */}
                   {series.fee && (
-                    <div className="mt-3 text-sm text-slate-600">
-                      {typeof series.fee === "object" ? (
-                        <span>
-                          Offline <strong>₹{series.fee.offline.toLocaleString("en-IN")}</strong> &nbsp;|&nbsp; Online <strong>₹{series.fee.online.toLocaleString("en-IN")}</strong>
-                        </span>
-                      ) : (
-                        <span>Fee: <strong>₹{series.fee.toLocaleString("en-IN")}</strong></span>
+                    <div className="mt-3 flex items-baseline gap-2">
+                      <span className="text-xl font-extrabold text-slate-900">
+                        ₹{series.fee.discounted.toLocaleString("en-IN")}
+                      </span>
+                      {series.fee.original > series.fee.discounted && (
+                        <>
+                          <span className="text-sm text-slate-400 line-through">
+                            ₹{series.fee.original.toLocaleString("en-IN")}
+                          </span>
+                          <span className="rounded-full bg-green-100 px-2 py-0.5 text-[11px] font-bold text-green-700">
+                            {Math.round(((series.fee.original - series.fee.discounted) / series.fee.original) * 100)}% OFF
+                          </span>
+                        </>
                       )}
                     </div>
                   )}
 
                   {/* CTA */}
-                  <div className="mt-auto pt-4">
+                  <div className="mt-auto flex items-center gap-2 pt-4">
                     <Link
                       href={`/${locale}/test-series/${series.slug}`}
                       className={cn(
-                        "flex w-full items-center justify-center gap-1 rounded-xl py-2.5 text-sm font-semibold transition-all duration-200",
+                        "flex flex-1 items-center justify-center gap-1 rounded-xl py-2.5 text-sm font-semibold transition-all duration-200",
                         t.btn
                       )}
                     >
-                      View Schedule & Details →
+                      Enroll Now →
+                    </Link>
+                    <Link
+                      href={`/${locale}/test-series/${series.slug}`}
+                      className="rounded-xl border border-slate-200 px-3.5 py-2.5 text-sm font-semibold text-slate-600 transition-colors hover:border-brand-blue/40 hover:text-brand-blue"
+                    >
+                      Details
                     </Link>
                   </div>
                 </div>

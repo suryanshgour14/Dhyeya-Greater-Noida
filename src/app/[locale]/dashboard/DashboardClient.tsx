@@ -83,6 +83,13 @@ export default function DashboardClient({ user, locale, initialTab, enrollments,
   const joinedDate = new Date(user.created_at).toLocaleDateString('en-IN', { year: 'numeric', month: 'long', day: 'numeric' });
   const provider = user.app_metadata?.provider === 'google' ? 'Google' : 'Email / Password';
 
+  // Editable profile (name + phone)
+  const [editing, setEditing] = useState(false);
+  const [formName, setFormName] = useState<string>((user.user_metadata?.name as string) || '');
+  const [formPhone, setFormPhone] = useState<string>((user.user_metadata?.phone as string) || '');
+  const [savingProfile, setSavingProfile] = useState(false);
+  const [profileMsg, setProfileMsg] = useState<{ ok: boolean; text: string } | null>(null);
+
   const courses = enrollments.filter((e) => e.products?.type === 'course');
   const testMap = new Map(tests.map((t) => [t.id, t]));
 
@@ -91,6 +98,24 @@ export default function DashboardClient({ user, locale, initialTab, enrollments,
     await supabase.auth.signOut();
     router.push(`/${locale}/login`);
     router.refresh();
+  }
+
+  async function handleSaveProfile() {
+    setSavingProfile(true);
+    setProfileMsg(null);
+    const { error } = await supabase.auth.updateUser({
+      data: { name: formName.trim(), phone: formPhone.trim() },
+    });
+    // Keep the profiles table (used for checkout prefill) in sync — best effort.
+    await supabase.from('profiles').update({ name: formName.trim(), phone: formPhone.trim() }).eq('id', user.id);
+    setSavingProfile(false);
+    if (error) {
+      setProfileMsg({ ok: false, text: 'Could not save. Please try again.' });
+    } else {
+      setProfileMsg({ ok: true, text: 'Saved successfully.' });
+      setEditing(false);
+      router.refresh();
+    }
   }
 
   return (
@@ -312,25 +337,89 @@ export default function DashboardClient({ user, locale, initialTab, enrollments,
         {/* ── Account Settings ───────────────────────────────────────────────── */}
         {tab === 'settings' && (
           <div className="rounded-2xl border border-border bg-white p-6 shadow-sm">
-            <h2 className="mb-4 text-base font-semibold text-foreground">Account Details</h2>
-            <div className="grid gap-4 sm:grid-cols-2">
-              {[
-                { label: 'Name', value: displayName },
-                { label: 'Email', value: user.email ?? '—' },
-                { label: 'Phone', value: (user.user_metadata?.phone as string) || '—' },
-                { label: 'Login method', value: provider },
-                { label: 'Member since', value: joinedDate },
-              ].map(({ label, value }) => (
-                <div key={label}>
-                  <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">{label}</p>
-                  <p className="mt-0.5 text-sm font-medium text-foreground">{value}</p>
-                </div>
-              ))}
+            <div className="mb-5 flex items-center justify-between">
+              <h2 className="text-base font-semibold text-foreground">Account Details</h2>
+              {!editing && (
+                <button
+                  onClick={() => {
+                    setEditing(true);
+                    setProfileMsg(null);
+                    setFormName((user.user_metadata?.name as string) || '');
+                    setFormPhone((user.user_metadata?.phone as string) || '');
+                  }}
+                  className="rounded-lg border border-brand-blue/30 bg-brand-blue/5 px-3 py-1.5 text-xs font-semibold text-brand-blue transition-colors hover:bg-brand-blue/10"
+                >
+                  Edit
+                </button>
+              )}
             </div>
-            <p className="mt-6 text-xs text-muted-foreground">
-              To update your name, phone or password, contact support at{' '}
-              <Link href={`/${locale}/contact`} className="font-semibold text-brand-blue hover:underline">the contact page</Link>.
-            </p>
+
+            {editing ? (
+              <div className="max-w-md space-y-4">
+                <div>
+                  <label htmlFor="acct-name" className="text-xs font-medium uppercase tracking-wider text-muted-foreground">Name</label>
+                  <input
+                    id="acct-name"
+                    value={formName}
+                    onChange={(e) => setFormName(e.target.value)}
+                    placeholder="Your full name"
+                    className="mt-1 w-full rounded-lg border border-border px-3 py-2 text-sm outline-none transition-colors focus:border-brand-blue focus:ring-1 focus:ring-brand-blue"
+                  />
+                </div>
+                <div>
+                  <label htmlFor="acct-phone" className="text-xs font-medium uppercase tracking-wider text-muted-foreground">Phone</label>
+                  <input
+                    id="acct-phone"
+                    value={formPhone}
+                    onChange={(e) => setFormPhone(e.target.value)}
+                    placeholder="e.g. 98765 43210"
+                    inputMode="tel"
+                    className="mt-1 w-full rounded-lg border border-border px-3 py-2 text-sm outline-none transition-colors focus:border-brand-blue focus:ring-1 focus:ring-brand-blue"
+                  />
+                </div>
+                <div>
+                  <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">Email</p>
+                  <p className="mt-1 text-sm text-slate-500">{user.email} <span className="text-xs">(can&apos;t be changed)</span></p>
+                </div>
+                <div className="flex flex-wrap items-center gap-3 pt-2">
+                  <button
+                    onClick={handleSaveProfile}
+                    disabled={savingProfile || !formName.trim()}
+                    className="inline-flex items-center gap-2 rounded-lg bg-brand-blue px-4 py-2 text-sm font-bold text-white transition-colors hover:bg-blue-700 disabled:opacity-60"
+                  >
+                    {savingProfile && <Loader2 className="h-4 w-4 animate-spin" />}
+                    {savingProfile ? 'Saving…' : 'Save changes'}
+                  </button>
+                  <button
+                    onClick={() => { setEditing(false); setProfileMsg(null); }}
+                    className="rounded-lg border border-border px-4 py-2 text-sm font-semibold text-slate-600 transition-colors hover:bg-slate-50"
+                  >
+                    Cancel
+                  </button>
+                  {profileMsg && (
+                    <span className={`text-sm font-medium ${profileMsg.ok ? 'text-green-600' : 'text-red-500'}`}>{profileMsg.text}</span>
+                  )}
+                </div>
+              </div>
+            ) : (
+              <>
+                <div className="grid gap-4 sm:grid-cols-2">
+                  {[
+                    { label: 'Name', value: displayName },
+                    { label: 'Email', value: user.email ?? '—' },
+                    { label: 'Phone', value: (user.user_metadata?.phone as string) || '—' },
+                    { label: 'Login method', value: provider },
+                    { label: 'Member since', value: joinedDate },
+                  ].map(({ label, value }) => (
+                    <div key={label}>
+                      <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">{label}</p>
+                      <p className="mt-0.5 text-sm font-medium text-foreground">{value}</p>
+                    </div>
+                  ))}
+                </div>
+                {profileMsg?.ok && <p className="mt-4 text-sm font-medium text-green-600">{profileMsg.text}</p>}
+              </>
+            )}
           </div>
         )}
       </div>

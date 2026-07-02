@@ -105,7 +105,7 @@ export const NAV_ITEMS: NavItem[] = [
       { label: 'IAS Mains', href: '/test-series/ias-mains', icon: Edit, description: 'Answer writing mock tests' },
       { label: 'UPPCS Prelims', href: '/test-series/uppcs-prelims', icon: ClipboardList, description: 'UP PCS prelims mock tests' },
       { label: 'UPPCS Mains', href: '/test-series/uppcs-mains', icon: Edit, description: 'UP PCS mains answer practice' },
-      { label: 'UKPSC Prelims', href: '/test-series/ukpsc-prelims', icon: ClipboardList, description: 'Uttarakhand prelims series' },
+      { label: 'UKPCS Prelims', href: '/test-series/ukpsc-prelims', icon: ClipboardList, description: 'Uttarakhand prelims series' },
       { label: 'UKPCS Mains', href: '/test-series/ukpcs-mains', icon: Edit, description: 'Uttarakhand mains series' },
     ],
   },

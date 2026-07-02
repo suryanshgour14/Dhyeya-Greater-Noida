@@ -25,13 +25,25 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
+// Maps each test series to its Razorpay product (products seeded in Supabase).
+// The amount charged is products.price_inr in Supabase, NOT the price shown on
+// the site — keep them in sync. See docs/PAYMENTS_CHECKLIST.md.
+const PRODUCT_IDS: Record<string, string> = {
+  "ias-prelims": "dd000001-0000-0000-0000-000000000001",
+  "ias-mains": "dd000001-0000-0000-0000-000000000002",
+  "uppcs-prelims": "dd000001-0000-0000-0000-000000000003",
+  "uppcs-mains": "dd000001-0000-0000-0000-000000000004",
+  "ukpsc-prelims": "dd000001-0000-0000-0000-000000000005",
+  "ukpcs-mains": "dd000001-0000-0000-0000-000000000006",
+};
+
 export default function TestSeriesDetailPage({ params }: Props) {
   const series = TEST_SERIES.find((s) => s.slug === params.slug);
   if (!series) notFound();
 
   return (
     <>
-      <TestSeriesHero series={series} />
+      <TestSeriesHero series={series} productId={PRODUCT_IDS[series.slug]} />
       <TestSeriesSchedule series={series} />
       <TestSeriesEnquiry series={series} />
     </>

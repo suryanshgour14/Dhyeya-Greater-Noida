@@ -1,9 +1,10 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { CalendarDays, FileText, IndianRupee, Clock } from "lucide-react";
+import { CalendarDays, FileText, Clock } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { TestSeries } from "@/lib/test-series";
+import BuyButton from "@/components/payments/BuyButton";
 
 const themes = {
   blue: {
@@ -37,33 +38,35 @@ const themes = {
 
 interface Props {
   series: TestSeries;
+  productId?: string;
 }
 
-function FeeBlock({ fee, t }: { fee: TestSeries["fee"]; t: (typeof themes)[keyof typeof themes] }) {
+function FeeBlock({ fee }: { fee: TestSeries["fee"] }) {
   if (!fee) return null;
-  if (typeof fee === "number") {
-    return (
-      <div className={cn("flex items-center gap-1.5 rounded-xl px-4 py-2 text-sm font-bold", t.fee)}>
-        <IndianRupee className="h-4 w-4" />
-        {fee.toLocaleString("en-IN")}
-      </div>
-    );
-  }
+  const off =
+    fee.original > fee.discounted
+      ? Math.round(((fee.original - fee.discounted) / fee.original) * 100)
+      : 0;
   return (
-    <div className="flex gap-2">
-      <div className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm">
-        <span className="block text-[10px] font-semibold uppercase tracking-widest text-slate-400">Offline</span>
-        <span className={cn("text-lg font-extrabold", t.hlVal)}>₹{fee.offline.toLocaleString("en-IN")}</span>
+    <div className="flex items-center gap-3 rounded-xl border border-white/20 bg-white/10 px-4 py-2.5 backdrop-blur-sm">
+      <div className="flex items-baseline gap-2">
+        <span className="text-2xl font-extrabold text-white">₹{fee.discounted.toLocaleString("en-IN")}</span>
+        {off > 0 && (
+          <span className="text-sm font-medium text-white/50 line-through">
+            ₹{fee.original.toLocaleString("en-IN")}
+          </span>
+        )}
       </div>
-      <div className={cn("rounded-xl px-4 py-2 text-sm", t.fee)}>
-        <span className="block text-[10px] font-semibold uppercase tracking-widest opacity-75">Online</span>
-        <span className="text-lg font-extrabold">₹{fee.online.toLocaleString("en-IN")}</span>
-      </div>
+      {off > 0 && (
+        <span className="rounded-full bg-green-500 px-2.5 py-0.5 text-[11px] font-bold text-white">
+          {off}% OFF
+        </span>
+      )}
     </div>
   );
 }
 
-export default function TestSeriesHero({ series }: Props) {
+export default function TestSeriesHero({ series, productId }: Props) {
   const t = themes[series.accentColor];
 
   return (
@@ -99,7 +102,7 @@ export default function TestSeriesHero({ series }: Props) {
 
           {/* Fee + start date row */}
           <div className="flex flex-wrap items-center gap-3">
-            {series.fee && <FeeBlock fee={series.fee} t={t} />}
+            {series.fee && <FeeBlock fee={series.fee} />}
             {series.startDate && (
               <div className="flex items-center gap-1.5 rounded-xl border border-white/20 bg-white/10 px-4 py-2 text-sm font-medium text-white">
                 <CalendarDays className="h-4 w-4 opacity-70" />
@@ -113,6 +116,18 @@ export default function TestSeriesHero({ series }: Props) {
               </div>
             )}
           </div>
+
+          {productId && (
+            <div className="mt-7">
+              <BuyButton
+                productId={productId}
+                redirectTo="/tests"
+                label="Enroll Now"
+                size="lg"
+                variant="gold"
+              />
+            </div>
+          )}
         </motion.div>
       </div>
     </section>

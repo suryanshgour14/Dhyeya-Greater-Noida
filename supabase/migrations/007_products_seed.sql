@@ -67,37 +67,37 @@ insert into products (id, type, ref_slug, title, price_inr, is_active, access_da
     'dd000001-0000-0000-0000-000000000001',
     'test', null,
     'All India IAS Prelims Test Series 2026',
-    3999, true, 365
+    2999, true, 365
   ),
   (
     'dd000001-0000-0000-0000-000000000002',
     'test', null,
     'GS Mains Answer Writing Programme 2026',
-    5999, true, 365
+    8999, true, 365
   ),
   (
     'dd000001-0000-0000-0000-000000000003',
     'test', null,
     'UPPCS Prelims Test Series 2026',
-    2499, true, 365
+    1499, true, 365
   ),
   (
     'dd000001-0000-0000-0000-000000000004',
     'test', null,
     'UPPCS Mains Test Series 2026',
-    3499, true, 365
+    6999, true, 365
   ),
   (
     'dd000001-0000-0000-0000-000000000005',
     'test', null,
-    'UKPSC Prelims Test Series 2026',
+    'UKPCS Prelims Test Series 2026',
     1499, true, 365
   ),
   (
     'dd000001-0000-0000-0000-000000000006',
     'test', null,
-    'UKPSC Mains Test Series 2026',
-    2999, true, 365
+    'UKPCS Mains Test Series 2026',
+    4999, true, 365
   ),
   (
     'dd000001-0000-0000-0000-000000000007',
