@@ -24,6 +24,8 @@ export interface TestSeries {
   tagline: string;
   description: string;
   accentColor: 'blue' | 'gold' | 'orange';
+  // `discounted` is what gets charged and must equal products.price_inr in
+  // Supabase; `original` is the cosmetic strikethrough. See docs/PAYMENTS_CHECKLIST.md.
   fee?: { original: number; discounted: number };
   totalTests: number;
   startDate?: string;
