@@ -109,15 +109,21 @@ export default function CourseCard({ course, index = 0 }: CourseCardProps) {
         </div>
 
         {/* CTA */}
-        <div className="mt-auto pt-4">
+        <div className="mt-auto flex items-center gap-2 pt-4">
           <Link
             href={`/${locale}/courses/${course.slug}`}
             className={cn(
-              "flex w-full items-center justify-center gap-1 rounded-xl py-2.5 text-sm font-semibold transition-all duration-200",
+              "flex flex-1 items-center justify-center gap-1 rounded-xl py-2.5 text-sm font-semibold transition-all duration-200",
               t.btn
             )}
           >
-            View Details <ChevronRight className="h-3.5 w-3.5" />
+            Enroll Now <ChevronRight className="h-3.5 w-3.5" />
+          </Link>
+          <Link
+            href={`/${locale}/courses/${course.slug}`}
+            className="rounded-xl border border-slate-200 px-3.5 py-2.5 text-sm font-semibold text-slate-600 transition-colors hover:border-brand-blue/40 hover:text-brand-blue"
+          >
+            Details
           </Link>
         </div>
       </div>

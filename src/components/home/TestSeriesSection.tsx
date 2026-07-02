@@ -17,7 +17,8 @@ const SERIES = [
     title: "All India IAS Prelims Test Series 2026",
     short: "GS Paper I + CSAT mock tests",
     features: ["50 Full Mocks", "All India Rank"],
-    price: "₹3,999",
+    price: "₹2,999",
+    originalPrice: "₹4,999",
     icon: ClipboardList,
     accent: "#1e3a6e",
     pill: "#e8eef7",
@@ -31,7 +32,8 @@ const SERIES = [
     title: "GS Mains Answer Writing Programme 2026",
     short: "Answer writing mock tests",
     features: ["360 Questions", "Expert Evaluation"],
-    price: "₹5,999",
+    price: "₹8,999",
+    originalPrice: "₹15,999",
     icon: Edit3,
     accent: "#C9A13B",
     pill: "#fdf6e4",
@@ -45,7 +47,8 @@ const SERIES = [
     title: "UPPCS Prelims Test Series 2026",
     short: "UP PCS prelims mock tests",
     features: ["30 Full Mocks", "UP Special Papers"],
-    price: "₹2,499",
+    price: "₹1,499",
+    originalPrice: "₹2,999",
     icon: ClipboardList,
     accent: "#ea580c",
     pill: "#fff3ed",
@@ -59,7 +62,8 @@ const SERIES = [
     title: "UPPCS Mains Test Series 2026",
     short: "UP PCS mains answer practice",
     features: ["18 Tests", "Papers 5 & 6 Included"],
-    price: "₹3,499",
+    price: "₹6,999",
+    originalPrice: "₹9,999",
     icon: Edit3,
     accent: "#7c3aed",
     pill: "#f5f0ff",
@@ -74,6 +78,7 @@ const SERIES = [
     short: "Uttarakhand prelims series",
     features: ["20 Full Mocks", "UK GK Coverage"],
     price: "₹1,499",
+    originalPrice: "₹1,999",
     icon: ClipboardList,
     accent: "#0891b2",
     pill: "#e0f7fa",
@@ -87,7 +92,8 @@ const SERIES = [
     title: "UKPCS Mains Test Series 2026",
     short: "Uttarakhand mains series",
     features: ["12 Tests", "UK Special Papers"],
-    price: "₹2,999",
+    price: "₹4,999",
+    originalPrice: "₹8,999",
     icon: Edit3,
     accent: "#059669",
     pill: "#ecfdf5",
@@ -102,6 +108,7 @@ const SERIES = [
     short: "Complete package — best value",
     features: ["50 Prelims + 360 Mains", "Interview Guidance"],
     price: "₹8,999",
+    originalPrice: "",
     icon: Target,
     accent: "#be123c",
     pill: "#fff1f3",
@@ -259,7 +266,12 @@ export default function TestSeriesSection() {
                 }}>
                   <div>
                     <div style={{ fontSize: 10, color: "#94a3b8", fontWeight: 500 }}>Starting from</div>
-                    <div style={{ fontSize: 18, fontWeight: 800, color: "#0B1C3D", lineHeight: 1.2 }}>{s.price}</div>
+                    <div style={{ display: "flex", alignItems: "baseline", gap: 6 }}>
+                      <span style={{ fontSize: 18, fontWeight: 800, color: "#0B1C3D", lineHeight: 1.2 }}>{s.price}</span>
+                      {s.originalPrice && (
+                        <span style={{ fontSize: 12, color: "#94a3b8", textDecoration: "line-through" }}>{s.originalPrice}</span>
+                      )}
+                    </div>
                   </div>
                   <BuyButton
                     productId={s.productId}

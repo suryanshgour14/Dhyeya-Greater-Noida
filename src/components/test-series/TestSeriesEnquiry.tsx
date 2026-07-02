@@ -62,18 +62,19 @@ export default function TestSeriesEnquiry({ series }: Props) {
               </div>
             </div>
 
-            {series.fee && typeof series.fee === "object" && (
+            {series.fee && (
               <div className="mt-6 rounded-xl border border-slate-100 bg-slate-50/60 p-4">
                 <p className="mb-2 text-[10px] font-bold uppercase tracking-widest text-slate-400">Fees</p>
-                <div className="flex flex-wrap gap-4">
-                  <div>
-                    <span className="block text-xs text-slate-400">Offline Mode</span>
-                    <span className="text-lg font-extrabold text-slate-800">₹{series.fee.offline.toLocaleString("en-IN")} /-</span>
-                  </div>
-                  <div>
-                    <span className="block text-xs text-slate-400">Online Mode</span>
-                    <span className="text-lg font-extrabold text-slate-800">₹{series.fee.online.toLocaleString("en-IN")} /-</span>
-                  </div>
+                <div className="flex items-baseline gap-2.5">
+                  <span className="text-2xl font-extrabold text-slate-900">₹{series.fee.discounted.toLocaleString("en-IN")}</span>
+                  {series.fee.original > series.fee.discounted && (
+                    <>
+                      <span className="text-sm text-slate-400 line-through">₹{series.fee.original.toLocaleString("en-IN")}</span>
+                      <span className="rounded-full bg-green-100 px-2 py-0.5 text-[11px] font-bold text-green-700">
+                        {Math.round(((series.fee.original - series.fee.discounted) / series.fee.original) * 100)}% OFF
+                      </span>
+                    </>
+                  )}
                 </div>
               </div>
             )}

@@ -24,7 +24,7 @@ export interface TestSeries {
   tagline: string;
   description: string;
   accentColor: 'blue' | 'gold' | 'orange';
-  fee?: { offline: number; online: number } | number;
+  fee?: { original: number; discounted: number };
   totalTests: number;
   startDate?: string;
   duration?: string;
@@ -44,6 +44,7 @@ export const TEST_SERIES: TestSeries[] = [
     description:
       'A professionally structured, week-by-week IAS Prelims Test Series starting July 5, 2026. This 40-week timeline systematically schedules 30 tests, strategically placing high-intensity Full-Length Tests (FLTs) and CSAT papers closer to the actual exam season in early 2027. Each Sunday test deepens your subject mastery, builds speed, and sharpens elimination instincts.',
     accentColor: 'blue',
+    fee: { original: 4999, discounted: 2999 },
     totalTests: 30,
     startDate: 'July 5, 2026',
     duration: '40 Weeks (Jul 2026 – Mar 2027)',
@@ -137,6 +138,7 @@ export const TEST_SERIES: TestSeries[] = [
     description:
       'A 16-set program designed to systematically transition you from micro-topic mastery to exam-level stamina. The program is balanced symmetrically: 8 Sectional Tests to build content and structure, followed by 8 Full-Length Tests (FLTs) to master time management and copy completion. Each set runs as two complete cycles of GS Papers 1–4 to train your brain to recall vast information under high pressure.',
     accentColor: 'blue',
+    fee: { original: 15999, discounted: 8999 },
     totalTests: 16,
     highlights: [
       { label: 'Total Sets', value: '16' },
@@ -196,6 +198,7 @@ export const TEST_SERIES: TestSeries[] = [
     description:
       'This schedule is strictly aligned with the latest UPPCS pattern, which removed optional subjects and introduced General Studies Paper 5 and Paper 6 (UP Special). The program is divided into two phases: Phase 1 focuses on micro-detailing through 10 Sectional Tests, and Phase 2 builds exam stamina through 8 Full-Length Tests.',
     accentColor: 'gold',
+    fee: { original: 9999, discounted: 6999 },
     totalTests: 18,
     highlights: [
       { label: 'Total Tests', value: '18' },
@@ -251,6 +254,7 @@ export const TEST_SERIES: TestSeries[] = [
     description:
       'A targeted test series for the UPPCS Prelims designed around the exact exam pattern. With 5 sectional tests covering high-yield static and dynamic GS content and 10 full-length simulators, this series is engineered to push your score past the safety margin. Each test comes with UP-specific factual drills, previous year paper analysis, and detailed performance reports.',
     accentColor: 'gold',
+    fee: { original: 2999, discounted: 1499 },
     totalTests: 15,
     highlights: [
       { label: 'Total Tests', value: '15' },
@@ -303,7 +307,7 @@ export const TEST_SERIES: TestSeries[] = [
     description:
       'उत्तराखंड लोक सेवा आयोग (UKPSC) के नवीनतम पाठ्यक्रम और परीक्षा पद्धति पर पूर्णतः आधारित। Fully based on the latest syllabus and exam pattern of the Uttarakhand Public Service Commission (UKPSC). The test series provides 10 dedicated sectional tests focusing specifically on Uttarakhand Special (UK Special) - उत्तराखंड विशेष पर विशेष ध्यान - comprehensive coverage of Current Affairs keeping in mind the trends of previous years (विगत वर्षों के रुझानों को ध्यान में रखकर), and detailed evaluation with authentic explanatory answer keys (विस्तृत मूल्यांकन एवं प्रामाणिक व्याख्यात्मक उत्तर पत्रक) for each question paper.',
     accentColor: 'orange',
-    fee: { offline: 4999, online: 1499 },
+    fee: { original: 1999, discounted: 1499 },
     totalTests: 22,
     startDate: '15 June 2026',
     duration: 'Jun–Oct 2026',
@@ -377,6 +381,7 @@ export const TEST_SERIES: TestSeries[] = [
     description:
       'A comprehensive Mains answer writing test series designed for the Uttarakhand Civil Services Main Examination. Covers all GS papers with special focus on Uttarakhand-specific content. Each test is evaluated by experienced faculty with detailed feedback on structure, presentation, and content quality.',
     accentColor: 'orange',
+    fee: { original: 8999, discounted: 4999 },
     totalTests: 12,
     highlights: [
       { label: 'Total Tests', value: '12' },
