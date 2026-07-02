@@ -21,7 +21,7 @@ const QUICK_STATS = [
   { value: "12+", labelKey: "welcome.yearsLabel" },
   { value: "500+", labelKey: "welcome.selectionsLabel" },
   { value: "25+", labelKey: "welcome.facultyLabel" },
-  { value: "4.9★", labelKey: "welcome.ratingLabel" },
+  { value: "4.3★", labelKey: "welcome.ratingLabel" },
 ] as const;
 
 export default function WelcomeSection() {

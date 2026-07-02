@@ -14,7 +14,7 @@ const STATS = [
   { icon: Trophy,        value: '500+',    label: 'UPSC Selections' },
   { icon: Users,         value: '15,000+', label: 'Students Trained' },
   { icon: GraduationCap, value: '25+',     label: 'Expert Faculty' },
-  { icon: Star,          value: '4.9★',    label: 'Google Rating' },
+  { icon: Star,          value: '4.3★',    label: 'Google Rating' },
 ];
 
 function FormSkeleton() {
