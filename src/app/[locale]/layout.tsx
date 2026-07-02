@@ -12,6 +12,7 @@ import AnnouncementBar from '@/components/layout/AnnouncementBar';
 import SmoothScroll from '@/components/shared/SmoothScroll';
 import WhatsAppButton from '@/components/shared/WhatsAppButton';
 import BackToTop from '@/components/shared/BackToTop';
+import LoadingScreen from '@/components/shared/LoadingScreen';
 import '../globals.css';
 
 const plusJakartaSans = Plus_Jakarta_Sans({
@@ -131,6 +132,7 @@ export default async function LocaleLayout({
         className={`${plusJakartaSans.variable} ${inter.variable} ${newsreader.variable} font-sans antialiased`}
       >
         <NextIntlClientProvider messages={messages}>
+          <LoadingScreen />
           <SmoothScroll>
             <AnnouncementBar items={barItems} />
             <Navbar />
