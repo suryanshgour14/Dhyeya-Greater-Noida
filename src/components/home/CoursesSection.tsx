@@ -358,6 +358,8 @@ function CourseCard({ course, index, locale }: { course: Course; index: number; 
             size="sm"
             variant="navy"
             className="flex-1 !rounded-lg"
+            productTitle={course.title}
+            priceLabel={fmt(course.fee)}
           />
           <Link
             href={`/${locale}${course.href}`}

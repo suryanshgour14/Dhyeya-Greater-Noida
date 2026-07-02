@@ -69,6 +69,8 @@ export default function StickyEnrollBar({
                   enrolledLabel="Go to Course"
                   size="md"
                   variant="gold"
+                  productTitle={title}
+                  priceLabel={`₹${fee.toLocaleString("en-IN")}`}
                 />
               ) : (
                 <button

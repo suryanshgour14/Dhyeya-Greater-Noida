@@ -22,6 +22,7 @@
 |---|------|--------------|
 | 007 | `007_products_seed.sql` | Seeds all course + test-series products (fixed UUIDs). Now seeds the **discounted** test-series prices. Uses `on conflict (id) do nothing`. |
 | 009 | `009_product_prices_2026_discount.sql` | **Force-updates** test-series `price_inr` by id. Needed because 007's `do nothing` will NOT change rows that were already seeded. Idempotent — safe to re-run. |
+| 010 | `010_purchase_details_and_notify.sql` | Adds `order_details` (the 9-field applicant form), `orders.paid_at/owner_notified_at`, `payments.amount_inr`, `webhook_events` (replay guard), and reusable `profiles.*` fields. Idempotent (`if not exists`). **Required for the new checkout flow.** |
 
 If the products table was seeded before this branch merged, **you must run 009**,
 otherwise old prices (₹5,999 / ₹3,499 / …) will be charged while the site shows
@@ -81,12 +82,60 @@ NEXT_PUBLIC_RAZORPAY_KEY_ID      # sent to browser checkout
 RAZORPAY_KEY_ID                  # server order creation
 RAZORPAY_KEY_SECRET              # server order creation
 RAZORPAY_WEBHOOK_SECRET          # must equal the secret set in Razorpay dashboard
+GMAIL_USER                       # Gmail address that sends the owner notification
+GMAIL_APP_PASSWORD               # Google App Password (2FA required) — NOT the normal password
+OWNER_EMAIL                      # who receives purchase alerts (comma-separated ok)
+CRON_SECRET                      # protects /api/payments/reconcile (Vercel Cron sends it automatically)
 ```
 
-## 7. Smoke test before announcing
+## 7. New checkout flow (details form → pay → owner email)
+
+Clicking **Enroll Now** now:
+1. Opens a **details form** (9 mandatory fields: full name, father's, mother's,
+   mobile, email, state, city, address, pincode — prefilled from the profile).
+2. On submit → `create-order` validates the details, stores them in
+   `order_details`, saves them back to the profile, and creates the Razorpay order.
+3. Razorpay checkout opens (amount = `products.price_inr`).
+4. On success → `verify` (browser) **or** `webhook` (server) settles the order
+   **once** (idempotent), grants the `enrollments` row, and **emails the owner**
+   the full applicant + payment details.
+
+**Owner email** is sent from the server via Gmail SMTP (`src/lib/notify-owner.ts`),
+so it fires even if the buyer's browser closed. It's sent exactly once via an
+atomic claim on `orders.owner_notified_at`. If `GMAIL_USER`/`GMAIL_APP_PASSWORD`
+are unset, the payment still succeeds — only the email is skipped (logged).
+
+## 8. Reconciliation cron (recovers interrupted payments)
+
+`vercel.json` registers `/api/payments/reconcile` every 15 min. It:
+- finds `created` orders older than 10 min, asks the Razorpay Orders API what
+  really happened, and settles/fails them (covers "money debited but the browser
+  never confirmed");
+- retries the owner email for any `paid` order whose email hadn't gone out.
+
+Needs `CRON_SECRET` set (Vercel Cron sends `Authorization: Bearer $CRON_SECRET`).
+
+## 9. Giving app access (owner's side)
+
+Every paid purchase produces:
+- an **`enrollments`** row keyed to the student's login + product (source of truth
+  for access — **the mobile app reads this**), and
+- an **`order_details`** row + the **owner email** with who bought what.
+
+If the app uses **this same Supabase project/logins**, access is automatic (the
+app checks `enrollments`). If the app is a separate backend, the owner uses the
+email / the admin/payments page to grant access manually. Either way the website's
+job is done once the payment is verified and recorded.
+
+## 10. Smoke test before announcing
 
 1. Log in as a normal student.
-2. Open a test series → **Enroll Now** → Razorpay checkout shows the **discounted** amount.
-3. Pay with a Razorpay test card → webhook fires → row appears in `enrollments`.
-4. Re-open the same product → it should block a second purchase ("already enrolled").
-5. Repeat for one course.
+2. Open a test series → **Enroll Now** → the **details form** appears; try submitting
+   empty to confirm validation, then fill it.
+3. Razorpay checkout shows the **discounted** amount → pay with a Razorpay test card.
+4. Success page says "website and mobile app"; a row appears in `enrollments` +
+   `order_details`; the **owner receives the email**.
+5. Re-open the same product → it blocks a second purchase ("already enrolled").
+6. Test an interruption: close the browser right after paying → within ~15 min the
+   reconcile cron (or the webhook) should still mark it paid + email the owner.
+7. Repeat for one course.

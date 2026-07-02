@@ -125,6 +125,8 @@ export default function TestSeriesHero({ series, productId }: Props) {
                 label="Enroll Now"
                 size="lg"
                 variant="gold"
+                productTitle={series.title}
+                priceLabel={series.fee ? `₹${series.fee.discounted.toLocaleString("en-IN")}` : undefined}
               />
             </div>
           )}

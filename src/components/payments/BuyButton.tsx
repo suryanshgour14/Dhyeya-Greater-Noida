@@ -9,6 +9,8 @@ import {
 } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { cn } from "@/lib/utils";
+import type { PaymentDetails } from "@/lib/payment-details";
+import EnrollDetailsDialog from "./EnrollDetailsDialog";
 
 // Razorpay is loaded from CDN at runtime — not bundled
 declare global {
@@ -38,6 +40,9 @@ export interface BuyButtonProps {
   className?: string;
   size?: "sm" | "md" | "lg";
   variant?: "gold" | "navy";
+  /** Shown in the details-form header (optional, improves UX). */
+  productTitle?: string;
+  priceLabel?: string;
 }
 
 export default function BuyButton({
@@ -49,6 +54,8 @@ export default function BuyButton({
   className,
   size = "md",
   variant = "gold",
+  productTitle,
+  priceLabel,
 }: BuyButtonProps) {
   const locale    = useLocale();
   const router    = useRouter();
@@ -60,6 +67,10 @@ export default function BuyButton({
   const [busy, setBusy]           = useState(false);
   const [toast, setToast]         = useState<{ msg: string; ok: boolean } | null>(null);
 
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [prefill, setPrefill]       = useState<Partial<PaymentDetails>>({});
+  const [payError, setPayError]     = useState<string>("");
+
   useEffect(() => {
     supabase.auth.getUser().then(({ data: { user } }) => setLoggedIn(!!user));
   }, [supabase]);
@@ -69,6 +80,7 @@ export default function BuyButton({
     setTimeout(() => setToast(null), 5000);
   }
 
+  // Step 0 — click: gate on auth/enrollment, then open the details form
   async function handleClick() {
     if (!loggedIn) {
       router.push(`/${locale}/login?next=${encodeURIComponent(pathname)}`);
@@ -78,84 +90,147 @@ export default function BuyButton({
       router.push(`/${locale}${redirectTo}`);
       return;
     }
+    setPayError("");
+    // Prefill the form from the saved profile (best-effort)
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user) {
+        const { data: p } = await supabase
+          .from("profiles")
+          .select("full_name, father_name, mother_name, phone, state, city, address, pincode")
+          .eq("id", user.id)
+          .maybeSingle();
+        setPrefill({
+          fullName:   p?.full_name   ?? "",
+          fatherName: p?.father_name ?? "",
+          motherName: p?.mother_name ?? "",
+          mobile:     p?.phone       ?? "",
+          email:      user.email     ?? "",
+          state:      p?.state       ?? "",
+          city:       p?.city        ?? "",
+          address:    p?.address     ?? "",
+          pincode:    p?.pincode     ?? "",
+        });
+      }
+    } catch { /* prefill is optional */ }
+    setDialogOpen(true);
+  }
 
+  // Step 1→2 — details submitted: create order, open Razorpay checkout
+  async function startPayment(details: PaymentDetails) {
+    setPayError("");
     setBusy(true);
     try {
       const ready = await loadRazorpay();
       if (!ready) {
-        flash("Failed to load payment gateway. Check your internet connection.", false);
+        setPayError("Failed to load the payment gateway. Check your internet connection.");
         setBusy(false);
         return;
       }
 
-      // Step 1 — create server-side order (price read from DB, not client)
-      const res  = await fetch("/api/payments/create-order", {
+      const res = await fetch("/api/payments/create-order", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ productId }),
+        body: JSON.stringify({ productId, details }),
       });
 
       let data: Record<string, string> = {};
-      try {
-        data = await res.json();
-      } catch {
-        flash("Server error — check console for details", false);
+      try { data = await res.json(); } catch {
+        setPayError("Server error — please try again.");
         setBusy(false);
         return;
       }
 
       if (!res.ok) {
-        flash(data.error ?? "Could not create order", false);
+        // Already-enrolled / validation / product errors surface in the dialog
+        setPayError(data.error ?? "Could not start the payment. Please try again.");
         setBusy(false);
+        if (data.error === "You are already enrolled in this product") {
+          setEnrolled(true);
+          setDialogOpen(false);
+        }
         return;
       }
 
-      const { razorpayOrderId, amount, currency, keyId, orderId, productTitle, prefill } = data;
+      const { razorpayOrderId, amount, currency, keyId, orderId, productTitle: title, prefill: rzpPrefill } = data;
 
-      // Step 2 — open Razorpay hosted checkout (card data never touches our server)
       const rzp = new window.Razorpay({
         key: keyId,
         amount,
         currency,
         name: "Dhyeya IAS Greater Noida",
-        description: productTitle,
+        description: title,
         order_id: razorpayOrderId,
-        prefill,
+        prefill: rzpPrefill,
         theme: { color: "#0B1C3D" },
         modal: {
-          ondismiss: () => setBusy(false),
+          ondismiss: () => {
+            setBusy(false);
+            flash("Payment cancelled. You can retry anytime.", false);
+          },
         },
+        // Step 3 — server verifies signature and grants enrollment
         handler: async (response: {
           razorpay_order_id: string;
           razorpay_payment_id: string;
           razorpay_signature: string;
         }) => {
-          // Step 3 — server verifies signature and grants enrollment
-          const vRes  = await fetch("/api/payments/verify", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ ...response, orderId }),
-          });
-          const vData = await vRes.json();
-          setBusy(false);
+          try {
+            const vRes  = await fetch("/api/payments/verify", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ ...response, orderId }),
+            });
+            const vData = await vRes.json();
+            setBusy(false);
 
-          if (vRes.ok && vData.success) {
-            setEnrolled(true);
-            flash("Payment successful! You are now enrolled.", true);
-            setTimeout(() => router.push(
-              `/${locale}/payment/success?ref=${response.razorpay_payment_id}&product=${encodeURIComponent(productTitle)}`
-            ), 1800);
-          } else {
-            flash(vData.error ?? "Verification failed. Please contact support.", false);
+            if (vRes.ok && vData.success) {
+              setEnrolled(true);
+              flash("Payment successful! You are now enrolled.", true);
+              setTimeout(() => router.push(
+                `/${locale}/payment/success?ref=${response.razorpay_payment_id}&product=${encodeURIComponent(title)}`
+              ), 1400);
+            } else {
+              // Verify failed on the browser, but the webhook may still settle it.
+              pollOrderStatus(orderId, title, response.razorpay_payment_id);
+            }
+          } catch {
+            pollOrderStatus(orderId, title, response.razorpay_payment_id);
           }
         },
       });
 
+      // Details captured & order created — hand off to Razorpay's checkout
+      setDialogOpen(false);
+      setBusy(false);
       rzp.open();
     } catch {
-      flash("Something went wrong. Please try again.", false);
+      setPayError("Something went wrong. Please try again.");
       setBusy(false);
     }
+  }
+
+  // Recovery — browser didn't get verify success; wait for the webhook to settle
+  async function pollOrderStatus(orderId: string, title: string, paymentRef: string) {
+    flash("Confirming your payment…", true);
+    for (let i = 0; i < 12; i++) {
+      await new Promise((r) => setTimeout(r, 3000));
+      try {
+        const r = await fetch(`/api/payments/order-status?orderId=${orderId}`);
+        if (!r.ok) continue;
+        const d = await r.json();
+        if (d.status === "paid") {
+          setEnrolled(true);
+          router.push(`/${locale}/payment/success?ref=${paymentRef}&product=${encodeURIComponent(title)}`);
+          return;
+        }
+        if (d.status === "failed") {
+          flash("Payment failed. If money was deducted it will be auto-refunded.", false);
+          return;
+        }
+      } catch { /* keep polling */ }
+    }
+    flash("Payment is still processing. Check 'My Purchases' in a few minutes.", false);
   }
 
   const pad = { sm: "px-4 py-2 text-xs", md: "px-6 py-3 text-sm", lg: "px-8 py-4 text-base" }[size];
@@ -200,13 +275,13 @@ export default function BuyButton({
 
       <motion.button
         onClick={handleClick}
-        disabled={busy}
+        disabled={busy || dialogOpen}
         whileHover={{ scale: busy ? 1 : 1.03 }}
         whileTap={{ scale: busy ? 1 : 0.97 }}
         className={cn(
           "inline-flex items-center gap-2 rounded-2xl font-bold transition-all",
           pad, btnColor,
-          busy && "opacity-60 cursor-not-allowed",
+          (busy || dialogOpen) && "opacity-60 cursor-not-allowed",
           className,
         )}
       >
@@ -222,6 +297,17 @@ export default function BuyButton({
         </span>
         {!busy && <ArrowRight className="h-4 w-4" />}
       </motion.button>
+
+      <EnrollDetailsDialog
+        open={dialogOpen}
+        onClose={() => setDialogOpen(false)}
+        onSubmit={startPayment}
+        submitting={busy}
+        defaultValues={prefill}
+        productTitle={productTitle ?? label ?? "This programme"}
+        priceLabel={priceLabel}
+        error={payError}
+      />
     </div>
   );
 }
