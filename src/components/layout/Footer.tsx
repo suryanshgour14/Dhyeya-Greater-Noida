@@ -1,4 +1,5 @@
-﻿import { Link } from "@/i18n/navigation";
+﻿import Image from "next/image";
+import { Link } from "@/i18n/navigation";
 import { Phone, Mail, MapPin, Clock } from "lucide-react";
 import { CONTACT_INFO, SOCIAL_LINKS, SITE_NAME } from "@/lib/constants";
 import SansathanamLogo from "@/components/shared/SansathanamLogo";
@@ -43,7 +44,15 @@ export default function Footer() {
 
           {/* Col 1 - Brand */}
           <div className="lg:col-span-2">
-            <div className="mb-4">
+            <div className="mb-4 flex flex-wrap items-center gap-4">
+              <Image
+                src="https://res.cloudinary.com/dl9t48lyt/image/upload/v1776708202/DHYEYA_LOGO_ENGLISHWHITE.jpg_gs7mee.jpg"
+                alt="Dhyeya IAS"
+                width={160}
+                height={52}
+                className="h-12 w-auto object-contain"
+              />
+              <span className="h-10 w-px bg-white/20" />
               <SansathanamLogo variant="dark" size="lg" />
             </div>
 
