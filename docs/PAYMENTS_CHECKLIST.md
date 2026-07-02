@@ -7,6 +7,46 @@
 
 ---
 
+## ⚠️ ACTION REQUIRED ON MERGE (do these or checkout breaks)
+
+The new checkout flow (details form → pay → owner email) will **not** work until
+BOTH of these are done on the production Supabase project + Vercel env:
+
+### 1) Run the new migrations in Supabase (SQL Editor)
+
+Run these in order (idempotent — safe to re-run):
+
+- `supabase/migrations/009_product_prices_2026_discount.sql` — syncs test-series prices
+- `supabase/migrations/010_purchase_details_and_notify.sql` — **required**: creates the
+  `order_details` table the details form writes to. **Without 010, clicking
+  "Proceed to Pay" returns "Failed to save your details."**
+
+Verify 010 ran:
+```sql
+select to_regclass('public.order_details');   -- should NOT be null
+```
+
+### 2) Set these environment variables (Vercel → Project → Settings → Environment Variables)
+
+```
+GMAIL_USER            = the Gmail address that sends purchase alerts
+GMAIL_APP_PASSWORD    = a Google App Password (16 chars, from Google Account >
+                        Security > App passwords — needs 2-Step Verification ON).
+                        NOT the normal Gmail password.
+OWNER_EMAIL           = who receives the alerts (comma-separated for multiple)
+CRON_SECRET           = any long random string (protects the reconcile cron)
+```
+
+Also confirm the Razorpay ones are already set: `RAZORPAY_KEY_ID`,
+`RAZORPAY_KEY_SECRET`, `RAZORPAY_WEBHOOK_SECRET`, `NEXT_PUBLIC_RAZORPAY_KEY_ID`.
+
+> If the GMAIL_* vars are missing, payments still succeed — only the owner email is
+> skipped (and logged). If CRON_SECRET is missing, the reconcile cron returns 401.
+
+Details for every step are in the numbered sections below.
+
+---
+
 ## 1. How pricing works (important)
 
 - `src/app/api/payments/create-order/route.ts` reads the product from Supabase
