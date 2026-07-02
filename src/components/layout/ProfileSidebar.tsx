@@ -57,7 +57,7 @@ export default function ProfileSidebar({ user }: Props) {
       .from("profiles")
       .select("role")
       .eq("id", user.id)
-      .single()
+      .maybeSingle()
       .then(({ data }) => {
         if (data?.role === "admin" || data?.role === "faculty") setIsAdmin(true);
       });

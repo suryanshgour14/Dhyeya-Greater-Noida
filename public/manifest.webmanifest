@@ -1,0 +1,12 @@
+{
+  "name": "Dhyeya Sansathanam Greater Noida",
+  "short_name": "Dhyeya IAS",
+  "description": "Premier UPSC & PCS coaching institute in Greater Noida.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0B1C3D",
+  "theme_color": "#0B1C3D",
+  "icons": [
+    { "src": "/favicon.ico", "sizes": "any", "type": "image/x-icon" }
+  ]
+}

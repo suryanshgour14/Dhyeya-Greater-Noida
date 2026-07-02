@@ -3,15 +3,13 @@
 import Image from "next/image";
 import { useLocale } from "next-intl";
 
+// New brand lockups (crest + "DHYEYA SANSATHANAM · GREATER NOIDA").
+// Files live in /public/images/ — save the provided artwork with these names.
+//   light = dark navy text  → use on light / white backgrounds (navbar)
+//   dark  = white text      → use on dark navy backgrounds (footer)
 const LOGOS = {
-  en: {
-    light: "https://res.cloudinary.com/dl9t48lyt/image/upload/v1776708127/DHYEYA_LOGO_ENGLISH_BLUE.jpg_pa8b8v.jpg",
-    dark:  "https://res.cloudinary.com/dl9t48lyt/image/upload/v1776708202/DHYEYA_LOGO_ENGLISHWHITE.jpg_gs7mee.jpg",
-  },
-  hi: {
-    light: "https://res.cloudinary.com/dl9t48lyt/image/upload/v1776708273/DHYEYA_LOGO_HINDI_BLUE.jpg_owqcgf.jpg",
-    dark:  "https://res.cloudinary.com/dl9t48lyt/image/upload/v1776708324/DHYEYA_LOGO_HINDI_WHITE.jpg_huiqjf.jpg",
-  },
+  light: "/images/logo-horizontal-light.png",
+  dark:  "/images/logo-horizontal-dark.png",
 } as const;
 
 interface DhyeyaLogoProps {
@@ -30,19 +28,18 @@ export default function DhyeyaLogo({
   priority = false,
 }: DhyeyaLogoProps) {
   const locale = useLocale();
-  const lang = locale === "hi" ? "hi" : "en";
-  const src = LOGOS[lang][background];
+  const src = LOGOS[background];
   const alt =
     locale === "hi"
-      ? "ध्येय IAS ग्रेटर नोएडा - सर्वश्रेष्ठ UPSC कोचिंग"
-      : "Dhyeya IAS Greater Noida - Best UPSC Coaching";
+      ? "ध्येय संस्थानम् ग्रेटर नोएडा - सर्वश्रेष्ठ UPSC कोचिंग"
+      : "Dhyeya Sansathanam Greater Noida - Best UPSC Coaching";
 
   return (
     <Image
       src={src}
       alt={alt}
-      width={240}
-      height={70}
+      width={320}
+      height={80}
       priority={priority}
       className={`w-auto object-contain ${heightClass} ${className}`}
     />

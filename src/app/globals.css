@@ -10,6 +10,24 @@
   }
 }
 
+/* ── Hero text CSS animations — no JS dependency, runs on first paint ──────── */
+@keyframes hero-fade-up {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.hero-animate {
+  animation: hero-fade-up 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+.hero-animate-d0   { animation-delay: 0ms; }
+.hero-animate-d80  { animation-delay: 80ms; }
+.hero-animate-d150 { animation-delay: 150ms; }
+.hero-animate-d220 { animation-delay: 220ms; }
+.hero-animate-d280 { animation-delay: 280ms; }
+.hero-animate-d350 { animation-delay: 350ms; }
+@media (prefers-reduced-motion: reduce) {
+  .hero-animate { animation: none; }
+}
+
 @layer base {
   .theme {
     --font-heading: var(--font-sans);

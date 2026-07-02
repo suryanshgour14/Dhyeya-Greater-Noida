@@ -154,7 +154,7 @@ export default function Footer() {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Facebook"
-                className="flex h-8 w-8 items-center justify-center rounded-lg bg-white/10 text-slate-300 transition-colors hover:bg-blue-600 hover:text-white"
+                className="flex h-8 w-8 items-center justify-center rounded-lg bg-white/10 text-slate-200 transition-colors hover:bg-blue-600 hover:text-white"
               >
                 <FacebookIcon size={16} />
               </a>
@@ -163,7 +163,7 @@ export default function Footer() {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Instagram"
-                className="flex h-8 w-8 items-center justify-center rounded-lg bg-white/10 text-slate-300 transition-colors hover:bg-pink-600 hover:text-white"
+                className="flex h-8 w-8 items-center justify-center rounded-lg bg-white/10 text-slate-200 transition-colors hover:bg-pink-600 hover:text-white"
               >
                 <InstagramIcon size={16} />
               </a>
@@ -172,7 +172,7 @@ export default function Footer() {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="YouTube"
-                className="flex h-8 w-8 items-center justify-center rounded-lg bg-white/10 text-slate-300 transition-colors hover:bg-red-600 hover:text-white"
+                className="flex h-8 w-8 items-center justify-center rounded-lg bg-white/10 text-slate-200 transition-colors hover:bg-red-600 hover:text-white"
               >
                 <YouTubeIcon size={16} />
               </a>
