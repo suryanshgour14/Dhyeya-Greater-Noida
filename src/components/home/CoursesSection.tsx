@@ -196,6 +196,7 @@ function CourseCard({ course, index, locale }: { course: Course; index: number; 
     <article
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
+      className="w-[85%] shrink-0 snap-center sm:w-auto sm:shrink"
       style={{
         background: hovered ? T.cardHov : T.card,
         padding: "30px 28px 26px",
@@ -529,15 +530,17 @@ export default function CoursesSection() {
           ))}
         </div>
 
-        {/* Grid */}
+        {/* Grid — swipeable carousel on phones, grid on larger screens */}
         <div
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3"
-          style={{ gap: 22, marginTop: 34 }}
+          className="flex snap-x snap-mandatory gap-4 overflow-x-auto pb-4 sm:grid sm:grid-cols-2 sm:gap-[22px] sm:overflow-visible sm:pb-0 lg:grid-cols-3 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+          style={{ marginTop: 34 }}
         >
           {visible.map((course, i) => (
             <CourseCard key={course.href} course={course} index={i} locale={locale as string} />
           ))}
         </div>
+        {/* Swipe hint (phones only) */}
+        <p className="mt-3 text-center text-xs text-slate-400 sm:hidden">← swipe to see more →</p>
 
         {/* CTA */}
         <div style={{ marginTop: 34, display: "flex", justifyContent: "center" }}>

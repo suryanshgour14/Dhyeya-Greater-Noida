@@ -158,7 +158,7 @@ export default function DownloadApp() {
               >
                 <div className="flex items-center gap-1.5">
                   <Star className="h-4 w-4 fill-brand-gold text-brand-gold" />
-                  <span className="text-sm font-bold text-slate-800">4.8</span>
+                  <span className="text-sm font-bold text-slate-800">4.3</span>
                 </div>
                 <p className="text-[9px] text-slate-500">10K+ reviews</p>
               </motion.div>

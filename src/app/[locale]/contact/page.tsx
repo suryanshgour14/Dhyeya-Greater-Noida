@@ -91,23 +91,13 @@ export default function ContactPage() {
           ))}
         </div>
 
-        {/* Hours + WhatsApp CTA */}
-        <div className="mt-8 flex flex-col items-center justify-between gap-4 rounded-2xl border border-slate-200 bg-slate-50 p-6 sm:flex-row">
-          <div className="flex items-center gap-3">
-            <Clock className="h-5 w-5 shrink-0 text-brand-gold" />
-            <div>
-              <p className="text-sm font-semibold text-brand-blue">Office Hours</p>
-              <p className="text-sm text-slate-600">{CONTACT_INFO.hours}</p>
-            </div>
+        {/* Office Hours */}
+        <div className="mt-8 flex items-center gap-3 rounded-2xl border border-slate-200 bg-slate-50 p-6">
+          <Clock className="h-5 w-5 shrink-0 text-brand-gold" />
+          <div>
+            <p className="text-sm font-semibold text-brand-blue">Office Hours</p>
+            <p className="text-sm text-slate-600">{CONTACT_INFO.hours}</p>
           </div>
-          <a
-            href={waLink("Hi, I'd like to enquire about admissions at Dhyeya IAS Greater Noida.")}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 rounded-xl bg-green-600 px-6 py-3 text-sm font-bold text-white transition-colors hover:bg-green-700"
-          >
-            <MessageCircle className="h-4 w-4" /> Message us on WhatsApp
-          </a>
         </div>
       </section>
 

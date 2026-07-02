@@ -15,6 +15,7 @@ import {
 import LanguageToggle from "./LanguageToggle";
 import DhyeyaLogo from "@/components/shared/DhyeyaLogo";
 import ProfileSidebar from "./ProfileSidebar";
+import SearchDialog from "./SearchDialog";
 import { createClient } from "@/lib/supabase/client";
 import type { User } from "@supabase/supabase-js";
 
@@ -259,6 +260,7 @@ export default function Navbar() {
   const locale = useLocale();
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
   const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
@@ -324,6 +326,7 @@ export default function Navbar() {
         <div className="flex items-center gap-2">
           <button
             aria-label="Search"
+            onClick={() => setSearchOpen(true)}
             className="rounded-full p-2 text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
           >
             <Search className="h-4 w-4" />
@@ -405,6 +408,8 @@ export default function Navbar() {
           </Sheet>
         </div>
       </div>
+
+      <SearchDialog open={searchOpen} onClose={() => setSearchOpen(false)} locale={locale} />
     </header>
   );
 }
