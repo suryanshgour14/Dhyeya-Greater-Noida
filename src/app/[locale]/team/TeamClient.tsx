@@ -317,7 +317,7 @@ const ADMIN_TEAM = [
     role: "Centre Head",
     tag: "Greater Noida",
     image:
-      "https://res.cloudinary.com/dl9t48lyt/image/upload/v1782416590/0bb87933-eb14-4856-af43-57eb38d93c65.png",
+      "https://res.cloudinary.com/dl9t48lyt/image/upload/v1782968326/WhatsApp_Image_2026-07-01_at_11.11.20_iiv1py.jpg",
     quote:
       "Every great officer was once an aspirant who chose to persist. At Dhyeya IAS Greater Noida, my commitment to each one of you is personal — we walk this journey together, every single step of the way.",
   },
@@ -375,7 +375,7 @@ function AdminCard({
             src={image}
             alt={name}
             fill
-            sizes="(max-width: 768px) 100vw, 33vw"
+            sizes="(max-width: 640px) 100vw, 50vw"
             className="object-contain object-bottom transition-transform duration-500 hover:scale-[1.03]"
           />
           {/* Role overlay at bottom */}
@@ -429,8 +429,8 @@ function AdministrationSection() {
           </p>
         </FadeIn>
 
-        {/* Three person cards */}
-        <div className="grid items-stretch gap-7 sm:grid-cols-2 lg:grid-cols-3">
+        {/* Person cards (centered — scales with how many there are) */}
+        <div className="mx-auto grid max-w-3xl items-stretch gap-7 sm:grid-cols-2">
           {ADMIN_TEAM.map((person, i) => (
             <AdminCard key={person.name} {...person} index={i} />
           ))}
