@@ -13,7 +13,7 @@ import {
   SheetContent,
 } from "@/components/ui/sheet";
 import LanguageToggle from "./LanguageToggle";
-import DhyeyaLogo from "@/components/shared/DhyeyaLogo";
+import SansathanamLogo from "@/components/shared/SansathanamLogo";
 import ProfileSidebar from "./ProfileSidebar";
 import SearchDialog from "./SearchDialog";
 import { createClient } from "@/lib/supabase/client";
@@ -312,7 +312,7 @@ export default function Navbar() {
       <div className="container mx-auto flex h-14 items-center justify-between px-4">
         {/* Logo */}
         <Link href={`/${locale}`} className="flex items-center shrink-0">
-          <DhyeyaLogo background="light" heightClass="h-9" className="max-w-[160px]" priority />
+          <SansathanamLogo variant="light" size="lg" priority />
         </Link>
 
         {/* Desktop nav */}
@@ -363,7 +363,7 @@ export default function Navbar() {
                   onClick={() => setMobileOpen(false)}
                   className="flex items-center shrink-0"
                 >
-                  <DhyeyaLogo background="light" heightClass="h-8" className="max-w-[140px]" />
+                  <SansathanamLogo variant="light" size="md" />
                 </Link>
                 <button
                   onClick={() => setMobileOpen(false)}

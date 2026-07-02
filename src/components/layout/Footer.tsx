@@ -2,6 +2,7 @@
 import { Phone, Mail, MapPin, Clock } from "lucide-react";
 import { CONTACT_INFO, SOCIAL_LINKS, SITE_NAME } from "@/lib/constants";
 import DhyeyaLogo from "@/components/shared/DhyeyaLogo";
+import SansathanamLogo from "@/components/shared/SansathanamLogo";
 import {
   FacebookIcon,
   InstagramIcon,
@@ -43,8 +44,12 @@ export default function Footer() {
 
           {/* Col 1 - Brand */}
           <div className="lg:col-span-2">
-            <div className="mb-4">
-              <DhyeyaLogo background="dark" heightClass="h-11" className="max-w-[180px]" />
+            <div className="mb-4 flex flex-wrap items-center gap-4">
+              {/* Parent company */}
+              <DhyeyaLogo background="dark" heightClass="h-12" className="max-w-[180px]" />
+              <span className="hidden h-11 w-px bg-white/15 sm:block" />
+              {/* Greater Noida branch logo */}
+              <SansathanamLogo variant="dark" size="lg" />
             </div>
 
             <p className="mb-5 text-sm leading-relaxed text-slate-400">

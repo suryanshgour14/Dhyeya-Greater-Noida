@@ -1,7 +1,7 @@
 ﻿"use client";
 
 import { motion } from "framer-motion";
-import { CheckCircle2, Smartphone, Star } from "lucide-react";
+import { CheckCircle2, Smartphone } from "lucide-react";
 import { APP_FEATURES } from "@/lib/constants";
 
 const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
@@ -62,7 +62,9 @@ export default function DownloadApp() {
             {/* Store buttons */}
             <div className="flex flex-wrap gap-3">
               <a
-                href="#"
+                href="https://play.google.com/store/apps/details?id=com.pfzywz.oaggpo"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="inline-flex items-center gap-3 rounded-xl border border-white/20 bg-white/10 px-5 py-3 text-white backdrop-blur-sm transition-colors hover:bg-white/20"
               >
                 {/* Google Play icon */}
@@ -76,7 +78,9 @@ export default function DownloadApp() {
               </a>
 
               <a
-                href="#"
+                href="https://apps.apple.com/in/app/my-appx/id1662307591"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="inline-flex items-center gap-3 rounded-xl border border-white/20 bg-white/10 px-5 py-3 text-white backdrop-blur-sm transition-colors hover:bg-white/20"
               >
                 {/* Apple icon */}
@@ -144,28 +148,6 @@ export default function DownloadApp() {
                 </div>
               </div>
 
-              {/* Floating rating badge */}
-              <motion.div
-                animate={{ y: [0, -6, 0] }}
-                transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-                className="absolute -right-4 top-8 rounded-2xl bg-white px-3 py-2 shadow-lg"
-              >
-                <div className="flex items-center gap-1.5">
-                  <Star className="h-4 w-4 fill-brand-gold text-brand-gold" />
-                  <span className="text-sm font-bold text-slate-800">4.3</span>
-                </div>
-                <p className="text-[9px] text-slate-500">10K+ reviews</p>
-              </motion.div>
-
-              {/* Floating download badge */}
-              <motion.div
-                animate={{ y: [0, 6, 0] }}
-                transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut" }}
-                className="absolute -left-4 bottom-12 rounded-2xl bg-white px-3 py-2 shadow-lg"
-              >
-                <p className="text-[10px] font-bold text-slate-800">50K+</p>
-                <p className="text-[9px] text-slate-500">Downloads</p>
-              </motion.div>
             </div>
           </motion.div>
 
