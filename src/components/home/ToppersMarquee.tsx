@@ -162,14 +162,14 @@ function SectionHeader() {
       </h2>
 
       <p className="mt-3 text-sm text-slate-500 md:text-base">
-        Proud achievements of our students — AIR 01 to hundreds of UPSC selections.
+        Proud achievements of our students — AIR 01 to thousands of IAS/PCS selections.
       </p>
 
       <div className="mt-8 flex flex-wrap items-center justify-center gap-x-10 gap-y-3">
         {[
-          { value: "500+", label: "UPSC Selections" },
+          { value: "5000+", label: "Selections in IAS / PCS" },
           { value: "AIR 01", label: "All India Rank 1" },
-          { value: "12 yrs", label: "Consistent Results" },
+          { value: "20 yrs", label: "Consistent Results" },
         ].map(({ value, label }) => (
           <div key={label} className="text-center">
             <p className="text-xl font-extrabold text-brand-blue">{value}</p>

@@ -58,7 +58,7 @@ export default function Footer() {
 
             <p className="mb-5 text-sm leading-relaxed text-slate-400">
               Premier UPSC &amp; State PSC coaching institute in Greater Noida. Trusted by
-              15,000+ aspirants with 500+ selections in UPSC Civil Services.
+              15,000+ aspirants with 5000+ selections in IAS/PCS.
             </p>
 
             <ul className="space-y-2.5 text-sm">

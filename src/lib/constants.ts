@@ -148,9 +148,9 @@ export const NAV_ITEMS: NavItem[] = [
 // ─── Stats ────────────────────────────────────────────────────────────────────
 export const STATS = [
   { value: 15000, suffix: '+', label: 'Students Trained', iconName: 'Users' },
-  { value: 500, suffix: '+', label: 'UPSC Selections', iconName: 'Trophy' },
+  { value: 5000, suffix: '+', label: 'Selections in IAS / PCS', iconName: 'Trophy' },
   { value: 25, suffix: '+', label: 'Expert Faculty', iconName: 'GraduationCap' },
-  { value: 12, suffix: '+', label: 'Years of Excellence', iconName: 'Star' },
+  { value: 20, suffix: '+', label: 'Years of Experience', iconName: 'Star' },
 ] as const;
 
 // ─── Toppers ─────────────────────────────────────────────────────────────────
@@ -1380,7 +1380,7 @@ export const STUDENT_ZONE_ITEMS: StudentZoneItem[] = [
 // ─── Why Choose Us ────────────────────────────────────────────────────────────
 export const WHY_US_FEATURES = [
   { icon: GraduationCap, title: 'Expert Faculty', desc: 'Learn from IAS/IPS officers and subject specialists with decades of experience.' },
-  { icon: Trophy, title: 'Proven Results', desc: '500+ selections in UPSC CSE across 12 years - our results speak for us.' },
+  { icon: Trophy, title: 'Proven Results', desc: '5000+ selections in IAS/PCS across 20 years - our results speak for us.' },
   { icon: BookOpen, title: 'Study Material', desc: 'Comprehensive, regularly updated notes covering the entire UPSC syllabus.' },
   { icon: UserCheck, title: 'Personal Mentorship', desc: 'One-on-one guidance sessions to identify and overcome your weaknesses.' },
   { icon: Building, title: 'Modern Infrastructure', desc: 'Smart classrooms, digital library, and a focused learning environment.' },

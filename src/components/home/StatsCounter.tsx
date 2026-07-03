@@ -9,9 +9,9 @@ const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
 
 const ICON_MAP = {
   "Students Trained": Users,
-  "UPSC Selections": Trophy,
+  "Selections in IAS / PCS": Trophy,
   "Expert Faculty": GraduationCap,
-  "Years of Excellence": Star,
+  "Years of Experience": Star,
 } as const;
 
 const COLOR_MAP = [

@@ -64,7 +64,7 @@ export default function CoursesPage() {
             {[
               { value: "10+", label: "Programmes" },
               { value: "68%", label: "Selection Rate" },
-              { value: "500+", label: "Selections" },
+              { value: "5000+", label: "Selections" },
               { value: "15+", label: "Expert Faculty" },
             ].map((s) => (
               <div key={s.label} className="text-center">

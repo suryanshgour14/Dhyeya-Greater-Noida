@@ -32,7 +32,7 @@ const WHY_ITEMS: WhyItem[] = [
   },
   {
     title: "Proven Results",
-    desc:  "500+ selections in UPSC CSE across 12 years. Our results are public record — not a marketing claim.",
+    desc:  "5000+ selections in IAS/PCS across 20 years. Our results are public record — not a marketing claim.",
     Icon:  Trophy,
   },
   {
@@ -58,9 +58,9 @@ const WHY_ITEMS: WhyItem[] = [
 ];
 
 const STATS = [
-  { value: "500+",  label: "UPSC Selections"   },
-  { value: "12+",   label: "Years of Excellence"},
-  { value: "4.3 ★", label: "Google Rating"      },
+  { value: "5000+", label: "Selections in IAS / PCS" },
+  { value: "20+",   label: "Years of Experience" },
+  { value: "4.3 ★", label: "Google Rating" },
 ];
 
 const EASE = [0.22, 1, 0.36, 1] as const;

@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 };
 
 const STATS = [
-  { icon: Trophy,        value: '500+',    label: 'UPSC Selections' },
+  { icon: Trophy,        value: '5000+',   label: 'Selections in IAS / PCS' },
   { icon: Users,         value: '15,000+', label: 'Students Trained' },
   { icon: GraduationCap, value: '25+',     label: 'Expert Faculty' },
   { icon: Star,          value: '4.3★',    label: 'Google Rating' },
