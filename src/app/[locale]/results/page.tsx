@@ -25,7 +25,7 @@ export default function ResultsPage() {
             {[
               { value: `${TOPPERS.length}+`, label: 'Featured Selections' },
               { value: 'AIR 01', label: 'All India Rank 1' },
-              { value: '500+', label: 'Total UPSC Selections' },
+              { value: '5000+', label: 'Total Selections in IAS / PCS' },
             ].map(({ value, label }) => (
               <div key={label} className="text-center">
                 <p className="text-2xl font-extrabold text-brand-gold">{value}</p>
