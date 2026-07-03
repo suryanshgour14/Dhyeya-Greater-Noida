@@ -80,7 +80,7 @@ export const NAV_ITEMS: NavItem[] = [
       { label: 'UP Special Paper 5 & 6', href: '/courses/up-special-paper-5-6', icon: BookOpen, description: 'UPPCS Mains GS Paper 5 & 6 mastery' },
       { label: 'General Hindi – UPPSC', href: '/courses/uppsc-general-hindi', icon: Book, description: '30-day Hindi paper intensive' },
       { label: 'Mains Answer Writing', href: '/courses/uppsc-mains-answer-writing', icon: PenLine, description: '120-day evaluated writing programme' },
-      { label: 'BPSC CCE Prep', href: '/courses/bpsc-cce-prep', icon: Award, description: 'Complete Bihar PCS CCE preparation' },
+      { label: 'BPSC', href: '/courses/bpsc-cce-prep', icon: Award, description: 'Complete Bihar PSC preparation' },
     ],
   },
   {
@@ -321,7 +321,7 @@ export const COURSES: Course[] = [
     fee: 110000,
     emi: '₹1,20,000 in installments',
     seats: 60,
-    batchStart: 'July 2026',
+    batchStart: 'Admissions Open',
     badge: 'Bestseller',
     tagline: 'Transform your aspiration into achievement - concept to AIR',
     description:
@@ -396,7 +396,7 @@ export const COURSES: Course[] = [
     fee: 81000,
     emi: '₹90,000 in installments',
     seats: 60,
-    batchStart: 'August 2026',
+    batchStart: 'Admissions Open',
     badge: 'Popular',
     tagline: 'Complete UPPSC PCS preparation - Prelims to Interview in one batch',
     description:
@@ -464,7 +464,7 @@ export const COURSES: Course[] = [
     fee: 253700,
     emi: '₹2,99,999 in installments',
     seats: 30,
-    batchStart: 'July 2026',
+    batchStart: 'Admissions Open',
     badge: 'Flagship',
     tagline: 'One programme, multiple services - build your civil services career from the ground up',
     description:
@@ -652,7 +652,7 @@ export const COURSES: Course[] = [
     fee: 22000,
     emi: '₹25,000 in installments',
     seats: 80,
-    batchStart: 'September 2026',
+    batchStart: 'Admissions Open',
     tagline: 'Turn CSAT from a qualifying barrier into a scoring advantage',
     description:
       'Thousands of UPSC and UPPSC aspirants work incredibly hard on General Studies only to be eliminated at the Prelims stage by a paper they neglected - CSAT (Paper II). The Dhyeya IAS 4-Month CSAT Mastery Programme is a focused, non-intimidating programme that takes students from zero aptitude background to confident 120+ scorers. With a non-math-background-friendly approach, integrated IAS & PCS preparation, time-optimization techniques, and comprehensive practice kits, this programme ensures CSAT never becomes the reason you don\'t clear Prelims.',
@@ -714,7 +714,7 @@ export const COURSES: Course[] = [
     fee: 25000,
     emi: '₹30,000 in installments',
     seats: 80,
-    batchStart: 'October 2026',
+    batchStart: 'Admissions Open',
     badge: 'Exam-Ready',
     tagline: 'Last-mile UPPSC Prelims preparation - reverse-engineered from the exam itself',
     description:
@@ -949,19 +949,19 @@ export const COURSES: Course[] = [
   // ── 11. BPSC CCE Complete Prep ────────────────────────────────────────────
   {
     slug: 'bpsc-cce-prep',
-    title: 'BPSC CCE Complete Preparation',
-    subtitle: 'Bihar Public Service Commission - Combined Competitive Examination',
+    title: 'BPSC',
+    subtitle: 'Bihar Public Service Commission',
     category: 'PCS',
     phase: 'All Phases',
     duration: '12 months',
     fee: 95000,
     emi: '₹8,000/month',
     seats: 60,
-    batchStart: 'August 2026',
+    batchStart: 'Admissions Open',
     badge: 'New',
-    tagline: 'End-to-end BPSC CCE preparation - Prelims to Personality Test, Bihar to the top',
+    tagline: 'End-to-end BPSC preparation - Prelims to Personality Test, Bihar to the top',
     description:
-      'The Bihar Public Service Commission Combined Competitive Examination (BPSC CCE) is conducted in three successive stages: a qualifying Prelims (150 MCQs, 150 marks, 2 hours with 0.25 negative marking), descriptive Mains (GS Paper I + GS Paper II + Essay Paper = 900 merit marks), and the Personality Test Interview (120 marks) - totalling 1020 merit marks. The Dhyeya IAS BPSC CCE Complete Preparation programme is purpose-built for Bihar aspirants, covering every stage with Bihar-specific content integration, bilingual teaching, structured answer writing practice, and mock interview preparation. From Ancient Bihar history to Bihar\'s current economic indicators, every class is calibrated to what the BPSC examiner rewards.',
+      'The Bihar Public Service Commission Combined Competitive Examination (BPSC CCE) is conducted in three successive stages: a qualifying Prelims (150 MCQs, 150 marks, 2 hours with 0.25 negative marking), descriptive Mains (GS Paper I + GS Paper II + Essay Paper = 900 merit marks), and the Personality Test Interview (120 marks) - totalling 1020 merit marks. The Dhyeya IAS BPSC preparation programme is purpose-built for Bihar aspirants, covering every stage with Bihar-specific content integration, bilingual teaching, structured answer writing practice, and mock interview preparation. From Ancient Bihar history to Bihar\'s current economic indicators, every class is calibrated to what the BPSC examiner rewards.',
     highlights: [
       { label: 'Total Merit', value: '1020 Marks' },
       { label: 'Mains Papers', value: '3 Merit Papers' },

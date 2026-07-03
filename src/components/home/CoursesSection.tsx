@@ -114,7 +114,7 @@ const COURSES: Course[] = [
     productId: "cc000001-0000-0000-0000-000000000005",
   },
   {
-    title: "4-Month UPPCS Prelims Crash",
+    title: "4-Month UPPCS Prelims Crash Course",
     sub: "UPPSC Preliminary",
     cat: "PCS",
     dur: "4 Months",
@@ -141,8 +141,8 @@ const COURSES: Course[] = [
     productId: "cc000001-0000-0000-0000-000000000007",
   },
   {
-    title: "BPSC CCE Complete Prep",
-    sub: "Bihar PSC — CCE",
+    title: "BPSC",
+    sub: "Bihar Public Service Commission",
     cat: "PCS",
     dur: "12 Months",
     seats: 60,
