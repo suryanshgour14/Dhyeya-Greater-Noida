@@ -85,7 +85,7 @@ export default function TestAttemptClient({
     attempt.progress ?? { answers: {}, marked: [], visited: [], currentQ: null }
   );
   const [currentIdx, setCurrentIdx] = useState(0);
-  const [showPalette, setShowPalette] = useState(true);
+  const [showPalette, setShowPalette] = useState(false);
   const [showSubmitModal, setShowSubmitModal] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [blurCount, setBlurCount] = useState(attempt.blur_count ?? 0);
@@ -271,13 +271,7 @@ export default function TestAttemptClient({
     <div className="fixed inset-0 z-[9999] flex flex-col bg-white overflow-hidden" style={{ userSelect: "none" }}>
       {/* ── Top bar ── */}
       <div className="flex shrink-0 items-center justify-between border-b border-slate-200 bg-slate-900 px-3 py-2.5 text-white">
-        <div className="flex items-center gap-3 min-w-0">
-          <button
-            onClick={() => setShowPalette((p) => !p)}
-            className="rounded-lg p-1.5 text-white/70 hover:bg-white/10 hover:text-white lg:hidden"
-          >
-            <Menu className="h-4 w-4" />
-          </button>
+        <div className="flex items-center gap-2 min-w-0">
           <div className="min-w-0">
             <p className="truncate text-sm font-bold">{test.title}</p>
             {currentSection && (
@@ -285,11 +279,11 @@ export default function TestAttemptClient({
             )}
           </div>
         </div>
-        <div className="flex items-center gap-3 shrink-0">
+        <div className="flex items-center gap-2 shrink-0">
           {/* Lang toggle */}
           <button
             onClick={() => setLang((l) => l === "en" ? "hi" : "en")}
-            className="flex items-center gap-1 rounded-lg border border-white/20 px-2.5 py-1 text-[11px] font-bold hover:bg-white/10"
+            className="flex items-center gap-1 rounded-lg border border-white/20 px-2 py-1 text-[11px] font-bold hover:bg-white/10"
           >
             <Globe className="h-3.5 w-3.5" />
             {lang === "en" ? "हिं" : "EN"}
@@ -297,18 +291,28 @@ export default function TestAttemptClient({
 
           {/* Overall timer */}
           <div className={cn(
-            "rounded-lg px-3 py-1.5 text-sm font-mono font-bold tabular-nums",
+            "rounded-lg px-2.5 py-1.5 text-sm font-mono font-bold tabular-nums",
             overallRemaining < 300 ? "bg-red-600 text-white animate-pulse" : "bg-white/10 text-white"
           )}>
             {fmtTime(overallRemaining)}
           </div>
+
+          {/* Palette toggle — mobile only, top-right */}
+          <button
+            onClick={() => setShowPalette((p) => !p)}
+            className="flex items-center gap-1 rounded-lg border border-white/20 px-2.5 py-1.5 text-[11px] font-bold text-white/80 hover:bg-white/10 hover:text-white lg:hidden"
+          >
+            <Menu className="h-3.5 w-3.5" />
+            <span className="hidden xs:inline">Palette</span>
+          </button>
 
           <button
             onClick={() => setShowSubmitModal(true)}
             className="flex items-center gap-1.5 rounded-lg bg-brand-gold px-3 py-1.5 text-xs font-bold text-white hover:bg-amber-500"
           >
             <Send className="h-3.5 w-3.5" />
-            Submit
+            <span className="hidden sm:inline">Submit</span>
+            <span className="sm:hidden">End</span>
           </button>
         </div>
       </div>
@@ -423,16 +427,26 @@ export default function TestAttemptClient({
           </AnimatePresence>
         </div>
 
+        {/* ── Question Palette backdrop (mobile) ── */}
+        {showPalette && (
+          <div
+            className="fixed inset-0 z-40 bg-black/40 lg:hidden"
+            onClick={() => setShowPalette(false)}
+          />
+        )}
+
         {/* ── Question Palette ── */}
         <aside className={cn(
           "flex flex-col border-l border-slate-200 bg-slate-50",
-          "w-[260px] shrink-0",
+          "w-[280px] shrink-0",
+          // Desktop: always visible inline
           "hidden lg:flex",
-          showPalette ? "!flex fixed inset-y-0 right-0 z-50 shadow-xl lg:relative lg:shadow-none" : "hidden"
+          // Mobile: slide-in overlay from right
+          showPalette && "!flex fixed top-0 right-0 bottom-0 z-50 shadow-2xl h-[100dvh] lg:relative lg:shadow-none lg:h-auto"
         )}>
           <div className="border-b border-slate-200 px-4 py-3 flex items-center justify-between">
             <p className="text-xs font-bold uppercase tracking-widest text-slate-500">Question Palette</p>
-            <button onClick={() => setShowPalette(false)} className="lg:hidden p-1 text-slate-400 hover:text-slate-700">
+            <button onClick={() => setShowPalette(false)} className="lg:hidden rounded-lg p-1.5 text-slate-400 hover:bg-slate-100 hover:text-slate-700">
               <X className="h-4 w-4" />
             </button>
           </div>

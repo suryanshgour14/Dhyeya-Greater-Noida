@@ -105,7 +105,7 @@ export default function ProfileSidebar({ user }: Props) {
               animate={{ x: 0 }}
               exit={{ x: "100%" }}
               transition={{ duration: 0.35, ease: EASE }}
-              className="fixed right-0 top-0 z-[9999] flex h-screen w-[320px] flex-col bg-white shadow-2xl"
+              className="fixed right-0 top-0 z-[9999] flex h-[100dvh] w-[320px] flex-col bg-white shadow-2xl"
             >
               {/* Header */}
               <div className="flex items-center justify-between border-b bg-brand-blue px-5 py-4">
@@ -131,7 +131,7 @@ export default function ProfileSidebar({ user }: Props) {
               </div>
 
               {/* Scrollable content */}
-              <div className="flex-1 overflow-y-auto" data-lenis-prevent>
+              <div className="flex-1 overflow-y-auto overscroll-contain" style={{ WebkitOverflowScrolling: "touch" } as React.CSSProperties} data-lenis-prevent>
                 {/* Admin Panel — only for admin/faculty */}
                 {isAdmin && (
                   <>
