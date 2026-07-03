@@ -300,7 +300,7 @@ export default function Navbar() {
             {user ? (
               <ProfileSidebar user={user} />
             ) : (
-              <Button asChild size="sm" className="h-7 rounded-none border border-white/30 bg-brand-blue px-4 text-xs font-bold uppercase tracking-widest text-white hover:bg-blue-800">
+              <Button asChild size="sm" className="h-8 rounded-lg border border-white/20 bg-brand-blue px-5 text-xs font-bold uppercase tracking-widest text-white hover:bg-blue-800">
                 <Link href={`/${locale}/login`}>Enroll Now</Link>
               </Button>
             )}
@@ -333,16 +333,16 @@ export default function Navbar() {
           </button>
 
           {user ? (
-            <span className="hidden sm:flex lg:hidden">
+            <span className="flex lg:hidden">
               <ProfileSidebar user={user} />
             </span>
           ) : (
             <Button
               asChild
               size="sm"
-              className="hidden bg-brand-blue text-white hover:bg-brand-blue/90 sm:flex lg:hidden"
+              className="flex bg-brand-blue px-4 py-2 text-xs font-bold text-white hover:bg-brand-blue/90 lg:hidden"
             >
-              <Link href={`/${locale}/login`}>Login</Link>
+              <Link href={`/${locale}/login`}>Enroll Now</Link>
             </Button>
           )}
 
@@ -386,14 +386,10 @@ export default function Navbar() {
               </div>
 
               <div className="border-t p-4">
-                {user ? (
-                  <div className="flex justify-center">
-                    <ProfileSidebar user={user} />
-                  </div>
-                ) : (
+                {!user && (
                   <Button
                     asChild
-                    className="w-full rounded-none border border-brand-blue/30 bg-brand-blue font-bold uppercase tracking-widest hover:bg-blue-800"
+                    className="h-12 w-full rounded-xl bg-brand-blue text-sm font-bold tracking-widest text-white hover:bg-blue-800"
                   >
                     <Link
                       href={`/${locale}/login`}
