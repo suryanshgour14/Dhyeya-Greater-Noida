@@ -60,7 +60,7 @@ export default async function CourseDetailPage({ params }: Props) {
       (enrollment.expires_at === null || new Date(enrollment.expires_at) > new Date());
   }
 
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://dhyeyagreaternoida.com";
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://www.dhyeyagreaternoida.com";
   const courseUrl = `${siteUrl}/${params.locale}/courses/${params.slug}`;
   const jsonLd: Record<string, unknown>[] = [
     {

@@ -54,7 +54,7 @@ const baseMetadata: Metadata = {
     'civil services coaching',
   ],
   metadataBase: new URL(
-    process.env.NEXT_PUBLIC_SITE_URL || 'https://dhyeyagreaternoida.com'
+    process.env.NEXT_PUBLIC_SITE_URL || 'https://www.dhyeyagreaternoida.com'
   ),
   icons: {
     icon: [
@@ -147,7 +147,7 @@ export default async function LocaleLayout({
 
   const [messages, barItems] = await Promise.all([getMessages(), getBarItems()]);
 
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://dhyeyagreaternoida.com';
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.dhyeyagreaternoida.com';
   const structuredData = [
     {
       '@context': 'https://schema.org',

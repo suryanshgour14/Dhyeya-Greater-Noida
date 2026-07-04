@@ -3,7 +3,7 @@ import { locales } from '@/i18n/config';
 import { COURSES } from '@/lib/constants';
 import { TEST_SERIES } from '@/lib/test-series';
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://dhyeyagreaternoida.com';
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.dhyeyagreaternoida.com';
 
 // All public, indexable paths (admin/dashboard/auth/studio excluded — see robots.ts)
 const staticPaths = [

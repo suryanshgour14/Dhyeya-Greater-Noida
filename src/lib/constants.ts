@@ -11,7 +11,7 @@ import {
 // ─── Site ────────────────────────────────────────────────────────────────────
 export const SITE_NAME = 'Dhyeya IAS Greater Noida';
 export const SITE_URL =
-  process.env.NEXT_PUBLIC_SITE_URL || 'https://dhyeyagreaternoida.com';
+  process.env.NEXT_PUBLIC_SITE_URL || 'https://www.dhyeyagreaternoida.com';
 
 export const CONTACT_INFO = {
   address:
