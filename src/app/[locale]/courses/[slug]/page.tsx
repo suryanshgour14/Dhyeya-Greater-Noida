@@ -60,8 +60,65 @@ export default async function CourseDetailPage({ params }: Props) {
       (enrollment.expires_at === null || new Date(enrollment.expires_at) > new Date());
   }
 
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://dhyeyagreaternoida.com";
+  const courseUrl = `${siteUrl}/${params.locale}/courses/${params.slug}`;
+  const jsonLd: Record<string, unknown>[] = [
+    {
+      "@context": "https://schema.org",
+      "@type": "Course",
+      name: course.title,
+      description: course.description,
+      url: courseUrl,
+      provider: {
+        "@type": "EducationalOrganization",
+        name: "Dhyeya IAS Greater Noida",
+        sameAs: siteUrl,
+      },
+      offers: {
+        "@type": "Offer",
+        priceCurrency: "INR",
+        price: product?.price_inr ?? course.fee,
+        availability: "https://schema.org/InStock",
+        url: courseUrl,
+      },
+      hasCourseInstance: {
+        "@type": "CourseInstance",
+        courseMode: ["Onsite", "Online"],
+        location: {
+          "@type": "Place",
+          name: "Dhyeya IAS Greater Noida",
+          address: "Greater Noida, Uttar Pradesh, India",
+        },
+      },
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        { "@type": "ListItem", position: 1, name: "Home", item: `${siteUrl}/${params.locale}` },
+        { "@type": "ListItem", position: 2, name: "Courses", item: `${siteUrl}/${params.locale}/courses` },
+        { "@type": "ListItem", position: 3, name: course.title, item: courseUrl },
+      ],
+    },
+  ];
+  if (course.faqs?.length) {
+    jsonLd.push({
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      mainEntity: course.faqs.map((f) => ({
+        "@type": "Question",
+        name: f.q,
+        acceptedAnswer: { "@type": "Answer", text: f.a },
+      })),
+    });
+  }
+
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <CourseHero course={course} productId={product?.id} isEnrolled={isEnrolled} courseSlug={params.slug} />
 
       <div className="bg-white">

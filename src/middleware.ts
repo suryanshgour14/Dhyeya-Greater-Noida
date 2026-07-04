@@ -68,7 +68,11 @@ export default async function middleware(request: NextRequest) {
     }
   }
 
-  return intlMiddleware(request);
+  const response = intlMiddleware(request);
+  // Expose the current path so the root layout can build per-page
+  // canonical + hreflang tags in generateMetadata.
+  response.headers.set('x-pathname', pathname);
+  return response;
 }
 
 export const config = {

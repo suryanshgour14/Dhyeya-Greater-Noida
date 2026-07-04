@@ -18,32 +18,42 @@ export default function AnimatedCounter({
   prefix = '',
   className,
 }: AnimatedCounterProps) {
-  const [count, setCount] = useState(0);
+  // `null` until the count-up animation runs. Rendering `target` by default
+  // means the server-side HTML (and no-JS / crawler view) always shows the real
+  // number, and it can never get stuck on 0 if the in-view trigger misfires.
+  const [value, setValue] = useState<number | null>(null);
   const ref = useRef<HTMLSpanElement>(null);
-  const isInView = useInView(ref, { once: true });
+  // Trigger slightly before the element is visible so the count-up starts
+  // off-screen (avoids a flash from the real number down to 0).
+  const isInView = useInView(ref, { once: true, margin: '200px' });
+  const started = useRef(false);
 
   useEffect(() => {
-    if (!isInView) return;
+    if (!isInView || started.current) return;
+    started.current = true;
 
-    let start = 0;
-    const increment = target / (duration / 16);
-    const timer = setInterval(() => {
-      start += increment;
-      if (start >= target) {
-        setCount(target);
-        clearInterval(timer);
+    const start = performance.now();
+    let raf = 0;
+    const tick = (now: number) => {
+      const p = Math.min((now - start) / duration, 1);
+      const eased = 1 - Math.pow(1 - p, 3); // easeOutCubic
+      if (p < 1) {
+        setValue(Math.round(target * eased));
+        raf = requestAnimationFrame(tick);
       } else {
-        setCount(Math.floor(start));
+        setValue(target);
       }
-    }, 16);
-
-    return () => clearInterval(timer);
+    };
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
   }, [isInView, target, duration]);
+
+  const display = value === null ? target : value;
 
   return (
     <span ref={ref} className={className}>
       {prefix}
-      {count.toLocaleString('en-IN')}
+      {display.toLocaleString('en-IN')}
       {suffix}
     </span>
   );

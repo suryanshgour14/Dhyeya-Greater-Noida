@@ -6,6 +6,8 @@ import { notFound } from 'next/navigation';
 import { unstable_cache } from 'next/cache';
 import { locales } from '@/i18n/config';
 import { createClient } from '@supabase/supabase-js';
+import { headers } from 'next/headers';
+import { CONTACT_INFO, SOCIAL_LINKS } from '@/lib/constants';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import AnnouncementBar from '@/components/layout/AnnouncementBar';
@@ -37,7 +39,7 @@ const newsreader = Newsreader({
   style: ['normal', 'italic'],
 });
 
-export const metadata: Metadata = {
+const baseMetadata: Metadata = {
   title: {
     default: 'Dhyeya IAS Greater Noida | Best UPSC Coaching',
     template: '%s | Dhyeya IAS Greater Noida',
@@ -74,6 +76,29 @@ export const metadata: Metadata = {
     images: ['/og-image.png'],
   },
 };
+
+// Per-page canonical + hreflang (en/hi) for SEO. Reads the path exposed by
+// middleware so every page self-canonicalises and declares its language alternates.
+export async function generateMetadata({
+  params,
+}: {
+  params: { locale: string };
+}): Promise<Metadata> {
+  const { locale } = params;
+  const raw = headers().get('x-pathname') || `/${locale}`;
+  const path = raw.replace(/^\/(en|hi)(?=\/|$)/, '') || '';
+  return {
+    ...baseMetadata,
+    alternates: {
+      canonical: `/${locale}${path}`,
+      languages: {
+        en: `/en${path}`,
+        hi: `/hi${path}`,
+        'x-default': `/en${path}`,
+      },
+    },
+  };
+}
 
 export const viewport: Viewport = {
   themeColor: '#0B1C3D',
@@ -122,11 +147,58 @@ export default async function LocaleLayout({
 
   const [messages, barItems] = await Promise.all([getMessages(), getBarItems()]);
 
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://dhyeyagreaternoida.com';
+  const structuredData = [
+    {
+      '@context': 'https://schema.org',
+      '@type': 'EducationalOrganization',
+      '@id': `${siteUrl}/#organization`,
+      name: 'Dhyeya IAS Greater Noida',
+      alternateName: 'Dhyeya Sansathanam Greater Noida',
+      url: siteUrl,
+      logo: `${siteUrl}/icon-512.png`,
+      image: `${siteUrl}/og-image.png`,
+      description:
+        'Premier UPSC, UPPCS & BPSC coaching institute in Greater Noida with expert faculty, test series and proven results.',
+      telephone: CONTACT_INFO.phone,
+      email: CONTACT_INFO.email,
+      address: {
+        '@type': 'PostalAddress',
+        streetAddress: 'Plot No. 039A',
+        addressLocality: 'Greater Noida',
+        addressRegion: 'Uttar Pradesh',
+        postalCode: '201310',
+        addressCountry: 'IN',
+      },
+      sameAs: [
+        SOCIAL_LINKS.facebook,
+        SOCIAL_LINKS.instagram,
+        SOCIAL_LINKS.youtube,
+        SOCIAL_LINKS.twitter,
+        SOCIAL_LINKS.telegram,
+      ],
+    },
+    {
+      '@context': 'https://schema.org',
+      '@type': 'WebSite',
+      '@id': `${siteUrl}/#website`,
+      name: 'Dhyeya IAS Greater Noida',
+      url: siteUrl,
+      publisher: { '@id': `${siteUrl}/#organization` },
+      inLanguage: ['en', 'hi'],
+    },
+  ];
+
   return (
     <html lang={locale} suppressHydrationWarning>
       <head>
         {/* Preconnect to Supabase for early auth/data connection */}
         <link rel="preconnect" href={process.env.NEXT_PUBLIC_SUPABASE_URL} />
+        {/* Organization + WebSite structured data (JSON-LD) */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+        />
       </head>
       <body
         className={`${plusJakartaSans.variable} ${inter.variable} ${newsreader.variable} font-sans antialiased`}
