@@ -46,7 +46,7 @@ export default function Footer() {
           <div className="lg:col-span-2">
             <div className="mb-4 flex flex-wrap items-center gap-4">
               <Image
-                src="https://res.cloudinary.com/dl9t48lyt/image/upload/v1776708202/DHYEYA_LOGO_ENGLISHWHITE.jpg_gs7mee.jpg"
+                src="https://res.cloudinary.com/dl9t48lyt/image/upload/v1776708324/DHYEYA_LOGO_HINDI_WHITE.jpg_huiqjf.jpg"
                 alt="Dhyeya IAS"
                 width={160}
                 height={52}
