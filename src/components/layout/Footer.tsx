@@ -202,6 +202,30 @@ export default function Footer() {
           </div>
         </div>
       </div>
+
+      {/* Signature */}
+      <div className="border-t border-white/5">
+        <div className="container mx-auto px-4 py-3 text-center text-[11px] text-slate-600">
+          Engineered &amp; maintained by{" "}
+          <a
+            href="https://www.linkedin.com/in/yashraj19/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="font-medium text-brand-gold/80 transition-colors hover:text-brand-gold"
+          >
+            Yash Raj
+          </a>{" "}
+          &amp;{" "}
+          <a
+            href="https://www.linkedin.com/in/suryanshgour/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="font-medium text-brand-gold/80 transition-colors hover:text-brand-gold"
+          >
+            Suryansh
+          </a>
+        </div>
+      </div>
     </footer>
   );
 }

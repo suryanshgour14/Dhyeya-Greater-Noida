@@ -161,18 +161,20 @@
   animation: ls-ring-pulse 2.4s cubic-bezier(0.4, 0, 0.6, 1) infinite 1.1s;
 }
 
-/* Logo disc */
+/* Logo card (Dhyeya IAS horizontal lockup) */
 .loading-disc {
   position: relative;
-  width: 140px;
-  height: 140px;
-  border-radius: 50%;
+  width: 272px;
+  height: 127px;
+  max-width: calc(100vw - 48px);
+  border-radius: 16px;
   overflow: hidden;
+  background: #0019A6;
   box-shadow:
     0 0 0 3px rgba(201,162,39,0.35),
     0 0 0 6px rgba(201,162,39,0.12),
-    0 20px 60px rgba(11,28,61,0.18),
-    0 6px 20px rgba(11,28,61,0.12);
+    0 20px 60px rgba(11,28,61,0.22),
+    0 6px 20px rgba(11,28,61,0.14);
 }
 
 /* Shine sweep */

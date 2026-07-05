@@ -59,29 +59,21 @@ export default function LoadingScreen() {
       {/* Centre stage */}
       <div className="loading-stage">
 
-        {/* Pulsing rings */}
-        <div className="loading-rings">
-          <span className="loading-ring loading-ring--1" />
-          <span className="loading-ring loading-ring--2" />
-          <span className="loading-ring loading-ring--3" />
-
-          {/* Logo disc */}
-          <div className="loading-disc">
-            <div className="loading-shine" />
-            <Image
-              src="https://res.cloudinary.com/dl9t48lyt/image/upload/v1783031036/ChatGPT_Image_Jul_1_2026_11_27_58_PM_jnzqbu.png"
-              alt="Dhyeya IAS Greater Noida"
-              fill
-              sizes="160px"
-              className="object-cover"
-              priority
-            />
-          </div>
+        {/* Logo card */}
+        <div className="loading-disc">
+          <div className="loading-shine" />
+          <Image
+            src="https://res.cloudinary.com/dl9t48lyt/image/upload/v1776708202/DHYEYA_LOGO_ENGLISHWHITE.jpg_gs7mee.jpg"
+            alt="Dhyeya IAS Greater Noida - most trusted since 2003"
+            fill
+            sizes="280px"
+            className="object-contain"
+            priority
+          />
         </div>
 
-        {/* Brand name */}
+        {/* Brand name (logo already shows "Dhyeya IAS", so only the location here) */}
         <div className="loading-brand">
-          <p className="loading-brand__name">Dhyeya IAS</p>
           <p className="loading-brand__sub">GREATER NOIDA</p>
         </div>
 
