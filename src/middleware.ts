@@ -16,6 +16,10 @@ const AUTH_REQUIRED = [
 // Routes that require faculty/admin role
 const ADMIN_REQUIRED = ['/admin'];
 
+// Public pages nested under an otherwise auth-gated section — must stay
+// crawlable/indexable (e.g. the UPSC FAQ page under /student-zone).
+const PUBLIC_EXCEPTIONS = ['/student-zone/faqs'];
+
 function getLocale(pathname: string) {
   return pathname.split('/')[1] || 'en';
 }
@@ -23,7 +27,9 @@ function getLocale(pathname: string) {
 export default async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  const needsAuth = AUTH_REQUIRED.some((p) => pathname.includes(p));
+  const isPublicException = PUBLIC_EXCEPTIONS.some((p) => pathname.includes(p));
+  const needsAuth =
+    !isPublicException && AUTH_REQUIRED.some((p) => pathname.includes(p));
   const needsAdmin = ADMIN_REQUIRED.some((p) => pathname.includes(p));
 
   if (needsAuth || needsAdmin) {

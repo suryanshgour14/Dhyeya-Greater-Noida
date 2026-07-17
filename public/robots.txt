@@ -1,7 +1,0 @@
-User-agent: *
-Allow: /
-Disallow: /studio/
-Disallow: /api/
-Disallow: /dashboard/
-
-Sitemap: https://dhyeyagreaternoida.com/sitemap.xml

@@ -7,6 +7,8 @@ import { CheckCircle2 } from 'lucide-react';
 export const metadata: Metadata = {
   title: 'Create Account - Dhyeya IAS Greater Noida',
   description: 'Join 15,000+ UPSC aspirants. Create your free student account.',
+  // Utility page — should not rank or be indexed.
+  robots: { index: false, follow: true },
 };
 
 const PERKS = [

@@ -8,6 +8,8 @@ import { Trophy, Users, GraduationCap, Star } from 'lucide-react';
 export const metadata: Metadata = {
   title: 'Student Login - Dhyeya IAS Greater Noida',
   description: 'Login to access your study materials, test series, and resources.',
+  // Utility page — should not rank or generate ?next= duplicate URLs in the index.
+  robots: { index: false, follow: true },
 };
 
 const STATS = [
